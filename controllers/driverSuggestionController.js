@@ -1,7 +1,7 @@
 
 
 const Suggestion = require("../models/Suggestion")
-const User = require("../models/User")
+const User = require("../models/user")
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
