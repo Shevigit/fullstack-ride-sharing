@@ -1,1 +1,18 @@
 
+const mongoose = require('mongoose');
+
+const SuggestionSchema = new mongoose.Schema({
+   
+    driver:  { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+    address: { type: String, required: true },
+    source: { type: String, required: true },
+    destination: { type: String, required: true },
+    date: { type: Date, required: true, index: true },
+    time: { type: String, required: true },
+    availableSeats: { type: Number, required: true, min:0 },
+    genderPreference: { type: String, enum: ['ללא העדפה', 'זכר', 'נקבה'], default: 'ללא העדפה' },
+    passengers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }],
+    status: { type: String, enum: ['active', 'canceled', 'completed'], default: 'active' }, // סטטוס לנסיעה
+    createdAt: { type: Date, default: Date.now, index: true }
+});
+module.exports=mongoose.model('Suggestion', SuggestionSchema)
