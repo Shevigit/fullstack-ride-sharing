@@ -1,27 +1,33 @@
-require("dotenv").config();
-const mongoose = require("mongoose");
-const express = require("express");
-const cors = require("cors"); // Assuming you need CORS
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const mongoose = require("mongoose")
+const connectDB = require("./config/db")
+require('dotenv').config();
 
-const connectDB = require("./config/db");
-const PORT = process.env.PORT || 7002;
 const app = express();
+console.log("start...");
+app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
-// Middleware
-app.use(cors()); // Use CORS if applicable
-app.use(express.json()); // To parse JSON bodies
+const userRoutes = require('./routes/authRoute');
+app.use(express.json());
+app.use('/api', userRoutes);
 
-connectDB();
+const PORT = process.env.PORT || 7001
+connectDB()
+app.use(express.json())
+app.use(express.static("public"))
+app.use("/api/auth", require("./routes/authRoute"))
 
-const CONNECTION_URL = process.env.DATABASE_URI;
-
-mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('Connected to MongoDB');
-        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-    })
-    .catch((error) => console.log(error.message));
-
+mongoose.connection.once('open', () => {
+    console.log('Connected to MongoDB')
+    app.listen(PORT, () => console.log(`Server running on port
+  ${PORT}`))
+})
 mongoose.connection.on('error', err => {
-    console.log(err);
-});
+    console.log(err)
+})

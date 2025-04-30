@@ -1,6 +1,5 @@
 
-var whitelist = ['http://localhost:3000','localhost']
-//לברר מה כותבים כאן
+var whitelist = ['http://localhost:3000', 'localhost']
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
