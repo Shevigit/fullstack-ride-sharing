@@ -9,4 +9,16 @@ exports.addDriverSuggestion = async(req,res)=>{
     res.json(driverSuggestion);
 }
 
+exports.getAllDriverSuggestions = async (req, res) => {
+    try {
+      const driverSuggestions = await DriverSuggestion.find();
+      res.json(driverSuggestions);    
+    
+    } catch (error) {
+      console.error('Failed to get driverSuggestions:', error);
+      res.status(500).json({ message: 'Failed to get driverSuggestions' });
+    }
+};
+  
+
 
