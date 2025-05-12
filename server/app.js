@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require("mongoose")
 const connectDB = require("./config/db")
+const cors = require("cors")
+
+const corsOptions = require("./config/corsOptions")
 require('dotenv').config();
 
 const app = express();
@@ -14,6 +17,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const userRoutes = require('./routes/authRoute');
+app.use(cors(corsOptions))
 app.use(express.json());
 app.use('/api', userRoutes);
 
