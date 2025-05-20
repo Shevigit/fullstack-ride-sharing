@@ -9,7 +9,10 @@ import UserLayout from "../components/UserLayOut";
 import PasswordGmail from "../components/PasswordGmail";
 import UserAndPassword from "../components/UserAndPassword";
 import LoginForm from "../components/LoginForm";
-
+import SearchDrive from "../components/SearchDrive";
+import Offer from "../components/Offer";
+import MyDrivers from "../components/MyDrivers";
+import About from "../components/About";
 
 const router2=createBrowserRouter(
     [
@@ -32,12 +35,26 @@ const router2=createBrowserRouter(
                     },
                     
                  {path:"loginIn",element:<LoginIn/>},
+                 {path:"SearchDrive",element:<SearchDrive/>},
+                 {path:"offer",element:<Offer/>},
+                 {path:"MyDrivers",element:<MyDrivers/>},
+                 {path:"about",element:<About/>},
+                //  {path:"contact",element:<LoginIn/>},
+                 {path:"*",element:<div>דף 404 - דף לא נמצא</div>},
+
+
                 //  {
                 //     path: "products", children: [
                 //         { index: true, element: <ProductList /> },
                 //         { path: ":id", element: <ProductDetails /> },
                 //     ]
                 // }
+
+
+    
+
+
+
                 ]
             
        }
