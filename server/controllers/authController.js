@@ -21,7 +21,8 @@ const login = async (req, res) => {
             hasCar: foundUser.hasCar, driveringLicense: foundUser.driveringLicense, gender: foundUser.gender,
             driverSuggestions: foundUser.driverSuggestions, passengerSuggestions: foundUser.passengerSuggestions, createdAt: foundUser.createdAt
         }
-        const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET,);
+
+        const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
         res.json({ accessToken: accessToken });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -31,7 +32,7 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
     try {
-        const { userName, phone, email, password, hasCar, driveringLicense, gender, driverSuggestions, passengerSuggestions, createdAt } = req.body
+        const { userName, phone, email, password, hasCar, gender } = req.body
         if (!userName || !phone || !email || !password || !gender) {
             return res.status(400).json({ message: "All fields are required!" })
         }
