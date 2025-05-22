@@ -18,13 +18,11 @@ interface UserSchema {
     userName: string;
     phone: string;
     email: string;
-    password: string;
-    hasCar: boolean;
-    driveringLicense: string;
+     password: string;
+    hasCar?: boolean|undefined;
+    driveringLicense?: string|undefined;
     gender: string;
-    //    driverSuggestions: SuggestionSchema
-    // passengerSuggestions:SuggestionSchema
-  //  createdAt: Date;
+
 }
 
 

@@ -1,11 +1,11 @@
 import { Outlet } from "react-router"
-import Nav2 from "./Nav2"
+import Nav from "./Nav"
 
 
 const UserLayout = () => {
     return (
         <div>
-        <Nav2/>
+        <Nav/>
             <Outlet/>
         </div>
     )
