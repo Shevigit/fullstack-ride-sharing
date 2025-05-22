@@ -1,316 +1,162 @@
-// import React from 'react';
-// import Box from '@mui/joy/Box';
-// import Drawer from '@mui/joy/Drawer';
-// import Button from '@mui/joy/Button';
-// import { TextField, Stack } from '@mui/material';
-// import { useForm } from "react-hook-form";
-// import FormSchema from '../schemas/FormSchema';
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import Checkbox from '@mui/material/Checkbox';
-// import Radio from '@mui/material/Radio';
-// import RadioGroup from '@mui/material/RadioGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import { useDispatch } from "react-redux";
-
-// import { addUser } from "../stores/Slices/LoginSlice";
-// import { useRegisterMutation } from '../stores/Slices/UserApiSlice';
-// import { useNavigate } from 'react-router';
-
-
-// interface UserSchema {
-//   userName: string;
-//   phone: string;
-//   email: string;
-//   //  password: string;
-//   hasCar?: boolean;
-//   driveringLicense?: string;
-//   gender: string;
-//   // createdAt: Date;
-// }
-
-
-
-
-// const LoginForm = () => {
-
-//   const [addUserRegister] = useRegisterMutation()
-//   const [state, setState] = React.useState({ right: false });
-//   const [checked, setChecked] = React.useState(true);
-//   const dispatch = useDispatch();
-// const navigate=useNavigate();
-//   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-//     if (event.type === 'keydown' && !["Tab", "Shift"].includes((event as React.KeyboardEvent).key)) {
-//       return;
-//     }
-//     setState({ right: open });
-//   };
-
-
-//   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setChecked(event.target.checked);
-//   };
-//   const { register, handleSubmit, formState: { errors } } = useForm<UserSchema>({
-//     mode: "onBlur",
-//     resolver: zodResolver(FormSchema) as any,
-//     defaultValues: {
-//       userName: '',
-//       phone: '',
-//       email: '',
-//       //  password: '',
-//       hasCar: false,
-//       driveringLicense: '',
-//       gender: '',
-//       //  createdAt: new Date(),
-//     }
-//   });
-//   const onSubmit = (data: UserSchema) => {
-//     console.log("onSubmit called");
-//     console.log("Received data:", data);
-
-//     const user: UserSchema = {
-//       // id: uuidv4(),
-//       userName: data.userName || "",
-//       phone: data.phone || "",
-//       email: data.email || "",
-//       //  password: data.password || "",
-//       hasCar: data.hasCar || false,
-//       driveringLicense: data.driveringLicense || "",
-//       gender: data.gender || "male",
-//     };
-
-
-//     // console.log("User object being dispatched:", user);
-//     addUserRegister(user)
-//     dispatch(addUser(user));
-// navigate("./passwordGmail");
-//   //  reset();
-//   };
-
-
-//   return (
-//     <>
-//     {/* // <React.Fragment> */}
-//       <Button variant="outlined" onClick={toggleDrawer(true)}>Open Right Drawer</Button>
-//       <Drawer anchor="right" open={state.right} onClose={toggleDrawer(false)}>
-//         <Box role="presentation" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-//           <form onSubmit={handleSubmit(onSubmit)}>
-//             <Stack
-//               //   component="form"
-//               sx={{ width: '25ch' }}
-//               spacing={2}
-//               noValidate
-//               autoComplete="off"
-
-//             >
-//               <TextField
-//                 hiddenLabel
-//                 id="filled-hidden-label-normal"
-//                 variant="filled"
-//                 size="small"
-//                 color="success"
-//                 placeholder="userName"
-//                 {...register("userName")}
-//               />
-//               {errors.userName && <p>{errors.userName.message}</p>}
-//               <TextField
-//                 hiddenLabel
-//                 id="filled-hidden-label-normal"
-//                 placeholder="phone"
-//                 variant="filled"
-//                 color="success"
-//                 {...register("phone", { required: "the form must include phone" })}
-//               />
-//               {errors.phone && <p>{errors.phone.message}</p>}
-//               <TextField
-//                 hiddenLabel
-//                 id="filled-hidden-label-normal"
-//                 placeholder="email"
-//                 variant="filled"
-//                 color="success"
-
-//                 {...register("email")}
-//               />
-//               {errors.email && <p>{errors.email.message}</p>}
-//                {/* <TextField
-//                 hiddenLabel
-//                 id="filled-hidden-label-normal"
-//                 placeholder="password"
-//                 variant="filled"
-//                 color="success"
-
-//                 {...register("password")}
-//               />
-//               {errors.password && <p>{errors.password.message}</p>}  */}
-
-//               <Checkbox
-//                 checked={checked}
-//                 {...register("hasCar")}
-//                 onChange={handleChange}
-//                 color="success"
-//               />
-//               {errors.hasCar && <p>{errors.hasCar.message}</p>}
-//               <TextField
-//                 disabled={!checked}
-//                 hiddenLabel
-//                 id="filled-hidden-label-normal"
-//                 placeholder="Driving License"
-//                 variant="filled"
-//                 color="success"
-//                 {...register("driveringLicense")}
-//               />
-//               {errors.driveringLicense && <p>{errors.driveringLicense.message}</p>}
-
-//               <RadioGroup  {...register("gender")} >
-//                 <FormControlLabel
-//                   value="זכר"
-//                   control={<Radio color="success" />}
-//                   label="זכר"
-//                 />
-//                 <FormControlLabel
-//                   value="נקבה"
-//                   control={<Radio color="success" />}
-//                   label="נקבה"
-//                 />
-//               </RadioGroup>
-
-
-
-//               {errors.gender && <p>{errors.gender.message}</p>}
-//             </Stack>
-
-//             <Button type="submit" sx={{ marginTop: 2 }}>Submit</Button>
-//           </form>
-//         </Box>
-//       </Drawer>
-//      </>
-//     // </React.Fragment>
-//   );
-// }
-
-// export default LoginForm;
-
-import React from 'react';
-import { Button, Drawer, Box, TextField, Stack, Checkbox, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { Button, Box, TextField, Stack, Checkbox, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { useForm, Controller } from 'react-hook-form'; // וודא ש-Controller מיובא כאן!
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from 'react-router-dom';
-import { useRegisterMutation } from '../stores/Slices/UserApiSlice'; // Importing the user API slice
-import FormSchema from '../schemas/FormSchema'; // Assume you have a validation schema
-import { useDispatch, useSelector } from 'react-redux';
-import {  addUser, selectUser } from '../stores/Slices/LoginSlice';
-import {  RegisterUser, User } from './interfaces/Interface';
-//import { useCookies } from 'react-cookie';
-
+import { useNavigate } from 'react-router-dom'; // תיקון: אם זה react-router-dom, הנתיב הוא כזה
+import FormSchema from '../schemas/FormSchema';
+import {  User } from './interfaces/Interface'; // וודא ש-interface User מעודכן
+import { useRegisterMutation } from '../stores/Slices/UserApiSlice';
+import { useState } from 'react';
 
 const LoginForm = () => {
-   
-    const [state, setState] = React.useState({ right: false });
-    const [checked, setChecked] = React.useState(false);
-   // const [cookies, setCookies] = useCookies(['token'])
- 
-const navigate = useNavigate();
-const dispatch=useDispatch()
-    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (event.type === 'keydown' && !["Tab", "Shift"].includes((event as React.KeyboardEvent).key)) {
-            return;
-        }
-        setState({ right: open });
-    };
+    const [checked, setChecked] = useState<boolean>(false);
+    const navigate = useNavigate();
+    const [Register] = useRegisterMutation();
+    // הסר את: const [gender, setGender]=useState<string>("") - כבר עשינו את זה
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // רצוי להסיר את ה-useState ל-checked ולתת ל-react-hook-form לנהל את זה
         setChecked(event.target.checked);
     };
 
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterUser>({
+    // <--- הנה הקוד המעודכן שלך עבור useForm --->
+    const {
+        register,
+        handleSubmit,
+        control, // נוסיף את control כדי שנוכל להשתמש ב-Controller
+        watch,   // נוסיף את watch כדי לשלוט ב-disabled של שדה הרישיון
+        formState: { errors }
+    } = useForm<User>({ // מומלץ לציין את הטיפוס כאן אם הוא מוגדר
         mode: "onBlur",
-        resolver: zodResolver(FormSchema) as any,
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            // הגדרת ערכי ברירת מחדל לכל השדות בטופס
+            userName: "",
+            phone: "",
+            email: "",
+            password: "",
+            hasCar: false, // ברירת מחדל ל-Checkbox
+            driveringLicense: "", // ברירת מחדל לשדה אופציונלי (אם ריק)
+            gender: "זכר", // <--- חשוב! הגדרת ברירת מחדל ל-RadioGroup
+        }
     });
+    // <--- סוף הקוד המעודכן עבור useForm --->
 
- 
-    const onSubmit = (data: RegisterUser) => {
-        // Create the user object based on RegisterUser interface
-        const user: RegisterUser = {
-            userName: data.userName || "", 
-            phone: data.phone || "",
-            email: data.email || "",
+    // השתמש ב-watch כדי לעקוב אחר מצב ה-Checkbox
+    const hasCarValue = watch("hasCar");
+
+    const onSubmit = async (data: User) => {
+        // אין צורך ליצור אובייקט user חדש על ידי הקצאות אחד-אחד אם data כבר מסוג User
+        // אלא אם כן יש לוגיקה נוספת שאתה רוצה ליישם.
+        // אם הטיפוס של `data` הוא `User` (כפי שהגדרת בפונקציה), והוא מגיע כבר מסודר
+        // מה-zodResolver, אין צורך ביצירת אובייקט `user` נוסף.
+        // אם `data` הוא מטיפוס אחר (למשל FormData), אז כן צריך להמיר אותו.
+        // נניח ש-data כבר תואם ל-User (לאחר תיקונים קודמים).
+
+        // וודא ש-driveringLicense ו-hasCar מקבלים ערכים תקינים אם הם אופציונליים
+        // ה-defaultValues כבר מטפלים בזה בהתחלה, אבל זה מחזק את זה.
+        const userToSend: User = {
+            ...data,
             hasCar: data.hasCar || false,
             driveringLicense: data.driveringLicense || "",
-            gender: data.gender || "",
+            // gender אמור להגיע תקין מ-data.gender עכשיו
         };
-    
-        console.log(user);
-        localStorage.setItem('user', JSON.stringify(user)); // Store the user data directly
-        dispatch(addUser(user)); // Dispatching the user directly
-        navigate("passwordGmail");
+
+        console.log(userToSend); // זה ה-user שיישלח
+        try {
+            const result = await Register(userToSend).unwrap();
+            console.log(result);
+            localStorage.setItem('user', JSON.stringify(userToSend)); // **שוב אזהרה: אל תאחסן סיסמא ב-localStorage!**
+            navigate('/')
+        } catch (error) {
+            console.error("שגיאה ברישום:", error);
+            // טיפול בשגיאה - הצג הודעה למשתמש
+        }
     };
 
     return (
         <>
-            <Button variant="outlined" onClick={toggleDrawer(true)}>Open Right Drawer</Button>
-            <Drawer anchor="right" open={state.right} onClose={toggleDrawer(false)}>
-                <Box role="presentation" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Stack >
-                            <TextField
-                                hiddenLabel
-                                variant="filled"
-                                size="small"
-                                color="success"
-                                placeholder="userName"
-                                {...register("userName")}
-                            />
-                            {errors.userName && <p>{errors.userName.message}</p>}
+            <Box role="presentation" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Stack >
+                        <TextField
+                            hiddenLabel
+                            variant="filled"
+                            size="small"
+                            color="success"
+                            placeholder="שם פרטי "
+                            {...register("userName")}
+                        />
+                        {errors.userName && <p>{errors.userName.message}</p>}
 
-                            <TextField
-                                hiddenLabel
-                                placeholder="phone"
-                                variant="filled"
-                                color="success"
-                                {...register("phone", { required: "Phone number is required" })}
-                            />
-                            {errors.phone && <p>{errors.phone.message}</p>}
+                        <TextField
+                            hiddenLabel
+                            placeholder="פלאפון"
+                            variant="filled"
+                            color="success"
+                            {...register("phone")}
+                        />
+                        {errors.phone && <p>{errors.phone.message}</p>}
 
-                            <TextField
-                                hiddenLabel
-                                placeholder="email"
-                                variant="filled"
-                                color="success"
-                                {...register("email")}
-                            />
-                            {errors.email && <p>{errors.email.message}</p>}
+                        <TextField
+                            hiddenLabel
+                            placeholder="מייל"
+                            variant="filled"
+                            color="success"
+                            {...register("email")}
+                        />
+                        {errors.email && <p>{errors.email.message}</p>}
 
-                            <Checkbox
-                                checked={checked}
-                                {...register("hasCar")}
-                                onChange={handleChange}
-                                color="success"
-                            />
-                            {errors.hasCar && <p>{errors.hasCar.message}</p>}
+                        <TextField
+                            hiddenLabel
+                            placeholder="סיסמא"
+                            variant="filled"
+                            color="success"
+                            {...register("password")}
+                        />
+                        {errors.password && <p>{errors.password.message}</p>}
 
-                            <TextField
-                                disabled={!checked}
-                                hiddenLabel
-                                placeholder="Driving License"
-                                variant="filled"
-                                color="success"
-                                {...register("driveringLicense")}
-                            />
-                            {errors.driveringLicense && <p>{errors.driveringLicense.message}</p>}
+                        {/* שימוש ב-watch עבור ה-Checkbox והלייבל */}
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    color="success"
+                                    checked={hasCarValue} // מצב ה-Checkbox מנוהל על ידי watch
+                                    // אין צורך ב-onChange={handleChange}
+                                    {...register("hasCar")}
+                                />
+                            }
+                            label="יש לי רכב"
+                        />
+                        {errors.hasCar && <p>{errors.hasCar.message}</p>}
 
-                            <RadioGroup {...register("gender")}>
-                                <FormControlLabel value="זכר" control={<Radio color="success" />} label="זכר" />
-                                <FormControlLabel value="נקבה" control={<Radio color="success" />} label="נקבה" />
-                            </RadioGroup>
-                            {errors.gender && <p>{errors.gender.message}</p>}
-                        </Stack>
+                        <TextField
+                            disabled={!hasCarValue} // שדה מופעל/מושבת לפי hasCarValue
+                            hiddenLabel
+                            placeholder="מספר רשיון"
+                            variant="filled"
+                            color="success"
+                            {...register("driveringLicense")}
+                        />
+                        {errors.driveringLicense && <p>{errors.driveringLicense.message}</p>}
 
-                        <Button type="submit" sx={{ marginTop: 2 }}>Submit</Button>
-                    </form>
-                </Box>
-            </Drawer>
+                        {/* שימוש ב-Controller עבור RadioGroup */}
+                        <Controller
+                            name="gender" // שם השדה חייב להתאים לסכימה ול-interface
+                            control={control} // מעבירים את control
+                            render={({ field }) => (
+                                <RadioGroup {...field}> {/* מעבירים את כל מאפייני field */}
+                                    <FormControlLabel style={{ color: "black" }} value="זכר" control={<Radio color="success" />} label="זכר" />
+                                    <FormControlLabel style={{ color: "black" }} value="נקבה" control={<Radio color="success" />} label="נקבה" />
+                                </RadioGroup>
+                            )}
+                        />
+                        {errors.gender && <p>{errors.gender.message}</p>}
+                    </Stack>
+                    <Button type="submit" sx={{ marginTop: 2 }}>Submit</Button>
+                </form>
+            </Box>
         </>
     );
 }
 
 export default LoginForm;
-       

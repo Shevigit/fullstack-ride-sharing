@@ -1,23 +1,24 @@
-import {  NavLink } from 'react-router'
+import { NavLink } from 'react-router'
+import { LoginBtn, navStyle, SignUpBtn } from '../CSS/nav'
+import { Button } from '@mui/material'
 const Nav = () => {
-
-  // console.log("shevi");
-    
     return (
         <div>
-
-        <nav style={{ display: "flex", position: "fixed", top: "0px", right: "0px", left: "0px", width: "100vw", backgroundColor: "gray", justifyContent: "space-around" }}>
+            <nav style={navStyle}>
                 <div>
-                    <NavLink to='/' style={({ isActive }) => ({ color: isActive ? "red" : "green" })}>Home Page</NavLink>
+                    <NavLink to='/' >Home Page</NavLink>
                 </div>
-                <div>
-                    <NavLink to='/loginForm' style={({ isActive }) => ({ color: isActive ? "red" : "green" })}>loginForm</NavLink>
-                </div>
-
-                <div>
-                    <NavLink to='/loginIn' style={({ isActive }) => ({ color: isActive ? "red" : "green" })}>LoginIn</NavLink>
-                </div>
-      </nav>
+                <NavLink to='/loginForm'>
+                <Button style={SignUpBtn}>
+                   Sign Up
+                </Button>
+                </NavLink>
+                <NavLink to='/loginIn'>
+                    <Button sx={LoginBtn}>
+                        Log In
+                    </Button>
+                </NavLink>
+            </nav>
         </div>
     )
 }

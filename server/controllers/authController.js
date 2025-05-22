@@ -30,47 +30,20 @@ const login = async (req, res) => {
 
 
 const register = async (req, res) => {
-    debugger
-    console.log("0");
-    try {
-       
-        const { userName, phone, email, password, hasCar, driveringLicense, gender} = req.body
-        console.log("1");
-        
-        if (!userName || !phone || !email || !password || !gender) {
-            console.log("Brachi");
-            
+        const { userName, phone, email, password, hasCar, driveringLicense, gender } = req.body
+        if (!userName || !phone || !email || !password || !gender||!driveringLicense)
             return res.status(400).json({ message: "All fields are required!" })
-
-        }
         const duplicate = await User.findOne({ email: email }).lean()
-        console.log("2");
-        if (duplicate) {
-            console.log("fdfdsfsd")
-            return res.status(409).message({ message: "duplicate email" })
-        }
-        console.log("1321231321")
+        if (duplicate)
+            return res.status(409).json({ message: "duplicate email" })
         const hashedPassword = await bcrypt.hash(password, 10);
-        console.log("3");
-        const userObject = { userName, phone, email, password: hashedPassword, hasCar, gender }
-        console.log("4");
+        const userObject = { userName, phone, email, password: hashedPassword, hasCar, gender,driveringLicense }
         const user = await User.create(userObject)
-        console.log("5");
-        await user.save();
-        console.log("6");
-        if (user) {
-            console.log(user)
-            return res.status(200).json({
-                message: `New user ${user.username}
-        created` })
-        } else {
-            return res.status(400).json({ message: 'Invalid user received' })
-        }
-    } catch (error) {
-        console.log("shevi");
-        
-        res.status(400).json({ error: error.message });
-    }
+        if (!user)
+            return res.status(400).json({ message: "invalid user received" })
+        const userInfo = { userName: userObject.userName, email: userObject.email, phone: userObject.phone, password: userObject.password, hasCar: userObject.hasCar, gender: userObject.gender,driveringLicense:userObject.driveringLicense }
+        const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET)
+        return res.status(201).json({ accessToken: accessToken, user: userInfo })
 };
 
 module.exports = { login, register }

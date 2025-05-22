@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
             return this.hasCar;
         }
     },
-    gender: { type: String, enum: ['male', 'female'], required: true },
+    gender: { type: String, enum: ['זכר', 'נקבה'], required: true },
     driverSuggestions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Suggestion' }], // נסיעות כנהג
     passengerSuggestions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Suggestion' }], // נסיעות כנוסע
     createdAt: { type: Date, default: Date.now, index: true }
