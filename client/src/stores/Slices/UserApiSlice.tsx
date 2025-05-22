@@ -54,7 +54,7 @@ const UserApiSlice = apiSlice.injectEndpoints({
         }),
         login: builder.mutation<Response,LoginCredentials>({
             query: (user) => ({
-                url: `/login`,
+                url: "/login",
                 method: "POST",
                 body: user
             }),
