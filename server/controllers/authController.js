@@ -30,28 +30,45 @@ const login = async (req, res) => {
 
 
 const register = async (req, res) => {
+    debugger
+    console.log("0");
     try {
+       
         const { userName, phone, email, password, hasCar, driveringLicense, gender} = req.body
+        console.log("1");
+        
         if (!userName || !phone || !email || !password || !gender) {
+            console.log("Brachi");
+            
             return res.status(400).json({ message: "All fields are required!" })
+
         }
         const duplicate = await User.findOne({ email: email }).lean()
+        console.log("2");
         if (duplicate) {
+            console.log("fdfdsfsd")
             return res.status(409).message({ message: "duplicate email" })
         }
+        console.log("1321231321")
         const hashedPassword = await bcrypt.hash(password, 10);
+        console.log("3");
         const userObject = { userName, phone, email, password: hashedPassword, hasCar, gender }
+        console.log("4");
         const user = await User.create(userObject)
+        console.log("5");
         await user.save();
+        console.log("6");
         if (user) {
             console.log(user)
-            return res.status(201).json({
+            return res.status(200).json({
                 message: `New user ${user.username}
         created` })
         } else {
             return res.status(400).json({ message: 'Invalid user received' })
         }
     } catch (error) {
+        console.log("shevi");
+        
         res.status(400).json({ error: error.message });
     }
 };

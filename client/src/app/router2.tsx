@@ -8,6 +8,7 @@ import UserLayout from "../components/UserLayOut";
 
 import PasswordGmail from "../components/PasswordGmail";
 import UserAndPassword from "../components/UserAndPassword";
+import RegisterComplete from "../components/RegisterComplete"
 import LoginForm from "../components/LoginForm";
 
 
@@ -25,19 +26,18 @@ const router2=createBrowserRouter(
                     path: "loginForm",   element: <UserLayout/> ,
                       children:[
                         { index:true, element: <LoginForm /> },
-                         { path: "passwordGmail", element: <PasswordGmail /> },
-                        { path: "userAndPassword", element: <UserAndPassword /> }
+                  
+                {path:"passwordGmail",element:<PasswordGmail/>},
 
+                        { path: "userAndPassword", element: <UserAndPassword /> },
+            
+                   ////////////////////////////////////  {path:"registerComplete/:user" ,element: <RegisterComplete/>}
+                {path:"registerComplete" ,element: <RegisterComplete/>}
                      ]
                     },
                     
                  {path:"loginIn",element:<LoginIn/>},
-                //  {
-                //     path: "products", children: [
-                //         { index: true, element: <ProductList /> },
-                //         { path: ":id", element: <ProductDetails /> },
-                //     ]
-                // }
+              
                 ]
             
        }
