@@ -7,6 +7,7 @@ import './App.css'
 import router2 from "./app/router2"
 import { Provider } from 'react-redux'
 import store from './stores/Store'
+import { CookiesProvider } from 'react-cookie'
 // import { Provider } from 'react-redux'
 // import store from './stores/Store'
 function App() {
@@ -14,10 +15,11 @@ function App() {
 
   return (
     <>
-       <Provider store={store}>
-<RouterProvider router={router2}/>
-   </Provider>
-
+    <CookiesProvider>
+      <Provider store={store}>
+        <RouterProvider router={router2} />
+      </Provider>
+</CookiesProvider>
 
     </>
   )

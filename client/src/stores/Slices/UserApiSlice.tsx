@@ -31,12 +31,20 @@ interface LoginCredentials {
     email: string;
     password: string;
 }
-interface Response {
-    success: boolean;
-    message: string;
-  
-}
 
+export interface Response {
+    accessToken: String;
+    user: {
+      userName: string;
+    phone: string;
+    email: string;
+     password: string;
+    hasCar?: boolean|undefined;
+    driveringLicense?: string|undefined;
+    gender: string;
+
+    };
+  }
 const UserApiSlice = apiSlice.injectEndpoints({
 
     endpoints: (builder) => ({
@@ -51,10 +59,10 @@ const UserApiSlice = apiSlice.injectEndpoints({
         login: builder.mutation<Response,LoginCredentials>({
             query: (user) => ({
                 url: `/login`,
-                method: "PUT",
+                method: "POST",
                 body: user
             }),
-            invalidatesTags: ["User"]
+            invalidatesTags: ["LoginCredentials"]
         }),
         // Uncomment and complete the following if needed
         // updateRecipe: builder.mutation<any, { _id: string, recipe: any }>({
