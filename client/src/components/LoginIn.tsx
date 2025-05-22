@@ -1,87 +1,69 @@
-//import React, { useState } from 'react';
 import { useState } from 'react';
-//import Button from '@mui/joy/Button';
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-//import { useDispatch } from "react-redux";
-//import { useLoginMutation } from '../stores/Slices/UserApiSlice';
 import LoginSchema from '../schemas/LoginSchema';
-//import { loginUser } from "../stores/Slices/LoginSlice";
-
+import { errorCSS, formStyle, InputStyle, submitBtn } from '../CSS/login';
 interface UserSchema {
-    email: string;
-      password: string;
+  email: string;
+  password: string;
 
-  }    
-  
+}
+const LoginIn = () => {
+  const { register, formState: { errors }, handleSubmit } = useForm<UserSchema>({
+    mode: "onBlur",
+    resolver: zodResolver(LoginSchema) as any,
+    defaultValues: {
+      email: '',
+      password: '',
 
-const LoginIn=()=>{
-    const { register, formState: { errors } } = useForm<UserSchema>({
-        mode: "onBlur",
-        resolver: zodResolver(LoginSchema) as any,
-        defaultValues: {
-            email: '',
-          password: '',
-     
-        }
-      });
-      //const dispatch = useDispatch();
-      const [isDisplay,setIsDisplay]=useState(false)
-     // const [addUserLogin]=useLoginMutation()
-    //   const onSubmit = (data: UserSchema) => {
-    //     console.log("onSubmit called");
-    //     console.log("Received data:", data);
-    
-    //     const user:UserSchema = {
-    //         email: data.email || "",
-    //          password: data.password || "",
-    //            };
+    }
+  });
+  const [isDisplay, setIsDisplay] = useState(false)
 
-    
-    //     // console.log("User object being dispatched:", user);
-    //     addUserLogin(user)
-    //     dispatch(loginUser(user));
- 
-    // };
-   const handleBlur=()=>{
-      setIsDisplay(!isDisplay)
-      
-   }
-    return(
-        <>
+  const handleBlur = () => {
+    setIsDisplay(!isDisplay)
 
-     <h1>כניסה להקשת שם משתמש וסיסמא</h1>
-     {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-     <TextField
-         hiddenLabel
-        id="filled-hidden-label-normal"
-        placeholder="email"
-        variant="filled"
-        color="success"
-     
-         {...register("email")}
-    
-         />
-              {errors.email && <p>{errors.email.message}</p>}
-              <TextField
-         hiddenLabel
-        id="filled-hidden-label-normal"
-        placeholder="password"
-        variant="filled"
-        color="success"
- //האם על input אפשר onBlur?
+  }
+  const onSubmit = () => {
 
-         {...register("password")}
-         onBlur={handleBlur}
-         />
-              {errors.password && <p>{errors.password.message}</p>}
-          
-              {/* <Button type="button" sx={{ marginTop: 2}}>Submit</Button> */}
-          {/* </form> */}
-        </>
-    )
+  }
+  return (
+    <>
+
+      <div style={formStyle}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <TextField
+              sx={InputStyle}
+              hiddenLabel
+              id="filled-hidden-label-normal"
+              placeholder="email"
+              variant="filled"
+              color="success"
+              {...register("email")}
+
+            />
+            {errors.email && <p style={errorCSS}>{errors.email.message}</p>}
+          </div>
+          <div>
+            <TextField
+              sx={InputStyle}
+              hiddenLabel
+              id="filled-hidden-label-normal"
+              placeholder="password"
+              variant="filled"
+              color="success"
+              {...register("password")}
+              onBlur={handleBlur}
+            />
+            {errors.password && <p style={errorCSS}>{errors.password.message}</p>}
+          </div>
+          <Button type="button" sx={submitBtn}>Submit</Button>
+        </form>
+      </div>
+    </>
+  )
 }
 export default LoginIn
 

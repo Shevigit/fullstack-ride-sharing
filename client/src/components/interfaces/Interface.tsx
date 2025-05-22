@@ -4,15 +4,16 @@ export interface User {
     email: string;
     password:string;
     hasCar: boolean;
-    driveringLicense: string;
+    driveringLicense?: string;
     gender: string;
+
 }
 export interface RegisterUser{
     userName: string;
     phone: string;
     email: string;
-       hasCar?: boolean|false;
-    driveringLicense?: string|"";
+    hasCar?: boolean;
+    driveringLicense: string;
     gender: string;
 }
 export interface LoginCredentials {

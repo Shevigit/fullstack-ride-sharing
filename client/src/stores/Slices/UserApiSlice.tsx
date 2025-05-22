@@ -1,3 +1,4 @@
+import { User } from "../../components/interfaces/Interface";
 import apiSlice from "../Slices/ApiSlice"
 interface SuggestionSchema {
     driver: UserSchema;
@@ -39,7 +40,7 @@ interface Response {
 const UserApiSlice = apiSlice.injectEndpoints({
 
     endpoints: (builder) => ({
-        register: builder.mutation<Response,UserSchema>({
+        register: builder.mutation<Response,User>({
             query: (user) => ({
                 url: "/register",
                 method: "POST",
