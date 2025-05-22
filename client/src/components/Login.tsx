@@ -24,22 +24,23 @@ const LoginIn = () => {
     }
   });
   const [isDisplay, setIsDisplay] = useState(false)
-  const[Login]=useLoginMutation()
-  const navigate=useNavigate()
-    const [, setCookie] = useCookies(['token']);
+  const [Login] = useLoginMutation()
+  const navigate = useNavigate()
+  const [, setCookie] = useCookies(['token']);
   const handleBlur = () => {
     setIsDisplay(!isDisplay)
-
   }
-   const onSubmit = async (data:LoginCredentials ) => {
+  const [error, setError] = useState<boolean>(false)
+  const onSubmit = async (data: LoginCredentials) => {
     try {
       const result = await Login(data).unwrap();
       console.log(result);
-      setCookie('token', result.accessToken, { path: '/', maxAge: 3600 * 24 * 7 }); 
+      setCookie('token', result.accessToken, { path: '/', maxAge: 3600 * 24 * 7 });
       localStorage.setItem("currentUser", JSON.stringify(result.user));
       navigate('/')
     } catch (err) {
       console.log(err);
+      setError(true)
     }
   }
   return (
@@ -73,6 +74,7 @@ const LoginIn = () => {
             />
             {errors.password && <p style={errorCSS}>{errors.password.message}</p>}
           </div>
+          <div>{error?<p style={errorCSS}>משתמש אינו קיים</p>:<p></p>}</div>
           <Button type="submit" sx={submitBtn}>Submit</Button>
         </form>
       </div>

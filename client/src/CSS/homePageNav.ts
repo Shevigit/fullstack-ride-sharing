@@ -13,14 +13,14 @@ export const NavbarContainer: CSSProperties = {
 export const NavbarLink: CSSProperties = {
     textDecoration: "none", // מוריד קו תחתון ברירת מחדל
    
-    fontSize: "1.4rem",
+    fontSize: "120%",
     fontWeight: "100",
     padding: "0.5rem 1rem", // ריווח פנימי לכל קישור
     position: "relative", // חשוב בשביל אפקט הקו התחתון
     overflow: "hidden", // לוודא שהקו לא יוצא מהגבולות לפני ה-hover
     cursor: "pointer",
     transition: "color 0.3s ease-in-out",
-    color: 'rgb(39, 8, 165)',
+    color: 'rgb(0, 0, 0)',
     fontFamily: "Calibri",
  
     

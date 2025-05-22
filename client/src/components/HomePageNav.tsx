@@ -1,7 +1,7 @@
 import { navStyle } from '../CSS/nav'
 import { NavLink } from 'react-router'
-import { NavbarLink, NavbarLinkHover } from '../CSS/homePageNav'
-import { styled } from '@mui/material'
+import { NavbarLink } from '../CSS/homePageNav'
+
 const HomePageNav = () => {
     return (
         <div>
