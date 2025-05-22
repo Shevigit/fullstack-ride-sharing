@@ -11,10 +11,8 @@ interface SuggestionSchema {
     genderPreference: String;
     passengers: UserSchema
     status: String;
-  //  createdAt:Date;
+  
 }
-
-
 interface UserSchema {
     userName: string;
     phone: string;
@@ -25,8 +23,6 @@ interface UserSchema {
     gender: string;
 
 }
-
-
 interface LoginCredentials {
     email: string;
     password: string;
@@ -64,22 +60,6 @@ const UserApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["LoginCredentials"]
         }),
-        // Uncomment and complete the following if needed
-        // updateRecipe: builder.mutation<any, { _id: string, recipe: any }>({
-        //     query: (recipe) => ({
-        //         url: `/recipes/${recipe._id}`,
-        //         method: "PUT",
-        //         body: recipe
-        //     }),
-        //     invalidatesTags: ["User"]
-        // }),
-        // deleteRecipe: builder.mutation<any, string>({
-        //     query: (id) => ({
-        //         url: `/recipes/${id}`,
-        //         method: "DELETE",
-        //     }),
-        //     invalidatesTags: ["User"]
-        // })
     })
 })
 
