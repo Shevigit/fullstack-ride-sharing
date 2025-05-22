@@ -3,13 +3,10 @@ import { createBrowserRouter } from "react-router";
 import AppLayout from "../components/AppLayout";
 import Home from "../components/Home";
 // import LoginForm from "../../components/LoginForm";
-import LoginIn from "../components/LoginIn";
+import LoginIn from "../components/Login";
 import UserLayout from "../components/UserLayOut";
 
-import PasswordGmail from "../components/PasswordGmail";
-import UserAndPassword from "../components/UserAndPassword";
-import RegisterComplete from "../components/RegisterComplete"
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/SignUp";
 import Update from "../components/Update";
 import BasicPage from "../components/About";
 import SearchDrive from "../components/SearchDrive";
@@ -22,9 +19,7 @@ const router2 = createBrowserRouter([{
       path: "loginForm", element: <UserLayout />,
       children: [
         { index: true, element: <LoginForm /> },
-        { path: "passwordGmail", element: <PasswordGmail /> },
-        { path: "userAndPassword", element: <UserAndPassword /> },
-        { path: "registerComplete", element: <RegisterComplete /> }
+  
       ]
     },
     { path: "loginIn", element: <LoginIn /> },
