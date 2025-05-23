@@ -5,74 +5,46 @@ import { useNavigate } from 'react-router-dom'; // תיקון: אם זה react-r
 import FormSchema from '../schemas/FormSchema';
 import {  User } from './interfaces/Interface'; // וודא ש-interface User מעודכן
 import { useRegisterMutation } from '../stores/Slices/UserApiSlice';
-import { useState } from 'react';
-
 const LoginForm = () => {
-    const [checked, setChecked] = useState<boolean>(false);
     const navigate = useNavigate();
     const [Register] = useRegisterMutation();
-    // הסר את: const [gender, setGender]=useState<string>("") - כבר עשינו את זה
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // רצוי להסיר את ה-useState ל-checked ולתת ל-react-hook-form לנהל את זה
-        setChecked(event.target.checked);
-    };
-
-    // <--- הנה הקוד המעודכן שלך עבור useForm --->
     const {
         register,
         handleSubmit,
-        control, // נוסיף את control כדי שנוכל להשתמש ב-Controller
-        watch,   // נוסיף את watch כדי לשלוט ב-disabled של שדה הרישיון
+        control,
+        watch,  
         formState: { errors }
-    } = useForm<User>({ // מומלץ לציין את הטיפוס כאן אם הוא מוגדר
+    } = useForm<User>({ 
         mode: "onBlur",
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            // הגדרת ערכי ברירת מחדל לכל השדות בטופס
+           
             userName: "",
             phone: "",
             email: "",
             password: "",
-            hasCar: false, // ברירת מחדל ל-Checkbox
-            driveringLicense: "", // ברירת מחדל לשדה אופציונלי (אם ריק)
-            gender: "זכר", // <--- חשוב! הגדרת ברירת מחדל ל-RadioGroup
+            hasCar: false, 
+            driveringLicense: "",
+            gender: "זכר", 
         }
     });
-    // <--- סוף הקוד המעודכן עבור useForm --->
-
-    // השתמש ב-watch כדי לעקוב אחר מצב ה-Checkbox
     const hasCarValue = watch("hasCar");
-
     const onSubmit = async (data: User) => {
-        // אין צורך ליצור אובייקט user חדש על ידי הקצאות אחד-אחד אם data כבר מסוג User
-        // אלא אם כן יש לוגיקה נוספת שאתה רוצה ליישם.
-        // אם הטיפוס של `data` הוא `User` (כפי שהגדרת בפונקציה), והוא מגיע כבר מסודר
-        // מה-zodResolver, אין צורך ביצירת אובייקט `user` נוסף.
-        // אם `data` הוא מטיפוס אחר (למשל FormData), אז כן צריך להמיר אותו.
-        // נניח ש-data כבר תואם ל-User (לאחר תיקונים קודמים).
-
-        // וודא ש-driveringLicense ו-hasCar מקבלים ערכים תקינים אם הם אופציונליים
-        // ה-defaultValues כבר מטפלים בזה בהתחלה, אבל זה מחזק את זה.
         const userToSend: User = {
             ...data,
             hasCar: data.hasCar || false,
             driveringLicense: data.driveringLicense || "",
-            // gender אמור להגיע תקין מ-data.gender עכשיו
         };
-
-        console.log(userToSend); // זה ה-user שיישלח
+        console.log(userToSend); 
         try {
             const result = await Register(userToSend).unwrap();
             console.log(result);
-            localStorage.setItem('user', JSON.stringify(userToSend)); // **שוב אזהרה: אל תאחסן סיסמא ב-localStorage!**
+           localStorage.setItem("currentUser", JSON.stringify(result.user));
             navigate('/')
         } catch (error) {
             console.error("שגיאה ברישום:", error);
-            // טיפול בשגיאה - הצג הודעה למשתמש
         }
     };
-
     return (
         <>
             <Box role="presentation" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
