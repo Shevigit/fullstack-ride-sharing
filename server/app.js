@@ -1,19 +1,25 @@
 require('dotenv').config(); 
-const express = require('express');
+
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const csv = require("csv-parser");
+const iconv = require("iconv-lite");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require('express-session'); 
 const passport = require('passport');   
-const cors = require("cors");
-const corsOptions = require("./config/corsOptions"); 
+// const corsOptions = require("./config/corsOptions"); 
 const connectDB = require("./config/db"); 
 const authRoutes = require('./routes/authRoute'); 
+// app.use(cors(corsOptions));
+
 const app = express();
 const PORT = process.env.PORT || 7001;
+app.use(cors());
 console.log("start...");
 connectDB();
-app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static("public"));
 app.use(session({
     secret: process.env.SESSION_SECRET || 'super_secret_key', // רצוי להשתמש במשתנה סביבה עבור Secret
     resave: false,
@@ -36,6 +42,54 @@ app.all('*', (req, res) => {
         res.type('txt').send('404 Not Found');
     }
 });
+
+
+
+
+
+
+// מאפשר CORS לבקשות מהדפדפן (חשוב אם ה־frontend בפורט אחר)
+
+// פונקציה לטעינת ערים מתוך קובץ CSV
+const loadCities = () => {
+  return new Promise((resolve, reject) => {
+    const results = new Set();
+
+    fs.createReadStream(path.join(__dirname, "data", "cities.csv"))
+      .pipe(iconv.decodeStream("win1255"))
+      .pipe(csv())
+      .on("data", (row) => {
+        const city = row["שם_ישוב"];
+        if (city) results.add(city);
+      })
+      .on("end", () => {
+        console.log("CSV loaded. Total cities:", results.size);
+        resolve([...results]);
+      })
+      .on("error", reject);
+  });
+};
+
+// Route שמחזיר את רשימת הערים
+app.get("/api/cities", async (req, res) => {
+  try {
+    const cities = await loadCities();
+    res.json(cities);
+  } catch (err) {
+    console.error("Error loading cities:", err);
+    res.status(500).json({ error: "Failed to load cities" });
+  }
+});
+
+// טיפול בשגיאות 404 (אפשר לשלוח טקסט פשוט)
+app.use((req, res) => {
+  res.status(404).send("Page not found");
+});
+
+// // הפעלת השרת
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
