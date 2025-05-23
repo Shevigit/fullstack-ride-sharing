@@ -21,3 +21,11 @@ export interface LoginCredentials {
     password: string;
 }
 
+export interface Drive{
+    address:string,
+    source:string,
+   destination:string,
+    date: Date,
+      time: string
+ genderPreference:string
+}
