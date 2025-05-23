@@ -4,6 +4,10 @@ import { Cookies } from 'react-cookie';
 const cookies = new Cookies();
 const ApiSlice=createApi({
     reducerPath:"api",
+<<<<<<< HEAD
+    baseQuery:fetchBaseQuery({baseUrl:'http://localhost:7002/api'}),
+tagTypes:["User","post","Drives"],
+=======
     baseQuery:fetchBaseQuery({
         baseUrl:'http://localhost:7002/api',
 <<<<<<< HEAD
@@ -27,6 +31,7 @@ const ApiSlice=createApi({
 >>>>>>> 05e8e3ab390df7da869d539b9333ec63b0d69267
     }),
 tagTypes:["User","post","LoginCredentials"],
+>>>>>>> 05e8e3ab390df7da869d539b9333ec63b0d69267
 endpoints:()=>({})
 })
 export default ApiSlice
