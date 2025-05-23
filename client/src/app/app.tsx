@@ -3,12 +3,12 @@ import { createBrowserRouter } from "react-router";
 import AppLayout from "../components/AppLayout";
 import Home from "../components/Home";
 // import LoginForm from "../../components/LoginForm";
-import LoginIn from "../components/LoginIn";
+import LoginIn from "../components/Login";
 import UserLayout from "../components/UserLayOut";
 
 import PasswordGmail from "../components/PasswordGmail";
 import UserAndPassword from "../components/UserAndPassword";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/SignUp";
 
 
 const router2=createBrowserRouter(

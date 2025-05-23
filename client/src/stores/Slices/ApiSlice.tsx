@@ -6,6 +6,7 @@ const ApiSlice=createApi({
     reducerPath:"api",
     baseQuery:fetchBaseQuery({
         baseUrl:'http://localhost:7002/api',
+<<<<<<< HEAD
        // credentials: 'include', 
         prepareHeaders: (headers) => {
             const token = cookies.get('token'); 
@@ -14,6 +15,16 @@ const ApiSlice=createApi({
             }
             return headers;
         },
+=======
+        // credentials: 'include', 
+        // prepareHeaders: (headers) => {
+        //     const token = cookies.get('token'); 
+        //     if (token) {
+        //       headers.set('Authorization', `Bearer ${token}`);
+        //     }
+        //     return headers;
+        // },
+>>>>>>> 05e8e3ab390df7da869d539b9333ec63b0d69267
     }),
 tagTypes:["User","post","LoginCredentials"],
 endpoints:()=>({})
