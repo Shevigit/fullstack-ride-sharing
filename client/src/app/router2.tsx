@@ -10,7 +10,7 @@ import LoginForm from "../components/SignUp";
 import Update from "../components/Update";
 import BasicPage from "../components/About";
 import SearchDrive from "../components/SearchDrive";
-import Offer from "../components/Offer";
+// import Offer from "../components/Offer";
 const router2 = createBrowserRouter([{
   element: <AppLayout />,
   children: [
@@ -26,7 +26,7 @@ const router2 = createBrowserRouter([{
     {path: "Update", element: <Update/>},
     {path: "About", element: <BasicPage/>},
     {path: "SearchDrive", element: <SearchDrive/>},
-    {path: "Offer", element: <Offer/>},
+    // {path: "Offer", element: <Offer/>},
 
 
   ]
