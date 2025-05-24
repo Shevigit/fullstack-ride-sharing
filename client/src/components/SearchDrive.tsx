@@ -1,148 +1,8 @@
-// // const SearchDrive=()=>{
-// //     return(
-// //         <>
-// //      <h1>SearchDrive</h1>
-// //         </>
-// //     )
-// // }
-// // export default SearchDrive
-
-// import React, { useState } from "react";
-// import { format } from "date-fns";
-// import { he } from "date-fns/locale";
-
-// import {
-//   TextField,
-//   Button,
-//   Grid,
-//   InputAdornment,
-//   IconButton,
-//   Typography,
-//   Popover,
-// } from "@mui/material";
-
-// import {
-//   Search as SearchIcon,
-//   CalendarToday as CalendarIcon,
-//   AccessTime as ClockIcon,
-// } from "@mui/icons-material";
-
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
-// const SearchDrive = ({ onSearch }) => {
-//   const [source, setSource] = useState("");
-//   const [destination, setDestination] = useState("");
-//   const [date, setDate] = useState(new Date());
-//   const [time, setTime] = useState("");
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     onSearch({
-//       source,
-//       destination,
-//       date: date ? format(date, "yyyy-MM-dd") : "",
-//       time,
-//     });
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <Typography variant="h4" gutterBottom>
-//         SearchDrive
-//       </Typography>
-
-//       <Grid container spacing={2}>
-//         <Grid item xs={12} md={6}>
-//           <TextField
-//             label="עיר מוצא"
-//             placeholder="מהיכן אתה יוצא?"
-//             fullWidth
-//             value={source}
-//             onChange={(e) => setSource(e.target.value)}
-//           />
-//         </Grid>
-
-//         <Grid item xs={12} md={6}>
-//           <TextField
-//             label="עיר יעד"
-//             placeholder="לאן אתה נוסע?"
-//             fullWidth
-//             value={destination}
-//             onChange={(e) => setDestination(e.target.value)}
-//           />
-//         </Grid>
-
-//         <Grid item xs={12} md={6}>
-//           <LocalizationProvider dateAdapter={AdapterDateFns} locale={he}>
-//             <DatePicker
-//               label="תאריך"
-//               value={date}
-//               onChange={(newValue) => setDate(newValue)}
-//               disablePast
-//               renderInput={(params) => (
-//                 <TextField
-//                   {...params}
-//                   fullWidth
-//                   InputProps={{
-//                     ...params.InputProps,
-//                     endAdornment: (
-//                       <InputAdornment position="end">
-//                         <CalendarIcon />
-//                       </InputAdornment>
-//                     ),
-//                   }}
-//                 />
-//               )}
-//             />
-//           </LocalizationProvider>
-//         </Grid>
-
-//         <Grid item xs={12} md={6}>
-//           <TextField
-//             label="שעה"
-//             type="time"
-//             value={time}
-//             onChange={(e) => setTime(e.target.value)}
-//             fullWidth
-//             InputProps={{
-//               endAdornment: (
-//                 <InputAdornment position="end">
-//                   <ClockIcon />
-//                 </InputAdornment>
-//               ),
-//             }}
-//             inputProps={{
-//               step: 300, // 5 minutes step
-//             }}
-//           />
-//         </Grid>
-
-//         <Grid item xs={12}>
-//           <Button
-//             type="submit"
-//             variant="contained"
-//             color="primary"
-//             fullWidth
-//             startIcon={<SearchIcon />}
-//             sx={{ height: 48 }}
-//           >
-//             חפש נסיעות
-//           </Button>
-//         </Grid>
-//       </Grid>
-//     </form>
-//   );
-// };
-
-// export default SearchDrive;
 
 
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
-
 import {
   TextField,
   Button,
@@ -150,17 +10,18 @@ import {
   InputAdornment,
   Typography,
   Autocomplete,
+  Box,
 } from "@mui/material";
-
 import {
   Search as SearchIcon,
   CalendarToday as CalendarIcon,
   AccessTime as ClockIcon,
 } from "@mui/icons-material";
-
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import RideCard from "./RideCard";
+import { Outlet } from "react-router";
 
 const SearchDrive = ({ onSearch }) => {
   const [cities, setCities] = useState([]);
@@ -170,7 +31,7 @@ const SearchDrive = ({ onSearch }) => {
   const [time, setTime] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:7002/api/cities") // החל לפי הצורך
+    fetch("http://localhost:7002/api/cities")
       .then((res) => res.json())
       .then((data) => setCities(data))
       .catch((err) => console.error("שגיאה בטעינת ערים:", err));
@@ -187,92 +48,122 @@ const SearchDrive = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Typography variant="h4" gutterBottom>
-        חיפוש נסיעה
-      </Typography>
+    <>
+      <Box
+        sx={{
+          maxWidth: "900px",
+          mx: "auto",
+          p: 3,
+          boxShadow: 2,
+          borderRadius: 3,
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        <form onSubmit={handleSubmit}>
+          <Typography variant="h4" gutterBottom align="center">
+            חיפוש נסיעה
+          </Typography>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Autocomplete
-            options={cities}
-            value={source}
-            onChange={(e, newValue) => setSource(newValue)}
-            renderInput={(params) => (
-              <TextField {...params} label="עיר מוצא" placeholder="בחר עיר" fullWidth />
-            )}
-          />
-        </Grid>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Autocomplete
+                options={cities}
+                 sx={{ width: "100%", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
 
-        <Grid item xs={12} md={6}>
-          <Autocomplete
-            options={cities}
-            value={destination}
-            onChange={(e, newValue) => setDestination(newValue)}
-            renderInput={(params) => (
-              <TextField {...params} label="עיר יעד" placeholder="בחר עיר" fullWidth />
-            )}
-          />
-        </Grid>
+                value={source}
+                onChange={(e, newValue) => setSource(newValue)}
+                renderInput={(params) => (
+                  <TextField {...params} label="עיר מוצא" fullWidth />
+                )}
+              />
+            </Grid>
 
-        <Grid item xs={12} md={6}>
-          <LocalizationProvider dateAdapter={AdapterDateFns} locale={he}>
-            <DatePicker
-              label="תאריך"
-              value={date}
-              onChange={(newValue) => setDate(newValue)}
-              disablePast
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <CalendarIcon />
-                      </InputAdornment>
-                    ),
-                  }}
+            <Grid item xs={12} md={6}>
+              <Autocomplete
+                options={cities}
+                value={destination}
+                onChange={(e, newValue) => setDestination(newValue)}
+                renderInput={(params) => (
+                  <TextField {...params} label="עיר יעד" fullWidth />
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <LocalizationProvider dateAdapter={AdapterDateFns} locale={he}>
+                <DatePicker
+                  label="תאריך"
+                  value={date}
+                  onChange={(newValue) => setDate(newValue)}
+                  disablePast
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <CalendarIcon />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
                 />
-              )}
-            />
-          </LocalizationProvider>
-        </Grid>
+              </LocalizationProvider>
+            </Grid>
 
-        <Grid item xs={12} md={6}>
-          <TextField
-            label="שעה"
-            type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            fullWidth
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <ClockIcon />
-                </InputAdornment>
-              ),
-            }}
-            inputProps={{ step: 300 }}
-          />
-        </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="שעה"
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <ClockIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                inputProps={{ step: 300 }}
+              />
+            </Grid>
 
-        <Grid item xs={12}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            startIcon={<SearchIcon />}
-            sx={{ height: 48 }}
-            disabled={!source || !destination}
-          >
-            חפש נסיעות
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+            <Grid item xs={12} display="flex" justifyContent="center">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                startIcon={<SearchIcon />}
+                sx={{ width: "100%", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
+                disabled={!source || !destination}
+              >
+                חפש נסיעות
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
+
+      {/* תוצאות */}
+      <Box mt={4} 
+      sx={{
+          maxWidth: "900px",
+          mx: "auto",
+          p: 3,
+          // boxShadow: 2,
+          borderRadius: 3,
+          // backgroundColor: "#f5f5f5",
+        }}>
+        <Outlet/>
+
+        <RideCard />
+
+      </Box>
+    </>
   );
 };
 

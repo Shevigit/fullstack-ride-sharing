@@ -10,7 +10,8 @@ import LoginForm from "../components/SignUp";
 import Update from "../components/Update";
 import BasicPage from "../components/About";
 import SearchDrive from "../components/SearchDrive";
-import Offer from "../components/Offer";
+import RideInfoCard from "../components/RideInfoCard";
+// import Offer from "../components/Offer";
 const router2 = createBrowserRouter([{
   element: <AppLayout />,
   children: [
@@ -25,8 +26,12 @@ const router2 = createBrowserRouter([{
     { path: "loginIn", element: <LoginIn /> },
     {path: "Update", element: <Update/>},
     {path: "About", element: <BasicPage/>},
-    {path: "SearchDrive", element: <SearchDrive/>},
-    {path: "Offer", element: <Offer/>},
+    {path: "SearchDrive", element: <SearchDrive/>,
+      children:[
+        {path:"id1",element:<RideInfoCard></RideInfoCard>}
+      ]
+    },
+    // {path: "Offer", element: <Offer/>},
 
 
   ]
