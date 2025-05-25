@@ -67,6 +67,7 @@ export const btnStyle: CSSProperties = {
 export const margin: CSSProperties = {
     //   marginRight: '3vw'
 }
+
 export const mainPage:CSSProperties={
     marginTop: "24vh",
     marginLeft: "15vw",
@@ -80,4 +81,5 @@ export const aboutTitle: CSSProperties={
     fontSize: "x-large",
     fontWeight: "500",
     color: "rgba(254, 95, 51, 0.86)"
+
 }
