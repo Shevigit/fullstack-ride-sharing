@@ -10,6 +10,10 @@ import LoginForm from "../components/SignUp";
 import Update from "../components/Update";
 import BasicPage from "../components/About";
 import SearchDrive from "../components/SearchDrive";
+// <<<<<<< HEAD
+import RideInfoCard from "../components/RideInfoCard";
+// =======
+// >>>>>>> 2c666fb639d493fc117214a9790f781c423a2aa0
 // import Offer from "../components/Offer";
 const router2 = createBrowserRouter([{
   element: <AppLayout />,
@@ -25,7 +29,15 @@ const router2 = createBrowserRouter([{
     { path: "loginIn", element: <LoginIn /> },
     {path: "Update", element: <Update/>},
     {path: "About", element: <BasicPage/>},
-    {path: "SearchDrive", element: <SearchDrive/>},
+// <<<<<<< HEAD
+    {path: "SearchDrive", element: <SearchDrive/>,
+      children:[
+        {path:"id1",element:<RideInfoCard></RideInfoCard>}
+      ]
+    },
+// =======
+//     {path: "SearchDrive", element: <SearchDrive/>},
+// >>>>>>> 2c666fb639d493fc117214a9790f781c423a2aa0
     // {path: "Offer", element: <Offer/>},
 
 
