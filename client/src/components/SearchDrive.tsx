@@ -1,9 +1,6 @@
-
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
-
 import {
   TextField,
   Button,
@@ -12,31 +9,27 @@ import {
   Typography,
   Autocomplete,
 } from "@mui/material";
-
 import {
   Search as SearchIcon,
   CalendarToday as CalendarIcon,
   AccessTime as ClockIcon,
 } from "@mui/icons-material";
-
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import { mainContentStyle } from "../CSS/home";
 const SearchDrive = ({ onSearch }) => {
   const [cities, setCities] = useState([]);
   const [source, setSource] = useState(null);
   const [destination, setDestination] = useState(null);
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState("");
-
   useEffect(() => {
     fetch("http://localhost:7002/api/cities") 
       .then((res) => res.json())
       .then((data) => setCities(data))
       .catch((err) => console.error("שגיאה בטעינת ערים:", err));
   }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     onSearch({
@@ -46,13 +39,12 @@ const SearchDrive = ({ onSearch }) => {
       time,
     });
   };
-
   return (
-    <form onSubmit={handleSubmit}>
+    <div style={mainContentStyle}>
+    <form onSubmit={handleSubmit} >
       <Typography variant="h4" gutterBottom>
         חיפוש נסיעה
       </Typography>
-
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Autocomplete
@@ -64,7 +56,6 @@ const SearchDrive = ({ onSearch }) => {
             )}
           />
         </Grid>
-
         <Grid item xs={12} md={6}>
           <Autocomplete
             options={cities}
@@ -75,7 +66,6 @@ const SearchDrive = ({ onSearch }) => {
             )}
           />
         </Grid>
-
         <Grid item xs={12} md={6}>
           <LocalizationProvider dateAdapter={AdapterDateFns} locale={he}>
             <DatePicker
@@ -100,7 +90,6 @@ const SearchDrive = ({ onSearch }) => {
             />
           </LocalizationProvider>
         </Grid>
-
         <Grid item xs={12} md={6}>
           <TextField
             label="שעה"
@@ -118,7 +107,6 @@ const SearchDrive = ({ onSearch }) => {
             inputProps={{ step: 300 }}
           />
         </Grid>
-
         <Grid item xs={12}>
           <Button
             type="submit"
@@ -134,6 +122,7 @@ const SearchDrive = ({ onSearch }) => {
         </Grid>
       </Grid>
     </form>
+    </div>
   );
 };
 

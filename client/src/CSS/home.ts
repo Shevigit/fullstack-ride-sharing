@@ -67,3 +67,10 @@ export const btnStyle: CSSProperties = {
 export const margin: CSSProperties = {
     //   marginRight: '3vw'
 }
+export const mainContentStyle: React.CSSProperties = {
+  marginTop: "8vh", // מונע גלישה מתחת לניווט העליון
+  marginLeft: "24vw", // מונע גלישה מתחת לניווט הצדדי (אם הוא בצד שמאל)
+  padding: "1rem", // ריווח פנימי לתוכן
+  minHeight: "100vh",
+  
+};
