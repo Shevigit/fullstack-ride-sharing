@@ -10,8 +10,15 @@ import {
   Typography,
   Autocomplete,
   Box,
+  Card,
+  CardContent,
+  Stack,
 } from "@mui/material";
-
+import {
+ 
+  Chip,
+ 
+} from "@mui/material";
 import Grid from '@mui/material/Grid';
 import {
   Search as SearchIcon,
@@ -21,8 +28,9 @@ import {
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import RideCard from "./RideCard";
+import { useGetAlldriversQuery } from "../stores/Slices/endPointsDriver";
 
 
 
@@ -48,7 +56,7 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
   const [destination, setDestination] = useState<City | null>(null);
   const [date, setDate] = useState<Date | null>(new Date());
   const [time, setTime] = useState("");
-  //const { data: GetAlldrivers, isError, isLoading } = useGetAlldriversQuery();
+  const { data: GetAlldrivers, isError, isLoading } = useGetAlldriversQuery();
   useEffect(() => {
     fetch("http://localhost:7002/api/cities")
       .then((res) => res.json())
@@ -182,9 +190,54 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
           borderRadius: 3,
           // backgroundColor: "#f5f5f5",
         }}>
-        <Outlet/>
+        {
+  GetAlldrivers?.map(driver=>(
+<Card
+      variant="outlined"
+      sx={{ mb: 2, p: 2, borderRadius: 3, backgroundColor: "#f9f9ff" }}
+    >
+      <CardContent>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Box>
+            <Typography variant="h6" color="primary" gutterBottom>
+              {driver.source} → {driver.destination}
+            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <AccessTimeIcon fontSize="small" />
+              <Typography variant="body2">
+                {driver.date} בשעה {driver.time}
+              </Typography>
+            </Stack>
+            <Typography variant="body2" color="text.secondary">
+              {driver.availableSeats > 0
+                ? `${driver.availableSeats} מקומות פנויים`
+                : "אין מקומות פנויים"}
+            </Typography>
+          </Box>
 
-        <RideCard />
+          <Stack alignItems="flex-end" spacing={1}>
+            <Chip
+              label={driver.status ? "פעיל" : "לא פעיל"}
+              color={driver.status ? "success" : "default"}
+              size="small"
+            />
+           
+            <Button
+            component={Link}
+            to={`/SearchDrive/${driver._id}`}
+              variant="outlined"
+              size="small"
+              disabled={driver.availableSeats === 0}
+            >
+              {driver.availableSeats === 0 ? "אין מקומות פנויים" : "פרטים נוספים"}
+              
+            </Button>
+          </Stack>
+        </Stack>
+      </CardContent>
+    </Card>
+  ))
+}
 
       </Box>
  </div>

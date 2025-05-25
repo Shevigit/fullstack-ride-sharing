@@ -1,4 +1,3 @@
-
 import { createBrowserRouter } from "react-router";
 import AppLayout from "../components/AppLayout";
 import Home from "../components/Home";
@@ -10,7 +9,9 @@ import LoginForm from "../components/SignUp";
 import Update from "../components/Update";
 import BasicPage from "../components/About";
 import SearchDrive from "../components/SearchDrive";
+import RideInfoCard from "../components/RideInfoCard";
 
+import SuggestionDrive from "../components/SuggestionDrive";
 const router2 = createBrowserRouter([{
   element: <AppLayout />,
   children: [
@@ -25,12 +26,14 @@ const router2 = createBrowserRouter([{
     { path: "loginIn", element: <LoginIn /> },
     {path: "Update", element: <Update/>},
     {path: "About", element: <BasicPage/>},
+    {path: "SearchDrive", element: <SearchDrive/>,
+    
+      children:[
+        {path:"id",element:<RideInfoCard></RideInfoCard>}
+      ]
+    },
 
-    {path: "SearchDrive", element: <SearchDrive onSearch={function (data: { source: { id: number; name: string; } | null; destination: { id: number; name: string; } | null; date: string; time: string; }): void {
-      throw new Error("Function not implemented.");
-    } }/>},
-    //  {path: "Offer", element: <SuggestionDrive/>},
-
+    {path: "SuggestionDrive", element: <SuggestionDrive/>},
 
 
   ]
@@ -41,23 +44,6 @@ const router2 = createBrowserRouter([{
 ]
 
 )
-
-//    (property) Children: ({
-//     index: boolean;
-//     element: JSX.Element;
-// } | {
-//     path: string;
-//     element: JSX.Element;
-// })[]
-// { path: "contact", element: <Contact /> },
-// {
-//     path: "users", element: <UserLayout />, children: [
-//         { index: true, element: <UserList /> },
-//         { path: "newUser", element: <UserDetailForm /> },
-//         { path: ":userName", element: <UserDetails /> },
-//     ]
-// }
-
 
 
 export default router2
