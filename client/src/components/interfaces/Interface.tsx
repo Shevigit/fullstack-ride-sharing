@@ -42,5 +42,6 @@ export interface Driver{
     passengers:User[],
     status: status
     createdAt:Date,
+    _id?:string,
 }
 

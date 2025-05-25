@@ -1,4 +1,3 @@
-
 import { createBrowserRouter } from "react-router";
 import AppLayout from "../components/AppLayout";
 import Home from "../components/Home";
@@ -25,8 +24,9 @@ const router2 = createBrowserRouter([{
     {path: "Update", element: <Update/>},
     {path: "About", element: <BasicPage/>},
     {path: "SearchDrive", element: <SearchDrive/>,
+    
       children:[
-        {path:"id1",element:<RideInfoCard></RideInfoCard>}
+        {path:"id",element:<RideInfoCard></RideInfoCard>}
       ]
     },
     {path: "SuggestionDrive", element: <SuggestionDrive/>},

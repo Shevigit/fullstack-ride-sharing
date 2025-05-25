@@ -31,9 +31,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-                <div id="about-us">
-                        <BasicPage/>
-                </div>
+              
             </div>
         </>
     )
