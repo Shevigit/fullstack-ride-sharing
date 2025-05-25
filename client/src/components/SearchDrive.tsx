@@ -17,8 +17,7 @@ import {
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useGetAlldriversQuery } from "../stores/Slices/endPointsDriver";
-import { main } from "../CSS/home";
+
 
 type City = {
   id: number;
@@ -62,7 +61,7 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
   };
 
   return (
-    <div style={main}>
+    <div >
     <form onSubmit={handleSubmit}>
       <Typography variant="h4" gutterBottom>
         חיפוש נסיעה

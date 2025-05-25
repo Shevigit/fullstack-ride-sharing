@@ -10,6 +10,7 @@ import LoginForm from "../components/SignUp";
 import Update from "../components/Update";
 import BasicPage from "../components/About";
 import SearchDrive from "../components/SearchDrive";
+import SuggestionDrive from "../components/SuggestionDrive";
 // import Offer from "../components/Offer";
 const router2 = createBrowserRouter([{
   element: <AppLayout />,
@@ -25,8 +26,10 @@ const router2 = createBrowserRouter([{
     { path: "loginIn", element: <LoginIn /> },
     {path: "Update", element: <Update/>},
     {path: "About", element: <BasicPage/>},
-    {path: "SearchDrive", element: <SearchDrive/>},
-    // {path: "Offer", element: <Offer/>},
+    {path: "SearchDrive", element: <SearchDrive onSearch={function (data: { source: { id: number; name: string; } | null; destination: { id: number; name: string; } | null; date: string; time: string; }): void {
+      throw new Error("Function not implemented.");
+    } }/>},
+     {path: "Offer", element: <SuggestionDrive/>},
 
 
   ]
