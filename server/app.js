@@ -1,6 +1,9 @@
 require('dotenv').config(); 
-
 const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 7001;
+
+
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
@@ -9,15 +12,13 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require('express-session'); 
 const passport = require('passport');   
-// const corsOptions = require("./config/corsOptions"); 
+const corsOptions = require("./config/corsOptions"); 
 const connectDB = require("./config/db"); 
 const authRoutes = require('./routes/authRoute'); 
 const { log } = require('console');
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
+const driverRouter=require('./routes/driverSuggestionRoute')
 
-const app = express();
-const PORT = process.env.PORT || 7001;
-app.use(cors());
 console.log("start...");
 connectDB();
 app.use(express.json());
@@ -33,7 +34,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api', authRoutes); // משתמש ב-authRoutes שיובא למעלה
-
+app.use('/drivers',driverRouter);
 
 
 
