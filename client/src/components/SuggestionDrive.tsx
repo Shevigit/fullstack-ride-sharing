@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Drawer, Box, TextField, Stack, Checkbox, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import React, { useState } from 'react';
+import { Button, TextField, Stack, Checkbox, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormSchema from '../schemas/FormSchema'; // Assume you have a validation schema
@@ -25,6 +25,14 @@ const SuggestionDrive = () => {
         localStorage.setItem('user', JSON.stringify(user)); // Store the user data directly
     };
 
+
+  // 🟢 מצב לסימון checkbox
+  const [checked, setChecked] = useState(false);
+
+  // 🟢 פונקציה שמשנה את המצב
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
 
 
     return (
