@@ -67,3 +67,6 @@ export const btnStyle: CSSProperties = {
 export const margin: CSSProperties = {
     //   marginRight: '3vw'
 }
+export const main: CSSProperties={
+    
+}

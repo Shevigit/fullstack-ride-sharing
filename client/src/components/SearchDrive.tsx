@@ -17,6 +17,8 @@ import {
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useGetAlldriversQuery } from "../stores/Slices/endPointsDriver";
+import { main } from "../CSS/home";
 
 type City = {
   id: number;
@@ -40,12 +42,13 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
   const [destination, setDestination] = useState<City | null>(null);
   const [date, setDate] = useState<Date | null>(new Date());
   const [time, setTime] = useState("");
-
+  //const { data: GetAlldrivers, isError, isLoading } = useGetAlldriversQuery();
   useEffect(() => {
     fetch("http://localhost:7002/api/cities")
       .then((res) => res.json())
       .then((data) => setCities(data))
       .catch((err) => console.error("שגיאה בטעינת ערים:", err));
+
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -59,6 +62,7 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
   };
 
   return (
+    <div style={main}>
     <form onSubmit={handleSubmit}>
       <Typography variant="h4" gutterBottom>
         חיפוש נסיעה
@@ -146,6 +150,7 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
         </Grid>
       </Grid>
     </form>
+    </div>
   );
 };
 
