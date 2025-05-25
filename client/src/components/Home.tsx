@@ -1,6 +1,6 @@
 import { Button } from "@mui/material"
 import { bigFont, btnStyle, containerLinks, containerOfBtnsInHomePage, margin, mediumFont, picture, smallFont } from "../CSS/home"
-import { containerOfBtns } from "../CSS/nav"
+
 import { Link } from "react-router"
 import BasicPage from "./About"
 

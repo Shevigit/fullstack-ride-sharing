@@ -7,6 +7,7 @@ const cors = require("cors");
 const corsOptions = require("./config/corsOptions"); 
 const connectDB = require("./config/db"); 
 const authRoutes = require('./routes/authRoute'); 
+const driverRoute=require('./routes/driverSuggestionRoute')
 const app = express();
 const PORT = process.env.PORT || 7001;
 console.log("start...");
@@ -25,7 +26,8 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/api', authRoutes); // משתמש ב-authRoutes שיובא למעלה
+app.use('/api', authRoutes); 
+app.use('/drives', driverRoute)
 app.all('*', (req, res) => {
     res.status(404);
     if (req.accepts('html')) {
