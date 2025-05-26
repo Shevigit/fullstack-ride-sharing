@@ -9,9 +9,9 @@ const SuggestionSchema = new mongoose.Schema({
     date: { type: Date, required: true, index: true },
     time: { type: String, required: true },
     availableSeats: { type: Number, required: true, min: 0 },
-    genderPreference: { type: String, enum: ['Without preference', 'male', 'female'], default: 'Without preference' },
+    genderPreference: { type: String, enum: ['מעדיף לא לומר', 'נקבה', 'זכר'], default: 'מעדיף לא לומר' },
     passengers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }],
-    status: { type: String, enum: ['active', 'canceled', 'completed'], default: 'active' },
+    status: { type: String, enum: ['פעיל', 'בוטל', 'הושלם'], default: 'פעיל' },
     createdAt: { type: Date, default: Date.now, index: true }
 });
 module.exports = mongoose.model('Suggestion', SuggestionSchema)

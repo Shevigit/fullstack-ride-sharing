@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require("../models/User");
+const User = require('../models/user')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const login = async (req, res) => {
@@ -31,7 +31,17 @@ const register = async (req, res) => {
     const user = await User.create(userObject)
     if (!user)
         return res.status(400).json({ message: "invalid user received" })
-    const userInfo = { userName: userObject.userName, email: userObject.email, phone: userObject.phone, password: userObject.password, hasCar: userObject.hasCar, gender: userObject.gender, driveringLicense: userObject.driveringLicense }
+   const userInfo = { 
+  _id: user._id,
+  userName: user.userName,
+  email: user.email,
+  phone: user.phone,
+  password: user.password,
+  hasCar: user.hasCar,
+  gender: user.gender,
+  driveringLicense: user.driveringLicense
+}
+
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET)
     return res.status(201).json({ accessToken: accessToken, user: userInfo })
 };

@@ -33,7 +33,7 @@ const router2 = createBrowserRouter([{
       ]
     },
 
-    {path: "SuggestionDrive", element: <SuggestionDrive/>},
+    {path: "Offer", element: <SuggestionDrive/>},
 
 
   ]
