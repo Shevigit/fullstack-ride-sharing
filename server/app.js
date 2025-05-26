@@ -60,35 +60,6 @@ const loadCities=()=> {
   });
 }
 
-
-
-
-// מאפשר CORS לבקשות מהדפדפן (חשוב אם ה־frontend בפורט אחר)
-
-// פונקציה לטעינת ערים מתוך קובץ CSV
-// const loadCities = () => {
-//   return new Promise((resolve, reject) => {
-//     const results = new Set();
-
-//     fs.createReadStream(path.join(__dirname, "data", "cities.csv"))
-//       .pipe(iconv.decodeStream("win1255"))
-//       .pipe(csv())
-//       .on("data", (city) => {
-//         // const city = row["שם_ישוב"];
-//         // console.log(row.שם_ישוב);
-        
-//         if (city) results.add(city);
-//       })
-//       .on("end", () => {
-//         console.log("CSV loaded. Total cities:", results.size);
-//         console.log(results);
-        
-//         resolve([...results]);
-//       })
-//       .on("error", reject);
-//   });
-// };
-
 // Route שמחזיר את רשימת הערים
 app.get("/api/cities", async (req, res) => {
   try {
@@ -105,10 +76,7 @@ app.use((req, res) => {
   res.status(404).send("Page not found");
 });
 
-// // הפעלת השרת
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
+
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
