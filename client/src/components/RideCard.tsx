@@ -7,23 +7,8 @@ import { useGetAlldriversQuery } from "../stores/Slices/endPointsDriver";
 
 const RideCard = () => {
 
-    const ride = {
-    origin: "תל אביב",
-    destination: "ירושלים",
-    time: "07:30",
-    date: "2025-05-13",
-    availableSeats: 3,
-    isActive: true
-  };
+  
 
-  const {
-    origin,
-    destination,
-    time,
-    date,
-    availableSeats,
-    isActive
-  } = ride;
 
   return (
 <>

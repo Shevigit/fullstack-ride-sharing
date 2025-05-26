@@ -12,6 +12,7 @@ const SuggestionSchema = new mongoose.Schema({
     genderPreference: { type: String, enum: ['מעדיף לא לומר', 'נקבה', 'זכר'], default: 'מעדיף לא לומר' },
     passengers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }],
     status: { type: String, enum: ['פעיל', 'בוטל', 'הושלם'], default: 'פעיל' },
-    createdAt: { type: Date, default: Date.now, index: true }
+    createdAt: { type: Date, default: Date.now, index: true },
+    
 });
 module.exports = mongoose.model('Suggestion', SuggestionSchema)
