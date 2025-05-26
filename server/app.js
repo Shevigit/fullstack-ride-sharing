@@ -63,7 +63,9 @@ const loadCities = () => {
       })
       .on("error", reject);
   });
+
 };
+
 app.get("/api/cities", async (req, res) => {
   try {
     const cities = await loadCities();
