@@ -61,3 +61,7 @@ export interface SearchDriversData{
     
 
 }
+export interface ResDriver extends Driver{
+ passengers: User[],
+
+}

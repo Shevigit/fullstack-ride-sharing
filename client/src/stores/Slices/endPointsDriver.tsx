@@ -1,4 +1,4 @@
-import { Driver } from "../../components/interfaces/Interface";
+import { Driver, ResDriver } from "../../components/interfaces/Interface";
 import apiSliceDriver from "./apiSliceDrivers";
 
 const apiDriverSlice = apiSliceDriver.injectEndpoints({
@@ -22,7 +22,7 @@ const apiDriverSlice = apiSliceDriver.injectEndpoints({
         }),
         updatedriver: builder.mutation<Driver, Driver>({
             query: (updatedriver) => ({
-                url: `/drivers/${updatedriver.driver._id}`,
+                url: `/drivers/${updatedriver._id}`,
                 method: "PUT",
                 body: updatedriver,
             }),
@@ -30,7 +30,7 @@ const apiDriverSlice = apiSliceDriver.injectEndpoints({
         }),
         deletedriver: builder.mutation<Driver, Driver>({
             query: (deletedriver) => ({
-                url: `/drivers/${deletedriver.driver._id}`,
+                url: `/drivers/${deletedriver._id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["Driver"],
