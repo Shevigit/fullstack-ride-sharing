@@ -40,40 +40,48 @@ app.use('/drivers',driverRouter);
 
 
 
-const loadCities=()=> {
+const loadCities = () => {
   return new Promise((resolve, reject) => {
-    const results = new Set();
+    const citiesArray = [];
+    let idCounter = 1; // מונה ליצירת ID ייחודי
+
+    // נניח ש-path, fs, csv, iconv מיובאים כבר בתחילת הקובץ
     const filePath = path.join(__dirname, "data", "cities.csv");
 
     fs.createReadStream(filePath)
       .pipe(iconv.decodeStream("utf-8"))
       .pipe(csv())
       .on("data", (row) => {
-        const city = row["cities"];
-         console.log(row.cities);
-        if (city) results.add(city.trim());
+        const cityName = row["cities"]; // נניח שזו הכותרת בעמודה ב-CSV
+
+        if (cityName) {
+          // בדיקה אם העיר כבר קיימת כדי למנוע כפילויות, אם אתה רוצה
+          // אם ה-CSV שלך מכיל רק ערים ייחודיות, אפשר לוותר על הבדיקה הזו
+          const existingCity = citiesArray.find(city => city.name === cityName.trim());
+          if (!existingCity) {
+            citiesArray.push({
+              id: idCounter++, // הקצה ID ייחודי וקדם את המונה
+              name: cityName.trim(), // השם של העיר
+            });
+          }
+        }
       })
       .on("end", () => {
-        resolve(Array.from(results));
+        // מיין את הערים לפי שם לפני שליחה, אם תרצה
+        citiesArray.sort((a, b) => a.name.localeCompare(b.name));
+        resolve(citiesArray); // החזר מערך של אובייקטי City
       })
       .on("error", reject);
   });
-}
 
-// Route שמחזיר את רשימת הערים
 app.get("/api/cities", async (req, res) => {
   try {
     const cities = await loadCities();
-    res.json(cities);
+    res.json(cities); // וודא ש-res.json שולח את המערך שהכנו
   } catch (err) {
     console.error("Error loading cities:", err);
     res.status(500).json({ error: "Failed to load cities" });
   }
-});
-
-// טיפול בשגיאות 404 (אפשר לשלוח טקסט פשוט)
-app.use((req, res) => {
-  res.status(404).send("Page not found");
 });
 
 

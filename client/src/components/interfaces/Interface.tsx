@@ -53,3 +53,11 @@ export interface Driver_FieldsFillByUser {
     availableSeats: number,
     // genderPreference: type,
 }
+export interface SearchDriversData{
+    sourse: string,
+    destination: string,
+    date: Date,
+    time: string,
+    
+
+}
