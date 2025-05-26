@@ -58,7 +58,9 @@ const loadCities = () => {
       })
       .on("error", reject);
   });
-}
+
+
+
 app.get("/api/cities", async (req, res) => {
   try {
     const cities = await loadCities();
@@ -73,8 +75,8 @@ mongoose.connection.once('open', () => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
 mongoose.connection.on('error', err => {
-    console.error("MongoDB connection error:", err); // השתמש ב-console.error
-    // כאן אתה יכול להוסיף לוגיקה נוספת לטיפול בשגיאות קריטיות
+    console.error("MongoDB connection error:", err);
+   
 });
 
 
