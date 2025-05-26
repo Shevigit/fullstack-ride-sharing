@@ -73,10 +73,7 @@ const loadCities = () => {
       })
       .on("error", reject);
   });
-};
 
-
-// נניח ש-app (instance של express) מוגדר כבר
 app.get("/api/cities", async (req, res) => {
   try {
     const cities = await loadCities();
@@ -87,10 +84,7 @@ app.get("/api/cities", async (req, res) => {
   }
 });
 
-// // הפעלת השרת
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
+
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
