@@ -18,7 +18,6 @@ const authRoutes = require('./routes/authRoute');
 const { log } = require('console');
 app.use(cors(corsOptions));
 const driverRouter=require('./routes/driverSuggestionRoute')
-
 console.log("start...");
 connectDB();
 app.use(express.json());
@@ -35,11 +34,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api', authRoutes); // משתמש ב-authRoutes שיובא למעלה
 app.use('/drivers',driverRouter);
-
-
-
-
-
 const loadCities = () => {
   return new Promise((resolve, reject) => {
     const citiesArray = [];
@@ -53,10 +47,7 @@ const loadCities = () => {
       .pipe(csv())
       .on("data", (row) => {
         const cityName = row["cities"]; // נניח שזו הכותרת בעמודה ב-CSV
-
         if (cityName) {
-          // בדיקה אם העיר כבר קיימת כדי למנוע כפילויות, אם אתה רוצה
-          // אם ה-CSV שלך מכיל רק ערים ייחודיות, אפשר לוותר על הבדיקה הזו
           const existingCity = citiesArray.find(city => city.name === cityName.trim());
           if (!existingCity) {
             citiesArray.push({
@@ -67,12 +58,13 @@ const loadCities = () => {
         }
       })
       .on("end", () => {
-        // מיין את הערים לפי שם לפני שליחה, אם תרצה
         citiesArray.sort((a, b) => a.name.localeCompare(b.name));
         resolve(citiesArray); // החזר מערך של אובייקטי City
       })
       .on("error", reject);
   });
+
+};
 
 app.get("/api/cities", async (req, res) => {
   try {
@@ -90,8 +82,8 @@ mongoose.connection.once('open', () => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
 mongoose.connection.on('error', err => {
-    console.error("MongoDB connection error:", err); // השתמש ב-console.error
-    // כאן אתה יכול להוסיף לוגיקה נוספת לטיפול בשגיאות קריטיות
+    console.error("MongoDB connection error:", err);
+   
 });
 
 
