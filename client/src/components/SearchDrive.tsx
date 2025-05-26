@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
@@ -13,26 +11,19 @@ import {
   Card,
   CardContent,
   Stack,
-} from "@mui/material";
-import {
- 
   Chip,
- 
 } from "@mui/material";
 import Grid from '@mui/material/Grid';
 import {
   Search as SearchIcon,
   CalendarToday as CalendarIcon,
-  AccessTime as ClockIcon,
+  AccessTime as AccessTimeIcon,
 } from "@mui/icons-material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Link, Outlet } from "react-router";
-import RideCard from "./RideCard";
+import { Link } from "react-router";
 import { useGetAlldriversQuery } from "../stores/Slices/endPointsDriver";
-
-
 
 type City = {
   id: number;
@@ -57,12 +48,12 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
   const [date, setDate] = useState<Date | null>(new Date());
   const [time, setTime] = useState("");
   const { data: GetAlldrivers, isError, isLoading } = useGetAlldriversQuery();
+
   useEffect(() => {
     fetch("http://localhost:7002/api/cities")
       .then((res) => res.json())
       .then((data) => setCities(data))
       .catch((err) => console.error("שגיאה בטעינת ערים:", err));
-
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -76,31 +67,24 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
   };
 
   return (
-
-    <div >
-
-    
+    <div>
       <Box
         sx={{
-          maxWidth: "900px",
-          mx: "auto",
+          maxWidth: "100vw",
           p: 3,
           boxShadow: 2,
           borderRadius: 3,
           backgroundColor: "#f5f5f5",
+          marginLeft: "5vw",
+          marginTop: "17vh",
         }}
       >
         <form onSubmit={handleSubmit}>
-          <Typography variant="h4" gutterBottom align="center">
-            חיפוש נסיעה
-          </Typography>
-
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <Autocomplete
                 options={cities}
-                 sx={{ width: "100%", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
-
+                sx={{ width: "15vw", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
                 value={source}
                 onChange={(e, newValue) => setSource(newValue)}
                 renderInput={(params) => (
@@ -109,10 +93,10 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
               />
             </Grid>
 
-
             <Grid item xs={12} md={6}>
               <Autocomplete
                 options={cities}
+                sx={{ width: "15vw", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
                 value={destination}
                 onChange={(e, newValue) => setDestination(newValue)}
                 renderInput={(params) => (
@@ -156,7 +140,7 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <ClockIcon />
+                      <AccessTimeIcon />
                     </InputAdornment>
                   ),
                 }}
@@ -181,71 +165,72 @@ const SearchDrive: React.FC<SearchDriveProps> = ({ onSearch }) => {
       </Box>
 
       {/* תוצאות */}
-      <Box mt={4} 
-      sx={{
+      <Box
+        mt={4}
+        sx={{
           maxWidth: "900px",
           mx: "auto",
           p: 3,
-          // boxShadow: 2,
           borderRadius: 3,
-          // backgroundColor: "#f5f5f5",
-        }}>
-        {
-  GetAlldrivers?.map(driver=>(
-<Card
-      variant="outlined"
-      sx={{ mb: 2, p: 2, borderRadius: 3, backgroundColor: "#f9f9ff" }}
-    >
-      <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Box>
-            <Typography variant="h6" color="primary" gutterBottom>
-              {driver.source} → {driver.destination}
-            </Typography>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <AccessTimeIcon fontSize="small" />
-              <Typography variant="body2">
-                {driver.date} בשעה {driver.time}
-              </Typography>
-            </Stack>
-            <Typography variant="body2" color="text.secondary">
-              {driver.availableSeats > 0
-                ? `${driver.availableSeats} מקומות פנויים`
-                : "אין מקומות פנויים"}
-            </Typography>
-          </Box>
+        }}
+      >
+        {GetAlldrivers?.map((driver) => {
+          // המרת התאריך לאובייקט Date, בדיקה אם תקין
+          const dateObj = driver.date ? new Date(driver.date) : null;
+          const formattedDate = dateObj
+            ? format(dateObj, "dd/MM/yyyy", { locale: he })
+            : "אין תאריך";
 
-          <Stack alignItems="flex-end" spacing={1}>
-            <Chip
-              label={driver.status ? "פעיל" : "לא פעיל"}
-              color={driver.status ? "success" : "default"}
-              size="small"
-            />
-           
-            <Button
-            component={Link}
-            to={`/SearchDrive/${driver._id}`}
+          return (
+            <Card
+              key={driver._id}
               variant="outlined"
-              size="small"
-              disabled={driver.availableSeats === 0}
+              sx={{ mb: 2, p: 2, borderRadius: 3, backgroundColor: "#f9f9ff" }}
             >
-              {driver.availableSeats === 0 ? "אין מקומות פנויים" : "פרטים נוספים"}
-              
-            </Button>
-          </Stack>
-        </Stack>
-      </CardContent>
-    </Card>
-  ))
-}
+              <CardContent>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Typography variant="h6" color="primary" gutterBottom>
+                      {driver.source} → {driver.destination}
+                    </Typography>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <AccessTimeIcon fontSize="small" />
+                      <Typography variant="body2">
+                        {formattedDate} בשעה {driver.time}
+                      </Typography>
+                    </Stack>
+                    <Typography variant="body2" color="text.secondary">
+                      {driver.availableSeats > 0
+                        ? `${driver.availableSeats} מקומות פנויים`
+                        : "אין מקומות פנויים"}
+                    </Typography>
+                  </Box>
 
+                  <Stack alignItems="flex-end" spacing={1}>
+                    <Chip
+                      label={driver.status ? "פעיל" : "לא פעיל"}
+                      color={driver.status ? "success" : "default"}
+                      size="small"
+                    />
+
+                    <Button
+                      component={Link}
+                      to={`/SearchDrive/${driver._id}`}
+                      variant="outlined"
+                      size="small"
+                      disabled={driver.availableSeats === 0}
+                    >
+                      {driver.availableSeats === 0 ? "אין מקומות פנויים" : "פרטים נוספים"}
+                    </Button>
+                  </Stack>
+                </Stack>
+              </CardContent>
+            </Card>
+          );
+        })}
       </Box>
- </div>
-
+    </div>
   );
 };
 
 export default SearchDrive;
-
-
-

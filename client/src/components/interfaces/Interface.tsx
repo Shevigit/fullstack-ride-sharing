@@ -2,13 +2,13 @@ export interface User {
     userName: string;
     phone: string;
     email: string;
-    password:string;
+    password: string;
     hasCar: boolean;
     driveringLicense?: string;
     gender: string;
     _id?: string
 }
-export interface RegisterUser{
+export interface RegisterUser {
     userName: string;
     phone: string;
     email: string;
@@ -20,18 +20,18 @@ export interface LoginCredentials {
     email: string;
     password: string;
 }
-export enum type{
+export enum type {
     "זכר",
     "נקבה",
     "מעדיף שלא לומר"
 }
-export enum status{
-    "active",
-    "canceled",
-    "completed"
+export enum status {
+  פעיל = "פעיל",
+  בוטל = "בוטל",
+  הושלם = "הושלם"
 }
-export interface Driver{
-     driver: User,
+export interface Driver {
+    driver: string,
     address: string,
     source: string,
     destination: string,
@@ -39,9 +39,17 @@ export interface Driver{
     time: string,
     availableSeats: number,
     genderPreference: type,
-    passengers:User[],
+    passengers: User[],
     status: status
-    createdAt:Date,
-    _id?:string,
+    createdAt: Date,
+    _id?: string,
 }
-
+export interface Driver_FieldsFillByUser {
+    address: string,
+    source: string,
+    destination: string,
+    date: Date,
+    time: string,
+    availableSeats: number,
+    // genderPreference: type,
+}

@@ -16,7 +16,7 @@ const HomePageNav = () => {
                 </NavLink>
                 <NavLink to="/Offer">
                     <div style={NavbarLink}>
-                        הצעת נסיעה
+                        הוספת נסיעה
                     </div>
                 </NavLink>
                 <NavLink to="/SearchDrive">
