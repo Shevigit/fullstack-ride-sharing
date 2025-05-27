@@ -20,6 +20,7 @@ import {
   Search as SearchIcon,
   CalendarToday as CalendarIcon,
   AccessTime as AccessTimeIcon,
+  SignalCellular3BarTwoTone,
 } from "@mui/icons-material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -30,6 +31,8 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SearchDriverSchema from "../schemas/SearchDriverSchema";
 import { Driver } from "./interfaces/Interface";
+import { containerSearch } from "../CSS/searchDrive";
+import { skipToken } from "@reduxjs/toolkit/query";
 type City = {
   id: number;
   name: string;
@@ -56,6 +59,8 @@ const SearchDrive = () => {
   });
   const watchedSource = watch("source");
   const watchedDestination = watch("destination");
+  const watcheddate = watch("date");
+  const watchedtime = watch("time");
   useEffect(() => {
     fetch("http://localhost:7002/api/cities")
       .then((res) => {
@@ -75,6 +80,12 @@ const SearchDrive = () => {
       })
       .catch((err) => console.error("שגיאה בטעינת ערים:", err));
   }, []);
+  const handleReset = () => {
+    if (GetAlldrivers) {
+      setFilteredDrivers(GetAlldrivers);
+
+    }
+  }
   const onSubmit = (data: SearchData) => {
     console.log("נתוני הטופס:", data);
     setSearchAttempted(true);
@@ -97,17 +108,18 @@ const SearchDrive = () => {
     <div>
       <Box
         sx={{
-          maxWidth: "100vw",
+          // maxWidth: "100vw",
           p: 3,
           boxShadow: 2,
           borderRadius: 3,
           backgroundColor: "#f5f5f5",
-          marginLeft: "5vw",
+          marginLeft: "10vw",
           marginTop: "17vh",
+          width: "100%"
         }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={3}>
+          <Grid container spacing={2} >
             <Grid item xs={12} md={6}>
               <Controller
                 name="source"
@@ -245,10 +257,18 @@ const SearchDrive = () => {
                 variant="contained"
                 color="primary"
                 startIcon={<SearchIcon />}
-                sx={{ width: "100%", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
-                disabled={!watchedSource || !watchedDestination}
+                sx={{ width: "10vw", height: 50, fontSize: "1.1rem", borderRadius: 2, marginRight: "1vw" }}
+                disabled={!watchedSource || !watchedDestination || !watcheddate || !watchedtime}
               >
                 חפש נסיעות
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ width: "10vw", height: 50, fontSize: "1.1rem", borderRadius: 2}}
+                onClick={handleReset}
+              >
+                אפס סינון
               </Button>
             </Grid>
           </Grid>
@@ -257,10 +277,11 @@ const SearchDrive = () => {
       <Box
         mt={4}
         sx={{
-          maxWidth: "900px",
+          maxWidth: "100%",
           mx: "auto",
           p: 3,
           borderRadius: 3,
+          marginLeft: "17vw"
         }}
       >
         {driversToRender.length === 0 && (

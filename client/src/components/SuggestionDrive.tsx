@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Driver, Driver_FieldsFillByUser, status, type, User } from './interfaces/Interface';
 import SuggestionSchema from '../schemas/SuggestionSchema';
 import { useAdddriverMutation } from '../stores/Slices/endPointsDriver';
+import { useNavigate } from 'react-router';
 const SuggestionDrive = () => {
     const [currentUser, setCurrentUser] = useState<User>()
     const [type_, setType_] = useState<type>()
@@ -17,6 +18,7 @@ const SuggestionDrive = () => {
     const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setType_(event.target.value as unknown as type);
     };
+    const navigate=useNavigate()
     const onSubmit = async (data: Driver_FieldsFillByUser) => {
         const newDriver: Driver_FieldsFillByUser = {
             address: data.address,
@@ -38,6 +40,7 @@ const SuggestionDrive = () => {
         }
         addDriver(driver)
         console.log(driver);
+        navigate('/')
     };
 
     return (
