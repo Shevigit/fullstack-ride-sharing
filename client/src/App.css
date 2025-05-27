@@ -42,3 +42,23 @@
 .read-the-docs {
   color: #888;
 }
+@keyframes typing {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes blink-caret {
+  0%, 100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: rgb(0, 34, 156);
+  }
+}

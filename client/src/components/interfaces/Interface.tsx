@@ -65,3 +65,6 @@ export interface ResDriver extends Driver{
  passengers: User[],
 
 }
+export interface Comment{
+    text: string
+}

@@ -34,7 +34,7 @@ export const InputStyle: CSSProperties = {
 }
 export const submitBtn: CSSProperties = {
     width: "45vw",
-    backgroundColor: "rgb(35, 0, 173)", // חום כהה
+    backgroundColor: "rgba(81, 165, 12, 0.86)", // חום כהה
     color: "white",
     border: "none",
     borderRadius: "5px",
