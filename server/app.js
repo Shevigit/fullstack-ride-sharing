@@ -16,6 +16,7 @@ const authRoutes = require('./routes/authRoute');
 const { log } = require('console');
 app.use(cors(corsOptions));
 const driverRouter=require('./routes/driverSuggestionRoute')
+const commentsRouter=require('./routes/CommentRoute')
 console.log("start...");
 connectDB();
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use(express.json());
 // app.use(passport.session());
 app.use('/api', authRoutes); // משתמש ב-authRoutes שיובא למעלה
 app.use('/drivers',driverRouter);
+app.use('/comments',commentsRouter)
 const loadCities = () => {
   return new Promise((resolve, reject) => {
     const citiesArray = [];
@@ -58,7 +60,7 @@ const loadCities = () => {
       })
       .on("error", reject);
   });
-
+}
 
 
 app.get("/api/cities", async (req, res) => {

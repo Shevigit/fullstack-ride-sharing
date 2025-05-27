@@ -1,16 +1,10 @@
-
-
-
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Cookies } from "react-cookie";
-
 const cookies = new Cookies();
-
-const ApiSlice = createApi({
-  reducerPath: "api",
-
+const ApiSliceCommets = createApi({
+  reducerPath: "comments",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:7002/api",
+    baseUrl: "http://localhost:7002",
     prepareHeaders: (headers) => {
       const token = cookies.get("token");
       if (token) {
@@ -19,10 +13,8 @@ const ApiSlice = createApi({
       return headers;
     },
   }),
-
-  tagTypes: ["User", "Post", "Drives", "LoginCredentials"],
-
+  tagTypes: ["Comment"],
   endpoints: () => ({}),
 });
 
-export default ApiSlice;
+export default ApiSliceCommets;

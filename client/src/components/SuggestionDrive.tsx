@@ -19,17 +19,12 @@ const SuggestionDrive = () => {
     };
     const onSubmit = async (data: Driver_FieldsFillByUser) => {
         const newDriver: Driver_FieldsFillByUser = {
-            // driver: currentUser!,
             address: data.address,
             source: data.source,
             destination: data.destination,
             date: new Date(data.date),
             time: data.time,
             availableSeats: data.availableSeats,
-            // genderPreference: data.genderPreference,
-            // passengers:[],
-            // status: status.active,
-            // createdAt: new Date(Date.now())
         };
         console.log(currentUser);
         
@@ -56,7 +51,6 @@ const SuggestionDrive = () => {
                         {...register('address')}
                     />
                     {errors.address && <p>{errors.address.message}</p>}
-
                     <TextField
                         placeholder="עיר מקור"
                         variant="outlined"
@@ -64,7 +58,6 @@ const SuggestionDrive = () => {
                         {...register('source')}
                     />
                     {errors.source && <p>{errors.source.message}</p>}
-
                     <TextField
                         placeholder="עיר יעד"
                         variant="outlined"
@@ -72,19 +65,6 @@ const SuggestionDrive = () => {
                         {...register('destination')}
                     />
                     {errors.destination && <p>{errors.destination.message}</p>}
-
-                    {/* <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={hasCar}
-                                onChange={(e) => setHasCar(e.target.checked)}
-                            />
-                        }
-                        label="יש לך רכב?"
-                    />
-                    <input type="hidden" value={hasCar ? 'true' : 'false'} {...register('hasCar')} />
-                    {errors.hasCar && <p>{errors.hasCar.message}</p>} */}
-
                     <TextField
                         placeholder="תאריך הנסיעה"
                         variant="outlined"
@@ -119,7 +99,7 @@ const SuggestionDrive = () => {
                     </div>
 
 
-                    <Button type="submit" variant="contained" style={{ backgroundColor: "rgba(254, 95, 51, 0.86)" }}>
+                    <Button type="submit" variant="contained" style={{ backgroundColor: "rgba(81, 165, 12, 0.86)" }}>
                         שלח
                     </Button>
                 </Stack>

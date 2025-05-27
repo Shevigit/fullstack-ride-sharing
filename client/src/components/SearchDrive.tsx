@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
 import {
@@ -77,14 +77,14 @@ const SearchDrive = () => {
   }, []);
   const onSubmit = (data: SearchData) => {
     console.log("נתוני הטופס:", data);
-    setSearchAttempted(true); 
+    setSearchAttempted(true);
     if (!GetAlldrivers) {
       console.warn("אין נהגים לסינון.");
-      setFilteredDrivers([]); 
+      setFilteredDrivers([]);
       return;
     }
     const filtered = GetAlldrivers.filter(x =>
-      (data.source ? x.source === data.source.name : true) && 
+      (data.source ? x.source === data.source.name : true) &&
       (data.destination ? x.destination === data.destination.name : true) &&
       (data.date && x.date ? format(new Date(x.date), 'yyyy-MM-dd') === format(data.date, 'yyyy-MM-dd') : true)
     );
@@ -266,8 +266,8 @@ const SearchDrive = () => {
         {driversToRender.length === 0 && (
           <Typography variant="body1" align="center" sx={{ color: "black" }}>
             {searchAttempted
-              ? "לא נמצאו נהגים התואמים לסינון." 
-              : "אין נהגים זמינים כרגע." 
+              ? "לא נמצאו נהגים התואמים לסינון."
+              : "אין נהגים זמינים כרגע."
             }
           </Typography>
         )}
@@ -302,7 +302,13 @@ const SearchDrive = () => {
                   </Box>
                   <Stack alignItems="flex-end" spacing={1}>
                     <Chip
-                      label={driver.status ? "פעיל" : "לא פעיל"}
+                      label={
+                        new Date(driver.date) < new Date()
+                          ? "הושלם"
+                          : driver.status
+                            ? "פעיל"
+                            : "לא פעיל"
+                      }
                       color={driver.status ? "success" : "default"}
                       size="small"
                     />
