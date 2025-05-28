@@ -17,7 +17,7 @@ const addDriverSuggestion = async (req, res) => {
       date,
       time,
       availableSeats,
-      genderPreference
+     // genderPreference
     } = req.body;
 
     // בדיקה של שדות חובה
@@ -36,7 +36,7 @@ const addDriverSuggestion = async (req, res) => {
       date,
       time,
       availableSeats,
-      genderPreference
+    //   genderPreference
     });
 
     res.status(201).json(newSuggestion);
