@@ -6,6 +6,8 @@ const Suggestion = require('../models/DriverSuggestion');
 const addDriverSuggestion = async (req, res) => {
     try {
         if (!req.body.driver) {
+            console.log("0");
+            
             return res.status(401).json({ message: 'Missing user ID from token' });
         }
         const {
@@ -15,12 +17,14 @@ const addDriverSuggestion = async (req, res) => {
             date,
             time,
             availableSeats,
-            genderPreference
+           genderPreference
         } = req.body;
         if (
             !address || !source || !destination ||
             !date || !time || availableSeats === undefined
         ) {
+            console.log("1");
+            
             return res.status(400).json({ message: 'Missing required fields' });
         }
         const newSuggestion = await Suggestion.create({
@@ -33,19 +37,24 @@ const addDriverSuggestion = async (req, res) => {
             availableSeats,
             genderPreference
         });
+        console.log("02");
         res.status(201).json(newSuggestion);
     } catch (err) {
         console.error(err);
+        console.log("3");
         res.status(500).json({ message: 'Server error' });
     }
 };
 
 const getAllDriverSuggestions = async (req, res) => {
     try {
+
         const driverSuggestions = await Suggestion.find().sort({ createdAt: -1 }); // מהחדש לישן
+        console.log("4");
         res.json(driverSuggestions);
     } catch (error) {
         console.error('Failed to get driverSuggestions:', error);
+        console.log("5");
         res.status(500).json({ message: 'Failed to get driverSuggestions' });
     }
 };
