@@ -15,6 +15,7 @@ const apiDriverSlice = apiSliceDriver.injectEndpoints({
         adddriver: builder.mutation<Driver, Driver>({
             query: (newdriver) => ({
                 url: "/drivers",
+                             
                 method: "POST",
                 body: newdriver,
             }),

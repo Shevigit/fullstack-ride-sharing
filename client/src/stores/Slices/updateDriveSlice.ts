@@ -12,5 +12,5 @@ const updateDriveSlice = ApiSlice.injectEndpoints({
         }),
     })
 })
-export const {useUpdateDriveMutation } = ApiSlice;
+export const {useUpdateDriveMutation } = updateDriveSlice;
 export default updateDriveSlice;

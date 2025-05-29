@@ -60,8 +60,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import ApiSlice from "./Slices/ApiSlice";
 import apiSliceDriver from "./Slices/apiSliceDrivers";
 import ApiSliceCommets from "./Slices/ApiSliceComments";
-import cityReducer from "./Slices/citiesSlice";
+
 import { streetApi } from "./Slices/streetSlice"; 
+//import citiesApi from "./Slices/citiesApi";
 
 const store = configureStore({
   reducer: {
@@ -70,7 +71,7 @@ const store = configureStore({
     [apiSliceDriver.reducerPath]: apiSliceDriver.reducer,
     [ApiSliceCommets.reducerPath]: ApiSliceCommets.reducer,
     [streetApi.reducerPath]: streetApi.reducer, 
-    cities: cityReducer,
+  //  [citiesApi.reducerPath]:citiesApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
