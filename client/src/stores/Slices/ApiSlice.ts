@@ -46,14 +46,15 @@ const ApiSlice = createApi({
     },
   }),
 
-  tagTypes: ["User", "Post", "Drives", "LoginCredentials"],
+  tagTypes: ["User", "Post", "Drives", "LoginCredentials","City"],
 
-  endpoints: (builder) => ({
-    getCities: builder.query({
-      query: () => "/cities",
-    }),
-  }),
+//  endpoints: (builder) => ({
+//    getCities: builder.query({
+//      query: () => "/cities",
+//    }),
+//   }),
+endpoints:()=>({})
 });
 
-export const { useGetCitiesQuery } = ApiSlice; // 👈 חובה לייצא את ה-hook
+//export const { useGetCitiesQuery } = ApiSlice; // 👈 חובה לייצא את ה-hook
 export default ApiSlice;
