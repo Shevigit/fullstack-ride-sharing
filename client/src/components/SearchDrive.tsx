@@ -1,4 +1,7 @@
-// import { useState, useEffect } from "react";
+
+
+
+// import { useState } from "react";
 // import { format } from "date-fns";
 // import { he } from "date-fns/locale";
 // import {
@@ -20,34 +23,37 @@
 //   Search as SearchIcon,
 //   CalendarToday as CalendarIcon,
 //   AccessTime as AccessTimeIcon,
-//   SignalCellular3BarTwoTone,
 // } from "@mui/icons-material";
 // import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 // import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 // import { Link } from "react-router-dom";
 // import { useGetAlldriversQuery } from "../stores/Slices/endPointsDriver";
+// import { useGetCitiesQuery } from "../stores/Slices/apiSliceDrivers"; 
 // import { useForm, Controller } from "react-hook-form";
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import SearchDriverSchema from "../schemas/SearchDriverSchema";
 // import { Driver } from "./interfaces/Interface";
-// import { containerSearch } from "../CSS/searchDrive";
-// import { skipToken } from "@reduxjs/toolkit/query";
+
 // type City = {
 //   id: number;
 //   name: string;
 // };
+
 // type SearchData = {
 //   source: City;
 //   destination: City;
 //   date: Date;
 //   time: string;
 // };
+
 // const SearchDrive = () => {
-//   const [cities, setCities] = useState<City[]>([]);
 //   const [filteredDrivers, setFilteredDrivers] = useState<Driver[]>([]);
 //   const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
+
 //   const { data: GetAlldrivers, isError, isLoading } = useGetAlldriversQuery();
+//   const { data: cities = [], isLoading: isCitiesLoading, error: citiesError } = useGetCitiesQuery();
+
 //   const {
 //     register,
 //     handleSubmit,
@@ -57,147 +63,75 @@
 //   } = useForm<SearchData>({
 //     resolver: zodResolver(SearchDriverSchema),
 //   });
+
 //   const watchedSource = watch("source");
 //   const watchedDestination = watch("destination");
-//   const watcheddate = watch("date");
-//   const watchedtime = watch("time");
-//   useEffect(() => {
-//     fetch("http://localhost:7002/api/cities")
-//       .then((res) => {
-//         if (!res.ok) {
-//           throw new Error(`HTTP error! status: ${res.status}`);
-//         }
-//         return res.json();
-//       })
-//       .then((data: City[]) => {
-//         const areAllCitiesValid = data.every(
-//           (city) => typeof city.id === 'number' && typeof city.name === 'string'
-//         );
-//         if (!areAllCitiesValid) {
-//           console.error("ישנם אובייקטים לא תקינים במערך הערים!", data);
-//         }
-//         setCities(data);
-//       })
-//       .catch((err) => console.error("שגיאה בטעינת ערים:", err));
-//   }, []);
+//   const watchedDate = watch("date");
+//   const watchedTime = watch("time");
+
 //   const handleReset = () => {
 //     if (GetAlldrivers) {
 //       setFilteredDrivers(GetAlldrivers);
-
 //     }
-//   }
+//   };
+
 //   const onSubmit = (data: SearchData) => {
-//     console.log("נתוני הטופס:", data);
 //     setSearchAttempted(true);
 //     if (!GetAlldrivers) {
-//       console.warn("אין נהגים לסינון.");
 //       setFilteredDrivers([]);
 //       return;
 //     }
-//     const filtered = GetAlldrivers.filter(x =>
+//     const filtered = GetAlldrivers.filter((x) =>
 //       (data.source ? x.source === data.source.name : true) &&
 //       (data.destination ? x.destination === data.destination.name : true) &&
 //       (data.date && x.date ? format(new Date(x.date), 'yyyy-MM-dd') === format(data.date, 'yyyy-MM-dd') : true)
 //     );
 //     setFilteredDrivers(filtered);
 //   };
+
 //   const driversToRender = searchAttempted ? filteredDrivers : (GetAlldrivers || []);
-//   if (isLoading) return <CircularProgress sx={{ display: 'block', margin: 'auto', mt: 4 }} />;
-//   if (isError) return <Alert severity="error">שגיאה בטעינת נהגים.</Alert>;
+
+//   if (isLoading || isCitiesLoading) {
+//     return <CircularProgress sx={{ display: 'block', margin: 'auto', mt: 4 }} />;
+//   }
+
+//   if (isError || citiesError) {
+//     return <Alert severity="error">שגיאה בטעינת מידע.</Alert>;
+//   }
+
 //   return (
 //     <div>
-//       <Box
-//         sx={{
-//           // maxWidth: "100vw",
-//           p: 3,
-//           boxShadow: 2,
-//           borderRadius: 3,
-//           backgroundColor: "#f5f5f5",
-//           marginLeft: "10vw",
-//           marginTop: "17vh",
-//           width: "100%"
-//         }}
-//       >
+//       <Box sx={{ p: 3, boxShadow: 2, borderRadius: 3, backgroundColor: "#f5f5f5", marginLeft: "10vw", marginTop: "17vh", width: "100%" }}>
 //         <form onSubmit={handleSubmit(onSubmit)}>
-//           <Grid container spacing={2} >
-//             <Grid item xs={12} md={6}>
-//               <Controller
-//                 name="source"
-//                 control={control}
-//                 render={({ field: { onChange, value, ...field } }) => (
-//                   <Autocomplete
-//                     {...field}
-//                     options={cities}
-//                     getOptionLabel={(option) => {
-//                       if (typeof option === 'string') return option;
-//                       if (option && option.name) return option.name;
-//                       return '';
-//                     }}
-//                     isOptionEqualToValue={(option, val) => {
-//                       if (val === null || typeof val === 'undefined') return false;
-//                       if (option && typeof option === 'object' && 'id' in option &&
-//                         val && typeof val === 'object' && 'id' in val) {
-//                         return option.id === val.id;
-//                       }
-//                       return false;
-//                     }}
-//                     sx={{ width: "15vw", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
-//                     value={value}
-//                     onChange={(event, newValue: City | null) => {
-//                       onChange(newValue);
-//                     }}
-//                     renderInput={(params) => (
-//                       <TextField
-//                         {...params}
-//                         label="עיר מוצא"
-//                         fullWidth
-//                         error={!!errors.source}
-//                         helperText={errors.source?.message}
-//                       />
-//                     )}
-//                   />
-//                 )}
-//               />
-//             </Grid>
-//             <Grid item xs={12} md={6}>
-//               <Controller
-//                 name="destination"
-//                 control={control}
-//                 render={({ field: { onChange, value, ...field } }) => (
-//                   <Autocomplete
-//                     {...field}
-//                     options={cities}
-//                     getOptionLabel={(option) => {
-//                       if (typeof option === 'string') return option;
-//                       if (option && option.name) return option.name;
-//                       return '';
-//                     }}
-//                     isOptionEqualToValue={(option, val) => {
-//                       if (val === null || typeof val === 'undefined') return false;
-//                       if (option && typeof option === 'object' && 'id' in option &&
-//                         val && typeof val === 'object' && 'id' in val) {
-//                         return option.id === val.id;
-//                       }
-//                       return false;
-//                     }}
-//                     sx={{ width: "15vw", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
-//                     value={value}
-//                     onChange={(event, newValue: City | null) => {
-//                       onChange(newValue);
-//                     }}
-//                     renderInput={(params) => (
-//                       <TextField
-//                         {...params}
-//                         label="עיר יעד"
-//                         fullWidth
-//                         error={!!errors.destination}
-//                         helperText={errors.destination?.message}
-//                       />
-//                     )}
-//                   />
-//                 )}
-//               />
-//             </Grid>
+//           <Grid container spacing={2}>
+//             {[{ name: "source", label: "עיר מוצא" }, { name: "destination", label: "עיר יעד" }].map((field, idx) => (
+//               <Grid item xs={12} md={6} key={field.name}>
+//                 <Controller
+//                   name={field.name as "source" | "destination"}
+//                   control={control}
+//                   render={({ field: { onChange, value, ...fieldProps } }) => (
+//                     <Autocomplete
+//                       {...fieldProps}
+//                       options={cities}
+//                       getOptionLabel={(option) => typeof option === "string" ? option : option?.name || ""}
+//                       isOptionEqualToValue={(option, val) => option?.id === val?.id}
+//                       sx={{ width: "15vw" }}
+//                       value={value}
+//                       onChange={(_, newValue: City | null) => onChange(newValue)}
+//                       renderInput={(params) => (
+//                         <TextField
+//                           {...params}
+//                           label={field.label}
+//                           fullWidth
+//                           error={!!errors[field.name as keyof typeof errors]}
+//                           helperText={errors[field.name as keyof typeof errors]?.message}
+//                         />
+//                       )}
+//                     />
+//                   )}
+//                 />
+//               </Grid>
+//             ))}
 //             <Grid item xs={12} md={6}>
 //               <LocalizationProvider dateAdapter={AdapterDateFns} locale={he}>
 //                 <Controller
@@ -208,9 +142,7 @@
 //                       {...field}
 //                       label="תאריך"
 //                       value={value}
-//                       onChange={(newValue: Date | null) => {
-//                         onChange(newValue);
-//                       }}
+//                       onChange={(newValue: Date | null) => onChange(newValue)}
 //                       disablePast
 //                       renderInput={(params) => (
 //                         <TextField
@@ -258,14 +190,14 @@
 //                 color="primary"
 //                 startIcon={<SearchIcon />}
 //                 sx={{ width: "10vw", height: 50, fontSize: "1.1rem", borderRadius: 2, marginRight: "1vw" }}
-//                 disabled={!watchedSource || !watchedDestination || !watcheddate || !watchedtime}
+//                 disabled={!watchedSource || !watchedDestination || !watchedDate || !watchedTime}
 //               >
 //                 חפש נסיעות
 //               </Button>
 //               <Button
 //                 variant="contained"
 //                 color="primary"
-//                 sx={{ width: "10vw", height: 50, fontSize: "1.1rem", borderRadius: 2}}
+//                 sx={{ width: "10vw", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
 //                 onClick={handleReset}
 //               >
 //                 אפס סינון
@@ -274,35 +206,19 @@
 //           </Grid>
 //         </form>
 //       </Box>
-//       <Box
-//         mt={4}
-//         sx={{
-//           maxWidth: "100%",
-//           mx: "auto",
-//           p: 3,
-//           borderRadius: 3,
-//           marginLeft: "17vw"
-//         }}
-//       >
+
+//       <Box mt={4} sx={{ maxWidth: "100%", mx: "auto", p: 3, borderRadius: 3, marginLeft: "17vw" }}>
 //         {driversToRender.length === 0 && (
 //           <Typography variant="body1" align="center" sx={{ color: "black" }}>
-//             {searchAttempted
-//               ? "לא נמצאו נהגים התואמים לסינון."
-//               : "אין נהגים זמינים כרגע."
-//             }
+//             {searchAttempted ? "לא נמצאו נהגים התואמים לסינון." : "אין נהגים זמינים כרגע."}
 //           </Typography>
 //         )}
+
 //         {driversToRender.map((driver) => {
 //           const dateObj = driver.date ? new Date(driver.date) : null;
-//           const formattedDate = dateObj
-//             ? format(dateObj, "dd/MM/yyyy", { locale: he })
-//             : "אין תאריך";
+//           const formattedDate = dateObj ? format(dateObj, "dd/MM/yyyy", { locale: he }) : "אין תאריך";
 //           return (
-//             <Card
-//               key={driver._id} // ודא ש-driver._id הוא ייחודי ותקין!
-//               variant="outlined"
-//               sx={{ mb: 2, p: 2, borderRadius: 3, backgroundColor: "#f9f9ff" }}
-//             >
+//             <Card key={driver._id} variant="outlined" sx={{ mb: 2, p: 2, borderRadius: 3, backgroundColor: "#f9f9ff" }}>
 //               <CardContent>
 //                 <Stack direction="row" justifyContent="space-between" alignItems="center">
 //                   <Box>
@@ -316,9 +232,7 @@
 //                       </Typography>
 //                     </Stack>
 //                     <Typography variant="body2" color="text.secondary">
-//                       {driver.availableSeats > 0
-//                         ? `${driver.availableSeats} מקומות פנויים`
-//                         : "אין מקומות פנויים"}
+//                       {driver.availableSeats > 0 ? `${driver.availableSeats} מקומות פנויים` : "אין מקומות פנויים"}
 //                     </Typography>
 //                   </Box>
 //                   <Stack alignItems="flex-end" spacing={1}>
@@ -327,8 +241,8 @@
 //                         new Date(driver.date) < new Date()
 //                           ? "הושלם"
 //                           : driver.status
-//                             ? "פעיל"
-//                             : "לא פעיל"
+//                           ? "פעיל"
+//                           : "לא פעיל"
 //                       }
 //                       color={driver.status ? "success" : "default"}
 //                       size="small"
@@ -356,8 +270,7 @@
 // export default SearchDrive;
 
 
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
 import {
@@ -385,30 +298,40 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Link } from "react-router-dom";
 import { useGetAlldriversQuery } from "../stores/Slices/endPointsDriver";
-import { useGetCitiesQuery } from "../stores/Slices/apiSliceDrivers"; 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SearchDriverSchema from "../schemas/SearchDriverSchema";
 import { Driver } from "./interfaces/Interface";
 
-type City = {
-  id: number;
-  name: string;
-};
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../stores/Store";
+import { fetchCities, City } from "../stores/Slices/citiesSlice";
 
 type SearchData = {
-  source: City;
-  destination: City;
-  date: Date;
+  source: City | null;
+  destination: City | null;
+  date: Date | null;
   time: string;
 };
 
 const SearchDrive = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { cities, isLoading: isCitiesLoading, error: citiesError } = useSelector(
+    (state: RootState) => state.cities
+  );
+
   const [filteredDrivers, setFilteredDrivers] = useState<Driver[]>([]);
   const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
   const { data: GetAlldrivers, isError, isLoading } = useGetAlldriversQuery();
-  const { data: cities = [], isLoading: isCitiesLoading, error: citiesError } = useGetCitiesQuery();
+
+  // טוענים את הערים פעם אחת בטעינה
+  useEffect(() => {
+    if (cities.length === 0) {
+      dispatch(fetchCities());
+    }
+  }, [dispatch, cities.length]);
 
   const {
     register,
@@ -418,6 +341,12 @@ const SearchDrive = () => {
     formState: { errors },
   } = useForm<SearchData>({
     resolver: zodResolver(SearchDriverSchema),
+    defaultValues: {
+      source: null,
+      destination: null,
+      date: null,
+      time: "",
+    },
   });
 
   const watchedSource = watch("source");
@@ -428,6 +357,7 @@ const SearchDrive = () => {
   const handleReset = () => {
     if (GetAlldrivers) {
       setFilteredDrivers(GetAlldrivers);
+      setSearchAttempted(false);
     }
   };
 
@@ -448,7 +378,7 @@ const SearchDrive = () => {
   const driversToRender = searchAttempted ? filteredDrivers : (GetAlldrivers || []);
 
   if (isLoading || isCitiesLoading) {
-    return <CircularProgress sx={{ display: 'block', margin: 'auto', mt: 4 }} />;
+    return <CircularProgress sx={{ display: "block", margin: "auto", mt: 4 }} />;
   }
 
   if (isError || citiesError) {
@@ -457,37 +387,51 @@ const SearchDrive = () => {
 
   return (
     <div>
-      <Box sx={{ p: 3, boxShadow: 2, borderRadius: 3, backgroundColor: "#f5f5f5", marginLeft: "10vw", marginTop: "17vh", width: "100%" }}>
+      <Box
+        sx={{
+          p: 3,
+          boxShadow: 2,
+          borderRadius: 3,
+          backgroundColor: "#f5f5f5",
+          marginLeft: "10vw",
+          marginTop: "17vh",
+          width: "100%",
+        }}
+      >
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            {[{ name: "source", label: "עיר מוצא" }, { name: "destination", label: "עיר יעד" }].map((field, idx) => (
-              <Grid item xs={12} md={6} key={field.name}>
-                <Controller
-                  name={field.name as "source" | "destination"}
-                  control={control}
-                  render={({ field: { onChange, value, ...fieldProps } }) => (
-                    <Autocomplete
-                      {...fieldProps}
-                      options={cities}
-                      getOptionLabel={(option) => typeof option === "string" ? option : option?.name || ""}
-                      isOptionEqualToValue={(option, val) => option?.id === val?.id}
-                      sx={{ width: "15vw" }}
-                      value={value}
-                      onChange={(_, newValue: City | null) => onChange(newValue)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={field.label}
-                          fullWidth
-                          error={!!errors[field.name as keyof typeof errors]}
-                          helperText={errors[field.name as keyof typeof errors]?.message}
-                        />
-                      )}
-                    />
-                  )}
-                />
-              </Grid>
-            ))}
+            {[{ name: "source", label: "עיר מוצא" }, { name: "destination", label: "עיר יעד" }].map(
+              (field) => (
+                <Grid item xs={12} md={6} key={field.name}>
+                  <Controller
+                    name={field.name as "source" | "destination"}
+                    control={control}
+                    render={({ field: { onChange, value, ...fieldProps } }) => (
+                      <Autocomplete
+                        {...fieldProps}
+                        options={cities}
+                        getOptionLabel={(option) =>
+                          typeof option === "string" ? option : option?.name || ""
+                        }
+                        isOptionEqualToValue={(option, val) => option?.id === val?.id}
+                        sx={{ width: "15vw" }}
+                        value={value}
+                        onChange={(_, newValue: City | null) => onChange(newValue)}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={field.label}
+                            fullWidth
+                            error={!!errors[field.name as keyof typeof errors]}
+                            helperText={errors[field.name as keyof typeof errors]?.message}
+                          />
+                        )}
+                      />
+                    )}
+                  />
+                </Grid>
+              )
+            )}
             <Grid item xs={12} md={6}>
               <LocalizationProvider dateAdapter={AdapterDateFns} locale={he}>
                 <Controller
@@ -525,7 +469,7 @@ const SearchDrive = () => {
               <TextField
                 label="שעה"
                 type="time"
-                {...register('time')}
+                {...register("time")}
                 fullWidth
                 error={!!errors.time}
                 helperText={errors.time?.message}
@@ -574,7 +518,11 @@ const SearchDrive = () => {
           const dateObj = driver.date ? new Date(driver.date) : null;
           const formattedDate = dateObj ? format(dateObj, "dd/MM/yyyy", { locale: he }) : "אין תאריך";
           return (
-            <Card key={driver._id} variant="outlined" sx={{ mb: 2, p: 2, borderRadius: 3, backgroundColor: "#f9f9ff" }}>
+            <Card
+              key={driver._id}
+              variant="outlined"
+              sx={{ mb: 2, p: 2, borderRadius: 3, backgroundColor: "#f9f9ff" }}
+            >
               <CardContent>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Box>
@@ -588,7 +536,9 @@ const SearchDrive = () => {
                       </Typography>
                     </Stack>
                     <Typography variant="body2" color="text.secondary">
-                      {driver.availableSeats > 0 ? `${driver.availableSeats} מקומות פנויים` : "אין מקומות פנויים"}
+                      {driver.availableSeats > 0
+                        ? `${driver.availableSeats} מקומות פנויים`
+                        : "אין מקומות פנויים"}
                     </Typography>
                   </Box>
                   <Stack alignItems="flex-end" spacing={1}>

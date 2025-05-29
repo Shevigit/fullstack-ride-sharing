@@ -17,10 +17,6 @@ const LoginSlice = createSlice({
              state.user=action.payload
         },
 
-        // saveUser:(state, action: PayloadAction<loginUser>)=>{
-                  
-        //     state.user=action.payload
-        // }
 
     }
 });
