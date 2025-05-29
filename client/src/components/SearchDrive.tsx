@@ -1346,9 +1346,10 @@ const SearchDrive = () => {
                         to={`/SearchDrive/${driver._id}`}
                         variant="outlined"
                         size="small"
-                        disabled={driver.availableSeats === 0}
+                        // disabled={driver.availableSeats === 0}
                       >
-                        {driver.availableSeats === 0 ? "אין מקומות פנויים" : "פרטים נוספים"}
+                        פרטים נוספים
+                        {/* {driver.availableSeats === 0 ? "אין מקומות פנויים" : "פרטים נוספים"} */}
                       </Button>
                     </Stack>
                   </Stack>
