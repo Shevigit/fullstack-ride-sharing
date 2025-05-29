@@ -129,9 +129,9 @@ const Home = () => {
                         </div>
                     )}
                 </section>
-                <section style={{background: "rgb(76, 0, 168)", width:"100vw", height: "30vh"}}>
+                {/* <section style={{background: "rgb(76, 0, 168)", width:"100vw", height: "30vh"}}>
                        
-                </section>
+                </section> */}
             </div>
         </>
     );
