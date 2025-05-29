@@ -16,7 +16,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { useGetdriverByIdQuery, useUpdatedriverMutation } from "../stores/Slices/endPointsDriver";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { format } from "date-fns";

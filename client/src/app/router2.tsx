@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom"; // וודא שאתה מייבא מ-react-router-dom
+import { createBrowserRouter } from "react-router"; // וודא שאתה מייבא מ-react-router
 import AppLayout from "../components/AppLayout";
 import Home from "../components/Home";
 import LoginIn from "../components/Login";
