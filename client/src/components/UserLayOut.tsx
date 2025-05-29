@@ -6,18 +6,16 @@ const UserLayout = () => {
     const [baseNav, setBaseNav] = useState<boolean>(true)
     useEffect(() => {
         const user = localStorage.getItem('currentUser');
+        console.log(user);
         if (user) {
             setBaseNav(false)
         }
-
     }, [])
     return (
         <div>
             {
                 baseNav ? <Nav /> : <HomePageNav/>
             }
-
-            <Outlet />
         </div>
     )
 }
