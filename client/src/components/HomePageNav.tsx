@@ -1,8 +1,22 @@
 import { navStyle } from '../CSS/nav'
 import { NavLink } from 'react-router'
 import { NavbarLink } from '../CSS/homePageNav'
+import { Button } from '@mui/material'
+import { SignUpBtn } from '../CSS/nav'
+
+import { useDispatch } from 'react-redux'
+import { logout } from '../stores/Slices/UserSlice'
+
+
 
 const HomePageNav = () => {
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    
+  };
     return (
         <div>
             <nav style={navStyle}>
@@ -34,6 +48,11 @@ const HomePageNav = () => {
                         עמוד הבית
                     </div>
                 </NavLink>
+               
+                <Button style={SignUpBtn} onClick={handleLogout}>
+              Log out
+                </Button >
+            
             </nav>
         </div>
     )
