@@ -31,6 +31,7 @@ import HomePageNav from './HomePageNav';
 // import { useSelector } from 'react-redux';
 // import { RootState } from '../stores/Store';
 import { useEffect, useState } from 'react';
+import UserLayout from './UserLayOut';
 
 const AppLayout = () => {
   // const user = useSelector((state: RootState) => state.user.user);
@@ -44,7 +45,8 @@ const AppLayout = () => {
     }, [])
   return (
     <div>
-      {baseNav ? <HomePageNav /> : <Nav />}
+      <UserLayout/>
+      {/* {baseNav ? <HomePageNav /> : <Nav />} */}
       <Outlet />
     </div>
   );
