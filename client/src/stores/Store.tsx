@@ -1,15 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import LoginReducer from './Slices/UserApiSlice';
+
 import ApiSlice from "./Slices/ApiSlice";
 import apiSliceDriver from "./Slices/apiSliceDrivers";
 import ApiSliceCommets from "./Slices/ApiSliceComments";
+import UserSlice from "./Slices/UserSlice"
 
 const store = configureStore({
   reducer: {
-    //login: LoginReducer,
+    user: UserSlice,
     [ApiSlice.reducerPath]: ApiSlice.reducer,
     [apiSliceDriver.reducerPath]: apiSliceDriver.reducer,
-    [ApiSliceCommets.reducerPath]: ApiSliceCommets.reducer
+    [ApiSliceCommets.reducerPath]: ApiSliceCommets.reducer,
+  
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
