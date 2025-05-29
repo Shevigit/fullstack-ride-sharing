@@ -6,7 +6,7 @@ export interface User {
     hasCar: boolean;
     driveringLicense?: string;
     gender: string;
-
+zz
 }
 export interface RegisterUser{
     userName: string;
