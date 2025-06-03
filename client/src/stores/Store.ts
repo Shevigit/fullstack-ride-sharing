@@ -62,12 +62,14 @@ import apiSliceDriver from "./Slices/apiSliceDrivers";
 import ApiSliceCommets from "./Slices/ApiSliceComments";
 import UserSlice from "./Slices/UserSlice"
 import { streetApi } from "./Slices/streetSlice"; 
+import authReducer from "./Slices/authSlice";
 //import citiesApi from "./Slices/citiesApi";
 
 const store = configureStore({
   reducer: {
   user: UserSlice,
     // login: LoginReducer,
+       auth: authReducer,
     [ApiSlice.reducerPath]: ApiSlice.reducer,
     [apiSliceDriver.reducerPath]: apiSliceDriver.reducer,
     [ApiSliceCommets.reducerPath]: ApiSliceCommets.reducer,
