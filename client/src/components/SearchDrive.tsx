@@ -244,6 +244,10 @@ const SearchDrive = () => {
                       <Typography variant="body2" color="text.secondary">
                         {driver.availableSeats > 0 ? `${driver.availableSeats} מקומות פנויים` : "אין מקומות פנויים"}
                       </Typography>
+                      {/* ///////////////////////////////////////////// */}
+                       <Typography variant="body2" color="text.secondary">
+                        {driver.driver? `שם נהג: ${driver?.driver.userName}`  : "שם נהג לא נמצא"}
+                      </Typography>
                     </Box>
                     <Stack alignItems="flex-end" spacing={1}>
                       <Chip
