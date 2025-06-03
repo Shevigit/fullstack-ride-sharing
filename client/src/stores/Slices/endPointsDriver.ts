@@ -36,6 +36,27 @@ const apiDriverSlice = apiSliceDriver.injectEndpoints({
             }),
             invalidatesTags: ["Driver"],
         }),
+        //     addPassengerToSuggestion: builder.mutation<Driver, Driver>({
+        //     query: (addPassengerToSuggestion) => ({
+        //         url: `/drivers/${addPassengerToSuggestion._id}/addPassengerToSuggestion`,
+        //         method: "PUT",
+        //         body: addPassengerToSuggestion,
+
+        //     }),
+        //     invalidatesTags: ["Driver"],
+        // }),
+
+
+        addPassengerToSuggestion: builder.mutation<Driver, { suggestionId: string; passengerId: string }>({
+  query: ({ suggestionId, passengerId }) => ({
+    url: `/drivers/${suggestionId}/addPassengerToSuggestion`,
+    method: "PUT",
+    body: { passengerId },
+        
+  }),
+  invalidatesTags: ["Driver"],
+}),
+
         
     }),
 });
@@ -46,6 +67,7 @@ export const {
     useAdddriverMutation,
     useUpdatedriverMutation,
     useDeletedriverMutation,
+    useAddPassengerToSuggestionMutation,
     
 } = apiDriverSlice;
 export default apiDriverSlice

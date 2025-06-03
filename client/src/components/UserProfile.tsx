@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -14,27 +13,17 @@ import { useNavigate } from "react-router";
 import {
   useGetAlldriversQuery,
   useDeletedriverMutation,
+  
 } from "../stores/Slices/endPointsDriver";
 import { Driver, User } from "./interfaces/Interface";
 
-export default function UserProfile() {
+const UserProfile = () => {
   const { data: allDrivers, isLoading, isError, error } = useGetAlldriversQuery();
   const [deleteDriver] = useDeletedriverMutation();
-
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const currentUser=localStorage.getItem("currentUser");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const userString = localStorage.getItem("currentUser");
-    if (userString) {
-      try {
-        const parsedUser: User = JSON.parse(userString);
-        setCurrentUser(parsedUser);
-      } catch (e) {
-        console.error("שגיאה בניתוח משתמש:", e);
-      }
-    }
-  }, []);
+
 
   if (isLoading) {
     return (
@@ -52,24 +41,29 @@ export default function UserProfile() {
   }
 
   if (!currentUser) {
-    return (
-      <Typography variant="h6">אין משתמש מחובר.</Typography>
-    );
+    return <Typography variant="h6">אין משתמש מחובר.</Typography>;
   }
 
-  const myRides = allDrivers.filter(driver => driver.creator?._id === currentUser._id);
-  const joinedRides = allDrivers.filter(driver =>
-    driver.passengers.some(p => p?._id === currentUser._id)
+  const myRides = allDrivers.filter(
+    (driver) => driver?._id === currentUser._id
+  );
+
+  const joinedRides = allDrivers.filter(
+    (driver) =>
+      Array.isArray(driver.passengers) &&
+      driver.passengers.some((p) => p?._id === currentUser._id)
   );
 
   const handleEdit = (rideId: string) => {
     navigate(`/edit-ride/${rideId}`);
   };
 
-  const handleDelete = async (rideId: string) => {
+  const handleDelete = async (ride: Driver) => {
     if (window.confirm("האם אתה בטוח שברצונך למחוק את הנסיעה?")) {
       try {
-        await deleteDriver(rideId);
+        await deleteDriver(ride);
+        // כאן אפשר להוסיף שליחת מייל לכל הנוסעים - אם תרצה
+        // ride.passengers?.forEach(p => sendEmail(p.email, ...))
       } catch (err) {
         console.error("שגיאה במחיקה:", err);
       }
@@ -80,8 +74,12 @@ export default function UserProfile() {
     <Grid item xs={12} md={6} key={ride._id}>
       <Card elevation={3}>
         <CardContent>
-          <Typography variant="h6">{ride.source} → {ride.destination}</Typography>
-          <Typography variant="body2">תאריך: {ride.date}</Typography>
+          <Typography variant="h6">
+            {ride.source} → {ride.destination}
+          </Typography>
+          <Typography variant="body2">
+            תאריך: {new Date(ride.date).toLocaleDateString()}
+          </Typography>
           <Typography variant="body2">שעה: {ride.time}</Typography>
           <Typography variant="body2">כתובת איסוף: {ride.address}</Typography>
           <Divider sx={{ my: 1 }} />
@@ -92,7 +90,7 @@ export default function UserProfile() {
                 size="small"
                 variant="outlined"
                 color="primary"
-                onClick={() => handleEdit(ride._id)}
+                onClick={() => handleEdit(ride._id!)}
               >
                 ערוך
               </Button>
@@ -100,7 +98,7 @@ export default function UserProfile() {
                 size="small"
                 variant="outlined"
                 color="error"
-                onClick={() => handleDelete(ride._id)}
+                onClick={() => handleDelete(ride)}
               >
                 מחק
               </Button>
@@ -121,9 +119,11 @@ export default function UserProfile() {
         <Typography variant="h5">🛣️ נסיעות שיצרתי</Typography>
         <Grid container spacing={2} mt={1}>
           {myRides.length > 0 ? (
-            myRides.map(ride => renderRideCard(ride, true))
+            myRides.map((ride) => renderRideCard(ride, true))
           ) : (
-            <Typography variant="body1" sx={{ ml: 2 }}>לא יצרת נסיעות.</Typography>
+            <Typography variant="body1" sx={{ ml: 2 }}>
+              לא יצרת נסיעות.
+            </Typography>
           )}
         </Grid>
       </Box>
@@ -132,12 +132,16 @@ export default function UserProfile() {
         <Typography variant="h5">🚗 נסיעות שהצטרפתי אליהן</Typography>
         <Grid container spacing={2} mt={1}>
           {joinedRides.length > 0 ? (
-            joinedRides.map(ride => renderRideCard(ride))
+            joinedRides.map((ride) => renderRideCard(ride))
           ) : (
-            <Typography variant="body1" sx={{ ml: 2 }}>לא הצטרפת לנסיעות.</Typography>
+            <Typography variant="body1" sx={{ ml: 2 }}>
+              לא הצטרפת לנסיעות.
+            </Typography>
           )}
         </Grid>
       </Box>
     </Box>
   );
-}
+};
+
+export default UserProfile;
