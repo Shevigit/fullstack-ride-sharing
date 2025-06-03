@@ -9,6 +9,7 @@ import BasicPage from "../components/About";
 import SearchDrive from "../components/SearchDrive";
 import RideInfoCard from "../components/RideInfoCard";
 import SuggestionDrive from "../components/SuggestionDrive";
+import UserProfile from "../components/UserProfile";
 
 const router2 = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ const router2 = createBrowserRouter([
         ]
       },
       { path: "loginIn", element: <LoginIn /> },
-      { path: "Update", element: <Update /> },
+      { path: "Update", element: <UserProfile/> },
       { path: "About", element: <BasicPage /> },
       {
         path: "SearchDrive", // <-- הנתיב הבסיסי ל-SearchDrive
