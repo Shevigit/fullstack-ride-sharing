@@ -246,7 +246,7 @@ const SearchDrive = () => {
                       </Typography>
                       {/* ///////////////////////////////////////////// */}
                        <Typography variant="body2" color="text.secondary">
-                        {driver.driver? `שם נהג: ${driver?.driver.userName}`  : "שם נהג לא נמצא"}
+                        {driver.driver? `שם נהג: ${driver.driver}`  : "שם נהג לא נמצא"}
                       </Typography>
                     </Box>
                     <Stack alignItems="flex-end" spacing={1}>
