@@ -9,8 +9,12 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useAddcommentMutation, useGetAllcommentsQuery } from "../stores/Slices/endPointsComments";
 import { Comment } from "./interfaces/Interface";
+import { RootState } from "../stores/Store";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+      const currentUser = useSelector((state: RootState) => state.auth.currentUser);
+      const isLoggedIn = Boolean(currentUser);
     const [isOpen, setIsOpen] = useState(false);
     const defaultComment: Comment = { text: "" };
     const [comment_, setComment] = useState<Comment>(defaultComment);
@@ -19,6 +23,7 @@ const Home = () => {
 
     const { data } = useGetAllcommentsQuery();
     const testimonials = data ?? [];
+
 
     const next = () => {
         if (testimonials.length === 0) return;
@@ -86,6 +91,7 @@ const Home = () => {
                         <div style={mediumFont}>מלל כלשהוא...</div>
                         <div style={mediumFont}>מלל כלשהוא...</div>
                         <div style={bigFont}>והכל בקליק אחד</div>
+                        {isLoggedIn && (
                         <div style={containerOfBtnsInHomePage}>
                             <Link to="/Update">
                                 <Button sx={btnStyle} style={margin}>עדכן נסיעה</Button>
@@ -96,7 +102,7 @@ const Home = () => {
                             <Link to="/SearchDrive">
                                 <Button sx={btnStyle} style={margin}>חפש נסיעה</Button>
                             </Link>
-                        </div>
+                        </div>)}
                     </div>
                 </div>
 
@@ -138,3 +144,4 @@ const Home = () => {
 };
 
 export default Home;
+
