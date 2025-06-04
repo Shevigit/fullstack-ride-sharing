@@ -17,7 +17,7 @@ const HomePageNav = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logout()); // זה כבר מסיר גם מ־Redux וגם מ־localStorage
+    dispatch(logout()); 
     navigate('/');
   };
   return (

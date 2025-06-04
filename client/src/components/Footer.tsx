@@ -74,13 +74,13 @@
 //     </Box>
 //   );
 // }
-import { useEffect, useState } from "react";
+
 import { Box, Container, Grid, Typography, Link, Divider, IconButton } from "@mui/material";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { useSelector } from "react-redux";
-import { RootState } from "../stores/store"; // נתיב נכון למאגר ה-Redux שלך
+import { RootState } from "../stores/Store"; // נתיב נכון למאגר ה-Redux שלך
 
 import {
   footerBox,
