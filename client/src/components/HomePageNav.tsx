@@ -1,13 +1,11 @@
 
-
-
 import { useNavigate, NavLink } from 'react-router'; 
 import { navStyle } from '../CSS/nav';
 import { NavbarLink } from '../CSS/homePageNav';
 import { Button } from '@mui/material';
 import { SignUpBtn } from '../CSS/nav';
 import { useDispatch } from 'react-redux';
-import { logout } from '../stores/Slices/authSlice'; // ← תיקון כאן!
+import { logout } from '../stores/Slices/authSlice'; 
 
 import { useSelector } from 'react-redux';
 

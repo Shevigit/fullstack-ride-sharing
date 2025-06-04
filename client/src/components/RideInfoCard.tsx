@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -28,8 +28,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useParams, useNavigate } from "react-router";
 import {
   useGetdriverByIdQuery,
-  useUpdatedriverMutation,
-  useAddPassengerToSuggestionMutation,
+  // useUpdatedriverMutation,
+  useJoinSuggestionMutation,
 } from "../stores/Slices/endPointsDriver";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { format, isBefore } from "date-fns";
@@ -46,8 +46,8 @@ const RideInfoCard=() =>{
     isError,
     error,
   } = useGetdriverByIdQuery(_id ?? skipToken);
-  const [updatedriver] = useUpdatedriverMutation();
-  const [addPassengerToSuggestion] =useAddPassengerToSuggestionMutation();
+  // const [updatedriver] = useUpdatedriverMutation();
+  const [ joinSuggestio] =useJoinSuggestionMutation();
 
   const [isJoined, setIsJoined] = useState(false);
 
@@ -76,70 +76,47 @@ try {
     setIsDialogOpen(false);
   };
 
-//   const handleJoinConfirm = async () => {
-//     if (!thisDriver || !currentUser) return;
 
-//     let updatedPassengers = [...thisDriver.passengers.filter(p => p?._id !== currentUser._id)];
-
-//     const newPassengers = Array(selectedPassengersCount).fill(currentUser);
-
-//     const updatedDriver: Driver = {
-//       ...thisDriver,
-//       availableSeats:
-//         thisDriver.availableSeats + userPassengersCount - selectedPassengersCount,
-//       passengers: [...updatedPassengers, ...newPassengers],
-//       _id: thisDriver._id,
-//     };
-
-//     try {
-//     //  await addPassengerToSuggestion()
-//       // await updatedriver(updatedDriver);
-// await addPassengerToSuggestion({
-//   _id: thisDriver._id,
-//   User._id: currentUser._id,
-// });
-
-//       setUserPassengersCount(selectedPassengersCount);
-//       setIsJoined(selectedPassengersCount > 0);
-//     } catch (err) {
-//       console.error("שגיאה בעת עדכון נסיעה:", err);
-//     } finally {
-//       setIsDialogOpen(false);
-//     }
-//   };
 
 const handleJoinConfirm = async () => {
   if (!thisDriver?._id || !currentUser?._id) return;
 
-  let updatedPassengers = [...thisDriver.passengers.filter(p => p?._id !== currentUser._id)];
+  // const updatedPassengers = [...thisDriver.passengers.filter(p => p?._id !== currentUser._id)];
 
-  const newPassengers = Array(selectedPassengersCount).fill(currentUser);
+  // const newPassengers = Array(selectedPassengersCount).fill(currentUser);
 
-  const updatedDriver: Driver = {
-    ...thisDriver,
-    availableSeats:
-      thisDriver.availableSeats + userPassengersCount - selectedPassengersCount,
-    passengers: [...updatedPassengers, ...newPassengers],
-    _id: thisDriver._id,
-  };
+  // const updatedDriver: Driver = {
+  //   ...thisDriver,
+  //   availableSeats:
+  //     thisDriver.availableSeats + userPassengersCount - selectedPassengersCount,
+  //   passengers: [...updatedPassengers, ...newPassengers],
+  //   _id: thisDriver._id,
+  // };
 
   try {
-console.log("מנסה להוסיף נוסע", thisDriver._id, currentUser._id);
+console.log("מנסה להוסיף נוסע", thisDriver._id, currentUser._id,selectedPassengersCount);
 
 // await addPassengerToSuggestion({
 //   suggestionId: thisDriver._id,
 //   passengerId: currentUser._id,
 // });
-const result = await addPassengerToSuggestion({
+if(thisDriver._id!= currentUser._id){
+const result = await joinSuggestio({
   suggestionId: thisDriver._id,
-  passengerId: currentUser._id,
+   userId: currentUser._id,
+  countSeat:selectedPassengersCount
 }).unwrap(); 
-
 console.log("נוסע נוסף בהצלחה", result);
 
 console.log("נוסע נוסף בהצלחה");
 
     setUserPassengersCount(selectedPassengersCount);
+}else{
+  alert("ןוארכקראטיוחלךף")
+}
+
+
+
     setIsJoined(selectedPassengersCount > 0);
   } catch (err) {
     console.error("שגיאה בעת עדכון נסיעה:", err);

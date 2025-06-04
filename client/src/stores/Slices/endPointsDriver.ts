@@ -1,4 +1,4 @@
-import { Driver, ResDriver } from "../../components/interfaces/Interface";
+import { Driver } from "../../components/interfaces/Interface";
 import apiSliceDriver from "./apiSliceDrivers";
 
 const apiDriverSlice = apiSliceDriver.injectEndpoints({
@@ -36,22 +36,14 @@ const apiDriverSlice = apiSliceDriver.injectEndpoints({
             }),
             invalidatesTags: ["Driver"],
         }),
-        //     addPassengerToSuggestion: builder.mutation<Driver, Driver>({
-        //     query: (addPassengerToSuggestion) => ({
-        //         url: `/drivers/${addPassengerToSuggestion._id}/addPassengerToSuggestion`,
-        //         method: "PUT",
-        //         body: addPassengerToSuggestion,
+   
 
-        //     }),
-        //     invalidatesTags: ["Driver"],
-        // }),
-
-
-        addPassengerToSuggestion: builder.mutation<Driver, { suggestionId: string; passengerId: string }>({
-  query: ({ suggestionId, passengerId }) => ({
-    url: `/drivers/${suggestionId}/addPassengerToSuggestion`,
+        joinSuggestion: builder.mutation<Driver, { suggestionId: string; userId: string ,countSeat:number}>({
+  query: ({ suggestionId, userId,countSeat }) => ({
+    url: `/drivers/${suggestionId}/joinSuggestion`,
     method: "PUT",
-    body: { passengerId },
+
+    body: { userId ,countSeat},
         
   }),
   invalidatesTags: ["Driver"],
@@ -67,7 +59,6 @@ export const {
     useAdddriverMutation,
     useUpdatedriverMutation,
     useDeletedriverMutation,
-    useAddPassengerToSuggestionMutation,
-    
+    useJoinSuggestionMutation,
 } = apiDriverSlice;
 export default apiDriverSlice

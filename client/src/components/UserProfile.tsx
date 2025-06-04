@@ -168,14 +168,13 @@ import {
 import { Driver } from "./interfaces/Interface";
 
 const UserProfile = () => {
-  const navigate = useNavigate();
-
-  // מביאים את המשתמש הנוכחי מה-state של Redux (authSlice)
-  const currentUser = useSelector((state: RootState) => state.auth.currentUser);
 
   const { data: allDrivers, isLoading, isError, error } = useGetAlldriversQuery();
   const [deleteDriver] = useDeletedriverMutation();
+  const currentUser = localStorage.getItem("currentUser");
+  const navigate = useNavigate();
 
+  
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="30vh">
@@ -234,6 +233,9 @@ const UserProfile = () => {
           <Typography variant="body2">כתובת איסוף: {ride.address}</Typography>
           <Divider sx={{ my: 1 }} />
           <Typography variant="body2">מקומות פנויים: {ride.availableSeats}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {ride.driver ? `שם נהג: ${ride?.driver.userName}` : "שם נהג לא נמצא"}
+          </Typography>
           {showActions && (
             <Box mt={2} display="flex" gap={1}>
               <Button

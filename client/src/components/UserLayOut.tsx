@@ -13,8 +13,8 @@ const UserLayout = () => {
    
     <div>
       {currentUser ? <HomePageNav /> : <Nav />}
+      <Outlet/>
     </div>
-    <Outlet/>
      </>
   );
 };
