@@ -39,9 +39,9 @@ const AppLayout = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <UserLayout />
-      <div style={{ flex: 1 }}>
+      {/* <div style={{ flex: 1 }}>
         <Outlet />
-      </div>
+      </div> */}
       <Footer />
     </div>
   );
