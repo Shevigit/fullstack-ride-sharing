@@ -127,6 +127,136 @@ const updateDriverSuggestion = async (req, res) => {
         res.status(500).json({ message: "Failed to update suggestion" });
     }
 };
+// const joinSuggestion = async (req, res) => {
+//   const suggestionId = req.params.suggestionId;
+//   const { userId, countSeat } = req.body;
+
+//   if (!userId || countSeat === undefined) {
+//     return res.status(400).json({ message: 'חסר userId או countSeat בבקשה' });
+//   }
+
+//   try {
+//     const suggestion = await Suggestion.findById(suggestionId);
+//     if (!suggestion) {
+//       return res.status(404).json({ message: 'הצעת נסיעה לא נמצאה' });
+//     }
+
+//     if (suggestion.driver.toString() === userId) {
+//     return res.status(400).json({ message: 'הנהג לא יכול להצטרף כנסע לנסיעה שלו' });
+//     }
+
+//     const passengers = Array.isArray(suggestion.passengers) ? suggestion.passengers : [];
+
+//     const existingPassengerIndex = passengers.findIndex(
+//       (p) => p.user?.toString() === userId
+//     );
+
+//     if (countSeat === 0) {
+//       if (existingPassengerIndex !== -1) {
+//         passengers.splice(existingPassengerIndex, 1);
+//         suggestion.passengers = passengers;
+//         await suggestion.save();
+//         return res.json({ message: 'המשתמש הוסר מהרשימת הנוסעים', suggestion });
+//       } else {
+//         return res.status(400).json({ message: 'המשתמש לא נמצא ברשימת הנוסעים להסרה' });
+//       }
+//     }
+
+//     const seatsTaken = passengers.reduce((sum, p) => sum + p.countSeat, 0);
+//     const seatsLeft = suggestion.availableSeats - seatsTaken + (existingPassengerIndex !== -1 ? passengers[existingPassengerIndex].countSeat : 0);
+
+//     if (countSeat > seatsLeft) {
+//       return res.status(400).json({ message: `אין מספיק מקומות פנויים, נותרו ${seatsLeft}` });
+//     }
+
+//     if (existingPassengerIndex !== -1) {
+//       passengers[existingPassengerIndex].countSeat = countSeat;
+//     } else {
+//       passengers.push({ user: userId, countSeat });
+//     }
+
+//     suggestion.passengers = passengers;
+//     await suggestion.save();
+
+//     res.json({ message: 'נוסע נוסף/עודכן בהצלחה', suggestion });
+
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'שגיאה בשרת' });
+//   }
+// }
+
+
+const joinSuggestion = async (req, res) => {
+  const suggestionId = req.params.suggestionId;
+  const { userId, countSeat } = req.body;
+
+  if (!userId || countSeat === undefined) {
+    return res.status(400).json({ message: 'חסר userId או countSeat בבקשה' });
+  }
+
+  try {
+    const suggestion = await Suggestion.findById(suggestionId);
+    if (!suggestion) {
+      return res.status(404).json({ message: 'הצעת נסיעה לא נמצאה' });
+    }
+
+    if (suggestion.driver.toString() === userId) {
+      return res.status(400).json({ message: 'הנהג לא יכול להצטרף כנסע לנסיעה שלו' });
+    }
+
+    // ודא שפורמט passengers הוא מערך של אובייקטים
+    let passengers = Array.isArray(suggestion.passengers) ? suggestion.passengers : [];
+
+    // חפש את הנוסע אם קיים
+    const existingPassengerIndex = passengers.findIndex(p => p.user?.toString?.() === userId);
+
+    // === הסרה ===
+    if (countSeat === 0) {
+      if (existingPassengerIndex !== -1) {
+        const freedSeats = passengers[existingPassengerIndex].countSeat || 1;
+        passengers.splice(existingPassengerIndex, 1);
+        suggestion.availableSeats += freedSeats;
+        suggestion.passengers = passengers;
+        await suggestion.save();
+        return res.json({ message: 'המשתמש הוסר מהרשימת הנוסעים', suggestion });
+      } else {
+        return res.status(400).json({ message: 'המשתמש לא נמצא ברשימת הנוסעים להסרה' });
+      }
+    }
+
+    // === עדכון או הוספה ===
+    if (existingPassengerIndex !== -1) {
+      const currentCount = passengers[existingPassengerIndex].countSeat || 1;
+      const delta = countSeat - currentCount;
+
+      if (delta > suggestion.availableSeats) {
+        return res.status(400).json({ message: `אין מספיק מקומות פנויים, נותרו ${suggestion.availableSeats}` });
+      }
+
+      passengers[existingPassengerIndex].countSeat = countSeat;
+      suggestion.availableSeats -= delta;
+    } else {
+      if (countSeat > suggestion.availableSeats) {
+        return res.status(400).json({ message: `אין מספיק מקומות פנויים, נותרו ${suggestion.availableSeats}` });
+      }
+
+      passengers.push({ user: userId, countSeat });
+      suggestion.availableSeats -= countSeat;
+    }
+
+    suggestion.passengers = passengers;
+    await suggestion.save();
+
+    res.json({ message: 'נוסע נוסף/עודכן בהצלחה', suggestion });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'שגיאה בשרת' });
+  }
+}
+
+
 const getFoundById = async (req, res) => {
     try {
         const { id } = req.params; // ID שמגיע מ-req.params (לדוגמה, מ- /suggestions/:id)
@@ -174,4 +304,4 @@ const getSuggestionById = async (req, res) => {
     }
 };
 
-module.exports = { getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById }
+module.exports = {joinSuggestion, getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById }
