@@ -49,7 +49,7 @@ const addDriverSuggestion = async (req, res) => {
 const getAllDriverSuggestions = async (req, res) => {
     try {
 
-        const driverSuggestions = await Suggestion.find().sort({ createdAt: -1 }); // מהחדש לישן
+        const driverSuggestions = await Suggestion.find().populate('driver').sort({ createdAt: -1 }); // מהחדש לישן
         console.log("4");
         res.json(driverSuggestions);
     } catch (error) {
@@ -112,24 +112,29 @@ const deleteDriverSuggestion = async (req, res) => {
 };
 
 const updateDriverSuggestion = async (req, res) => {
-    try {
+
         const { id } = req.params;
-        const updateData = req.body;
-        const suggestion = await Suggestion.findById(id);
-        if (!suggestion) {
-            return res.status(404).json({ message: "Suggestion not found" });
-        }
-        Object.assign(suggestion, updateData); // מיישם את העדכונים
-        await suggestion.save();
-        res.json(suggestion);
+
+    try {
+const updateDriver = await Suggestion.findByIdAndUpdate(
+  id,
+  req.body,
+  { new: true }
+);
+
+if(!updateDriver){
+     return res.status(404).json({message: 'User not found'})
+}
+    return res.json(updateDriver)
+
     } catch (error) {
         console.error("Error updating suggestion:", error);
         res.status(500).json({ message: "Failed to update suggestion" });
     }
 };
 
+const joinSuggestion=async(req, res)=> {
 
-const joinSuggestion = async (req, res) => {
   const suggestionId = req.params.suggestionId;
   const { userId, countSeat } = req.body;
 
@@ -143,10 +148,21 @@ const joinSuggestion = async (req, res) => {
       return res.status(404).json({ message: 'הצעת נסיעה לא נמצאה' });
     }
 
+    // 1. אסור לנהג להצטרף לנסיעה שלו
     if (suggestion.driver.toString() === userId) {
       return res.status(400).json({ message: 'הנהג לא יכול להצטרף כנסע לנסיעה שלו' });
     }
 
+// <<<<<<< HEAD
+//     const existingPassengerIndex = suggestion.passengers.findIndex(
+//       (p) => p.user.toString() === userId
+//     );
+
+//     if (countSeat === 0) {
+//       // אם countSeat = 0, יש להסיר את המשתמש אם הוא נמצא במערך
+//       if (existingPassengerIndex !== -1) {
+//         suggestion.passengers.splice(existingPassengerIndex, 1);
+// =======
     // ודא שפורמט passengers הוא מערך של אובייקטים
     let passengers = Array.isArray(suggestion.passengers) ? suggestion.passengers : [];
 
@@ -167,6 +183,28 @@ const joinSuggestion = async (req, res) => {
       }
     }
 
+// <<<<<<< HEAD
+//     // countSeat > 0 - ממשיכים להוסיף/לעדכן
+
+//     // מחשבים מושבים פנויים (כולל סידור של מושבים קיימים)
+//     const seatsTaken = suggestion.passengers.reduce((sum, p) => sum + p.countSeat, 0);
+//     const seatsLeft = suggestion.availableSeats - seatsTaken + (existingPassengerIndex !== -1 ? suggestion.passengers[existingPassengerIndex].countSeat : 0);
+
+//     if (countSeat > seatsLeft) {
+//       return res.status(400).json({ message: `אין מספיק מקומות פנויים, נותרו ${seatsLeft}` });
+//     }
+
+//     if (existingPassengerIndex !== -1) {
+//       // מעדכנים את כמות המושבים של הנוסע הקיים
+//       suggestion.passengers[existingPassengerIndex].countSeat = countSeat;
+//     } else {
+//       suggestion.passengers.push({ user: userId, countSeat });
+//     }
+
+//     await suggestion.save();
+
+//     res.json({ message: 'נוסע נוסף/עודכן בהצלחה', suggestion });
+// =======
     // === עדכון או הוספה ===
     if (existingPassengerIndex !== -1) {
       const currentCount = passengers[existingPassengerIndex].countSeat || 1;
@@ -246,4 +284,7 @@ const getSuggestionById = async (req, res) => {
     }
 };
 
+// <<<<<<< HEAD
+// module.exports = { getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById,joinSuggestion }
+// =======
 module.exports = {joinSuggestion, getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById }

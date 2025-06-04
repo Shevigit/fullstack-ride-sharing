@@ -7,43 +7,45 @@ import { SignUpBtn } from '../CSS/nav';
 import { useDispatch } from 'react-redux';
 import { logout } from '../stores/Slices/authSlice'; 
 
+import { useSelector } from 'react-redux';
+
 const HomePageNav = () => {
-  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user.user); // או טיפוס נכון אם יש לך
+   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout()); 
     navigate('/');
   };
-
   return (
-    <div>
-      <nav style={navStyle}>
-        <div>
-          <NavLink to="/">RideShare</NavLink>
-        </div>
-        <NavLink to="/Update">
-          <div style={NavbarLink}>פרופיל משתמש</div>
-        </NavLink>
+    <nav style={navStyle}>
+      <NavLink to="/">RideShare</NavLink>
+
+      <NavLink to="/Update">
+        <div style={NavbarLink}>פרופיל משתמש</div>
+      </NavLink>
+
+      {user?.hasCar && (
         <NavLink to="/Offer">
           <div style={NavbarLink}>הוספת נסיעה</div>
         </NavLink>
-        <NavLink to="/SearchDrive">
-          <div style={NavbarLink}>חיפוש נסיעה</div>
-        </NavLink>
-        <NavLink to="/About">
-          <div style={NavbarLink}>אודות</div>
-        </NavLink>
-        <NavLink to="/">
-          <div style={NavbarLink}>עמוד הבית</div>
-        </NavLink>
+      )}
 
-        <Button style={SignUpBtn} onClick={handleLogout}>
-          Log out
-        </Button>
-      </nav>
-    </div>
+      <NavLink to="/SearchDrive">
+        <div style={NavbarLink}>חיפוש נסיעה</div>
+      </NavLink>
+
+      <NavLink to="/About">
+        <div style={NavbarLink}>אודות</div>
+      </NavLink>
+
+      <NavLink to="/">
+        <div style={NavbarLink}>עמוד הבית</div>
+      </NavLink>
+
+      <Button style={SignUpBtn} onClick={handleLogout}>Log out</Button>
+    </nav>
   );
 };
-
-export default HomePageNav;
+export default HomePageNav

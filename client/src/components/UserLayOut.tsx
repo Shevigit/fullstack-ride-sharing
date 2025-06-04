@@ -1,3 +1,4 @@
+
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/Store";
 import Nav from "./Nav";
@@ -14,7 +15,6 @@ const UserLayout = () => {
       {currentUser ? <HomePageNav /> : <Nav />}
       <Outlet/>
     </div>
-    <Outlet/>
      </>
   );
 };
