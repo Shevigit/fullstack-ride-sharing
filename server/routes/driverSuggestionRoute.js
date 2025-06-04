@@ -6,11 +6,9 @@ const {
   deleteDriverSuggestion,
   updateDriverSuggestion,
   getFoundById,
-// <<<<<<< HEAD
-//   joinSuggestion,
-// =======
-  joinSuggestion
 
+  joinSuggestion,
+  createSuggestion
 } = require('../controllers/driverSuggestionController'); 
 const verifyJWT = require('../middleware/verifyJWT'); 
 router.get('/', getAllDriverSuggestions);
@@ -18,9 +16,6 @@ router.post('/', addDriverSuggestion)
 router.get('/:id',verifyJWT, getFoundById);
 router.delete('/:id', verifyJWT, deleteDriverSuggestion);
 router.put('/:id', verifyJWT, updateDriverSuggestion);
-// <<<<<<< HEAD
-// router.put('/:suggestionId/joinSuggestion', joinSuggestion);
-// =======
 router.put('/:suggestionId/joinSuggestion', joinSuggestion)
-
+router.post('/createSuggestion', createSuggestion);
 module.exports = router;

@@ -74,7 +74,7 @@ const SuggestionDrive = () => {
 
     const driver: Driver = {
       ...newDriver,
-      driver: currentUser?._id!,
+      driver: currentUser!._id!,
       genderPreference: type_ ?? type.זכר,
       passengers: [],
       status: status.פעיל,
@@ -213,7 +213,7 @@ const SuggestionDrive = () => {
             <FormControlLabel value="נקבה" control={<Radio color="success" />} label="נקבה" />
           </RadioGroup>
 
-          <Button type="submit" variant="contained" style={{ backgroundColor: "rgba(81, 165, 12, 0.86)" }}>
+          <Button  type="submit" variant="contained" style={{ backgroundColor: "rgba(81, 165, 12, 0.86)" }}>
             שלח
           </Button>
         </Stack>
