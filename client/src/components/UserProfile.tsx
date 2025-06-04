@@ -15,7 +15,7 @@ import {
   useDeletedriverMutation,
 
 } from "../stores/Slices/endPointsDriver";
-import { Driver, User } from "./interfaces/Interface";
+import { Driver } from "./interfaces/Interface";
 
 const UserProfile = () => {
   const { data: allDrivers, isLoading, isError, error } = useGetAlldriversQuery();
@@ -85,7 +85,7 @@ const UserProfile = () => {
           <Divider sx={{ my: 1 }} />
           <Typography variant="body2">מקומות פנויים: {ride.availableSeats}</Typography>
           <Typography variant="body2" color="text.secondary">
-            {ride.driver ? `שם נהג: ${ride?.driver.userName}` : "שם נהג לא נמצא"}
+            {ride.driver ? `שם נהג: ${ride?.driver}` : "שם נהג לא נמצא"}
           </Typography>
           {showActions && (
             <Box mt={2} display="flex" gap={1}>
