@@ -100,17 +100,23 @@ console.log("מנסה להוסיף נוסע", thisDriver._id, currentUser._id,se
 //   suggestionId: thisDriver._id,
 //   passengerId: currentUser._id,
 // });
+if(thisDriver._id!= currentUser._id){
 const result = await joinSuggestio({
   suggestionId: thisDriver._id,
    userId: currentUser._id,
   countSeat:selectedPassengersCount
 }).unwrap(); 
-
 console.log("נוסע נוסף בהצלחה", result);
 
 console.log("נוסע נוסף בהצלחה");
 
     setUserPassengersCount(selectedPassengersCount);
+}else{
+  alert("ןוארכקראטיוחלךף")
+}
+
+
+
     setIsJoined(selectedPassengersCount > 0);
   } catch (err) {
     console.error("שגיאה בעת עדכון נסיעה:", err);

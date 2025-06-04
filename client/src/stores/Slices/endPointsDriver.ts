@@ -1,4 +1,4 @@
-import { Driver, ResDriver } from "../../components/interfaces/Interface";
+import { Driver } from "../../components/interfaces/Interface";
 import apiSliceDriver from "./apiSliceDrivers";
 
 const apiDriverSlice = apiSliceDriver.injectEndpoints({
@@ -38,10 +38,11 @@ const apiDriverSlice = apiSliceDriver.injectEndpoints({
         }),
    
 
-        joinSuggestion: builder.mutation<Driver, { suggestionId: string; userId: string ,countSeat:Number}>({
+        joinSuggestion: builder.mutation<Driver, { suggestionId: string; userId: string ,countSeat:number}>({
   query: ({ suggestionId, userId,countSeat }) => ({
     url: `/drivers/${suggestionId}/joinSuggestion`,
     method: "PUT",
+
     body: { userId ,countSeat},
         
   }),
