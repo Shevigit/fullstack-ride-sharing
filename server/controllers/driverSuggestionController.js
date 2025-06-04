@@ -50,7 +50,7 @@ const addDriverSuggestion = async (req, res) => {
 const getAllDriverSuggestions = async (req, res) => {
     try {
 
-        const driverSuggestions = await Suggestion.find().sort({ createdAt: -1 }); // מהחדש לישן
+        const driverSuggestions = await Suggestion.find().populate('driver').sort({ createdAt: -1 }); // מהחדש לישן
         console.log("4");
         res.json(driverSuggestions);
     } catch (error) {
@@ -121,94 +121,29 @@ if (!req.user || suggestion.driver.toString() !== req.user.id) {
 };
 
 const updateDriverSuggestion = async (req, res) => {
-    try {
+
         const { id } = req.params;
-        const updateData = req.body;
-        const suggestion = await Suggestion.findById(id);
-        if (!suggestion) {
-            return res.status(404).json({ message: "Suggestion not found" });
-        }
-        Object.assign(suggestion, updateData); // מיישם את העדכונים
-        await suggestion.save();
-        res.json(suggestion);
+
+    try {
+const updateDriver = await Suggestion.findByIdAndUpdate(
+  id,
+  req.body,
+  { new: true }
+);
+
+if(!updateDriver){
+     return res.status(404).json({message: 'User not found'})
+}
+    return res.json(updateDriver)
+
     } catch (error) {
         console.error("Error updating suggestion:", error);
         res.status(500).json({ message: "Failed to update suggestion" });
     }
 };
 
-
-// const joinSuggestion = async (req, res) => {
-//   const suggestionId = req.params.suggestionId;
-//   const { userId, countSeat } = req.body;
-
-//   if (!userId || countSeat === undefined) {
-//     return res.status(400).json({ message: 'חסר userId או countSeat בבקשה' });
-//   }
-
-//   try {
-//     const suggestion = await Suggestion.findById(suggestionId);
-//     if (!suggestion) {
-//       return res.status(404).json({ message: 'הצעת נסיעה לא נמצאה' });
-//     }
-
-//     if (suggestion.driver.toString() === userId) {
-//       return res.status(400).json({ message: 'הנהג לא יכול להצטרף כנסע לנסיעה שלו' });
-//     }
-
-//     // ודא שפורמט passengers הוא מערך של אובייקטים
-//     let passengers = Array.isArray(suggestion.passengers) ? suggestion.passengers : [];
-
-//     // חפש את הנוסע אם קיים
-//     const existingPassengerIndex = passengers.findIndex(p => p.user?.toString?.() === userId);
-
-//     // === הסרה ===
-//     if (countSeat === 0) {
-//       if (existingPassengerIndex !== -1) {
-//         const freedSeats = passengers[existingPassengerIndex].countSeat || 1;
-//         passengers.splice(existingPassengerIndex, 1);
-//         suggestion.availableSeats += freedSeats;
-//         suggestion.passengers = passengers;
-//         await suggestion.save();
-//         return res.json({ message: 'המשתמש הוסר מהרשימת הנוסעים', suggestion });
-//       } else {
-//         return res.status(400).json({ message: 'המשתמש לא נמצא ברשימת הנוסעים להסרה' });
-//       }
-//     }
-
-//     // === עדכון או הוספה ===
-//     if (existingPassengerIndex !== -1) {
-//       const currentCount = passengers[existingPassengerIndex].countSeat || 1;
-//       const delta = countSeat - currentCount;
-
-//       if (delta > suggestion.availableSeats) {
-//         return res.status(400).json({ message: `אין מספיק מקומות פנויים, נותרו ${suggestion.availableSeats}` });
-//       }
-
-//       passengers[existingPassengerIndex].countSeat = countSeat;
-//       suggestion.availableSeats -= delta;
-//     } else {
-//       if (countSeat > suggestion.availableSeats) {
-//         return res.status(400).json({ message: `אין מספיק מקומות פנויים, נותרו ${suggestion.availableSeats}` });
-//       }
-
-//       passengers.push({ user: userId, countSeat });
-//       suggestion.availableSeats -= countSeat;
-//     }
-
-//     suggestion.passengers = passengers;
-//     await suggestion.save();
-
-//     res.json({ message: 'נוסע נוסף/עודכן בהצלחה', suggestion });
-
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'שגיאה בשרת' });
-//   }
-// }
-
-
 const joinSuggestion = async (req, res) => {
+
   const suggestionId = req.params.suggestionId;
   const { userId, countSeat } = req.body;
 
@@ -223,9 +158,11 @@ const joinSuggestion = async (req, res) => {
       return res.status(404).json({ message: 'הצעת נסיעה לא נמצאה' });
     }
 
+    // 1. אסור לנהג להצטרף לנסיעה שלו
     if (suggestion.driver.toString() === userId) {
       return res.status(400).json({ message: 'הנהג לא יכול להצטרף כנסע לנסיעה שלו' });
     }
+
 
     let passengers = Array.isArray(suggestion.passengers) ? suggestion.passengers : [];
 
@@ -255,6 +192,7 @@ const joinSuggestion = async (req, res) => {
 if (suggestion.availableSeats <= 0 && existingPassengerIndex === -1) {
   return res.status(400).json({ message: 'הנסיעה מלאה' });
 }
+
     // === עדכון או הוספה ===
     if (existingPassengerIndex !== -1) {
       const currentCount = passengers[existingPassengerIndex].countSeat || 1;
@@ -341,7 +279,6 @@ const getSuggestionById = async (req, res) => {
     }
 };
 
-////////////////////////////////////////////////////////////
 
 const createSuggestion = async (req, res) => {
   try {
@@ -362,3 +299,4 @@ const createSuggestion = async (req, res) => {
 
 
 module.exports = {joinSuggestion, getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById,createSuggestion }
+

@@ -141,34 +141,35 @@ const LoginForm = () => {
               }}
             />
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  color="secondary"
-                  {...register('hasCar')}
-                  checked={hasCarValue}
-                />
-              }
-              label="יש לי רכב"
-            />
+        
+<FormControlLabel
+  control={
+    <Checkbox
+      color="secondary"
+      {...register('hasCar')}
+      checked={hasCarValue}
+    />
+  }
+  label="יש לי רכב"
+/>
 
-            <TextField
-              label="מספר רישיון נהיגה"
-              fullWidth
-              variant="outlined"
-              disabled={!hasCarValue}
-              {...register('driveringLicense')}
-              error={!!errors.driveringLicense}
-              helperText={errors.driveringLicense?.message}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Badge color="primary" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-
+{hasCarValue && (
+  <TextField
+    label="מספר רישיון נהיגה"
+    fullWidth
+    variant="outlined"
+    {...register('driveringLicense')}
+    error={!!errors.driveringLicense}
+    helperText={errors.driveringLicense?.message}
+    InputProps={{
+      startAdornment: (
+        <InputAdornment position="start">
+          <Badge color="primary" />
+        </InputAdornment>
+      ),
+    }}
+  />
+)}
             <Typography variant="subtitle1" fontWeight="medium">
               מין:
             </Typography>

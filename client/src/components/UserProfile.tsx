@@ -1,3 +1,6 @@
+
+
+import React from "react";
 import {
   Box,
   Typography,
@@ -10,21 +13,22 @@ import {
   Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { RootState } from "../stores/Store"; // נתיב אל ה-root reducer שלך
 import {
   useGetAlldriversQuery,
   useDeletedriverMutation,
-
 } from "../stores/Slices/endPointsDriver";
 import { Driver } from "./interfaces/Interface";
 
 const UserProfile = () => {
+
   const { data: allDrivers, isLoading, isError, error } = useGetAlldriversQuery();
   const [deleteDriver] = useDeletedriverMutation();
   const currentUser = localStorage.getItem("currentUser");
   const navigate = useNavigate();
 
-
-
+  
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="30vh">
@@ -35,23 +39,23 @@ const UserProfile = () => {
   }
 
   if (isError || !allDrivers) {
-    return (
-      <Alert severity="error">שגיאה בטעינת הנסיעות: {JSON.stringify(error)}</Alert>
-    );
+    return <Alert severity="error">שגיאה בטעינת הנסיעות: {JSON.stringify(error)}</Alert>;
   }
 
   if (!currentUser) {
     return <Typography variant="h6">אין משתמש מחובר.</Typography>;
   }
 
+  // סינון נסיעות שיצר המשתמש הנוכחי
   const myRides = allDrivers.filter(
-    (driver) => driver?._id === currentUser._id
+    (ride) => ride.driver === currentUser.id
   );
 
+  // סינון נסיעות שהמשתמש הצטרף אליהן (בתור נוסע)
   const joinedRides = allDrivers.filter(
-    (driver) =>
-      Array.isArray(driver.passengers) &&
-      driver.passengers.some((p) => p?._id === currentUser._id)
+    (ride) =>
+      Array.isArray(ride.passengers) &&
+      ride.passengers.some((p) => p?._id === currentUser.id)
   );
 
   const handleEdit = (rideId: string) => {
@@ -62,8 +66,7 @@ const UserProfile = () => {
     if (window.confirm("האם אתה בטוח שברצונך למחוק את הנסיעה?")) {
       try {
         await deleteDriver(ride);
-        // כאן אפשר להוסיף שליחת מייל לכל הנוסעים - אם תרצה
-        // ride.passengers?.forEach(p => sendEmail(p.email, ...))
+        // ניתן להוסיף שליחת מייל לנוסעים כאן אם רוצים
       } catch (err) {
         console.error("שגיאה במחיקה:", err);
       }
