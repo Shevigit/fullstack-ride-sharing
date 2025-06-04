@@ -284,7 +284,5 @@ const getSuggestionById = async (req, res) => {
     }
 };
 
-// <<<<<<< HEAD
-// module.exports = { getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById,joinSuggestion }
-// =======
+
 module.exports = {joinSuggestion, getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById }
