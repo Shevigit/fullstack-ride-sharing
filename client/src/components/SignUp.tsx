@@ -141,7 +141,7 @@ const LoginForm = () => {
               }}
             />
 
-            <FormControlLabel
+            {/* <FormControlLabel
               control={
                 <Checkbox
                   color="secondary"
@@ -167,8 +167,35 @@ const LoginForm = () => {
                   </InputAdornment>
                 ),
               }}
-            />
+            /> */}
+<FormControlLabel
+  control={
+    <Checkbox
+      color="secondary"
+      {...register('hasCar')}
+      checked={hasCarValue}
+    />
+  }
+  label="יש לי רכב"
+/>
 
+{hasCarValue && (
+  <TextField
+    label="מספר רישיון נהיגה"
+    fullWidth
+    variant="outlined"
+    {...register('driveringLicense')}
+    error={!!errors.driveringLicense}
+    helperText={errors.driveringLicense?.message}
+    InputProps={{
+      startAdornment: (
+        <InputAdornment position="start">
+          <Badge color="primary" />
+        </InputAdornment>
+      ),
+    }}
+  />
+)}
             <Typography variant="subtitle1" fontWeight="medium">
               מין:
             </Typography>
