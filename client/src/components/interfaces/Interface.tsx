@@ -3,7 +3,7 @@ export interface User {
     phone: string;
     email: string;
     password: string;
-    hasCar: boolean;
+    hasCar?: boolean;
     driveringLicense?: string;
     gender: string;
     _id?: string
@@ -13,7 +13,7 @@ export interface RegisterUser {
     phone: string;
     email: string;
     hasCar?: boolean;
-    driveringLicense: string;
+    driveringLicense?: string;
     gender: string;
 }
 export interface LoginCredentials {
