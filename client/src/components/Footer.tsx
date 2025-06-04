@@ -70,7 +70,7 @@ export default function Footer() {
         <Divider sx={dividerStyle} />
 
         <Typography sx={copyrightText}>
-          כל הזכויות שמורות. © RideShare 2024
+          כל הזכויות שמורות. © RideShare 2025
         </Typography>
       </Container>
     </Box>
