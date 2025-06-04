@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -28,7 +28,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useParams, useNavigate } from "react-router";
 import {
   useGetdriverByIdQuery,
-  useUpdatedriverMutation,
+  // useUpdatedriverMutation,
   useJoinSuggestionMutation,
 } from "../stores/Slices/endPointsDriver";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -46,7 +46,7 @@ const RideInfoCard=() =>{
     isError,
     error,
   } = useGetdriverByIdQuery(_id ?? skipToken);
-  const [updatedriver] = useUpdatedriverMutation();
+  // const [updatedriver] = useUpdatedriverMutation();
   const [ joinSuggestio] =useJoinSuggestionMutation();
 
   const [isJoined, setIsJoined] = useState(false);
@@ -81,17 +81,17 @@ try {
 const handleJoinConfirm = async () => {
   if (!thisDriver?._id || !currentUser?._id) return;
 
-  let updatedPassengers = [...thisDriver.passengers.filter(p => p?._id !== currentUser._id)];
+  // const updatedPassengers = [...thisDriver.passengers.filter(p => p?._id !== currentUser._id)];
 
-  const newPassengers = Array(selectedPassengersCount).fill(currentUser);
+  // const newPassengers = Array(selectedPassengersCount).fill(currentUser);
 
-  const updatedDriver: Driver = {
-    ...thisDriver,
-    availableSeats:
-      thisDriver.availableSeats + userPassengersCount - selectedPassengersCount,
-    passengers: [...updatedPassengers, ...newPassengers],
-    _id: thisDriver._id,
-  };
+  // const updatedDriver: Driver = {
+  //   ...thisDriver,
+  //   availableSeats:
+  //     thisDriver.availableSeats + userPassengersCount - selectedPassengersCount,
+  //   passengers: [...updatedPassengers, ...newPassengers],
+  //   _id: thisDriver._id,
+  // };
 
   try {
 console.log("מנסה להוסיף נוסע", thisDriver._id, currentUser._id,selectedPassengersCount);

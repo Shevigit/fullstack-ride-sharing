@@ -2,9 +2,9 @@ import { createBrowserRouter } from "react-router"; // וודא שאתה מיי�
 import AppLayout from "../components/AppLayout";
 import Home from "../components/Home";
 import LoginIn from "../components/Login";
-import UserLayout from "../components/UserLayOut";
+// import UserLayout from "../components/UserLayOut";
 import LoginForm from "../components/LoginForm";
-import Update from "../components/Update";
+// import Update from "../components/Update";
 import BasicPage from "../components/About";
 import SearchDrive from "../components/SearchDrive";
 import RideInfoCard from "../components/RideInfoCard";

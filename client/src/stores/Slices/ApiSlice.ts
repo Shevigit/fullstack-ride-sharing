@@ -1,7 +1,6 @@
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Cookies } from "react-cookie";
-
 const cookies = new Cookies();
 
 const ApiSlice = createApi({
@@ -20,13 +19,8 @@ const ApiSlice = createApi({
 
   tagTypes: ["User", "Post", "Drives", "LoginCredentials","City"],
 
-//  endpoints: (builder) => ({
-//    getCities: builder.query({
-//      query: () => "/cities",
-//    }),
-//   }),
 endpoints:()=>({})
 });
 
-//export const { useGetCitiesQuery } = ApiSlice; // 👈 חובה לייצא את ה-hook
+
 export default ApiSlice;
