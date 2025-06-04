@@ -31,9 +31,13 @@ export default function Footer() {
             <Box sx={linkList}>
               <Link href="/" color="inherit" underline="hover">דף הבית</Link>
               <Link href="/About" color="inherit" underline="hover">אודות</Link>
-              <Link href="/SearchDrive" color="inherit" underline="hover">חיפוש נסיעה</Link>
-              {!isLoggedIn && (
-                <Link href="/loginIn" color="inherit" underline="hover">הרשמה</Link>
+              {isLoggedIn && (
+                <Link href="/SearchDrive" color="inherit" underline="hover">חיפוש נסיעה</Link>
+                )}
+              {!isLoggedIn && (<>
+                <Link href="/loginForm" color="inherit" underline="hover">הרשמה</Link>
+                <Link href="/loginIn" color="inherit" underline="hover">התחברות</Link>
+                </>
               )}
             </Box>
           </Grid>
