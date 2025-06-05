@@ -9,8 +9,12 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useAddcommentMutation, useGetAllcommentsQuery } from "../stores/Slices/endPointsComments";
 import { Comment } from "./interfaces/Interface";
+import { RootState } from "../stores/Store";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+      const currentUser = useSelector((state: RootState) => state.auth.currentUser);
+      const isLoggedIn = Boolean(currentUser);
     const [isOpen, setIsOpen] = useState(false);
     const defaultComment: Comment = { text: "" };
     const [comment_, setComment] = useState<Comment>(defaultComment);
@@ -19,6 +23,7 @@ const Home = () => {
 
     const { data } = useGetAllcommentsQuery();
     const testimonials = data ?? [];
+
 
     const next = () => {
         if (testimonials.length === 0) return;
@@ -80,6 +85,7 @@ const Home = () => {
 
                 <div style={picture}>
                     <div style={containerLinks}>
+{/* <<<<<<< HEAD */}
                        <div style={bigFont}>מהיום זה קל יותר מתמיד</div>
 <div style={mediumFont}>תכנון הנסיעות שלך בלחיצות פשוטות</div>
 <div style={mediumFont}>התאמה מושלמת לדרישות וללו"ז שלך</div>
@@ -98,6 +104,7 @@ const Home = () => {
                                 <Button sx={btnStyle} style={margin}>חפש נסיעה</Button>
                             </Link>
                         </div>
+                        {/* )} */}
                     </div>
                 </div>
 
@@ -130,12 +137,11 @@ const Home = () => {
                         </div>
                     )}
                 </section>
-                {/* <section style={{background: "rgb(76, 0, 168)", width:"100vw", height: "30vh"}}>
-                       
-                </section> */}
+           
             </div>
         </>
     );
 };
 
 export default Home;
+

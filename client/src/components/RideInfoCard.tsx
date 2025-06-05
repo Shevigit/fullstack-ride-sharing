@@ -147,7 +147,6 @@ console.log("נוסע נוסף בהצלחה");
     : "אין תאריך";
   const isPastDate = rideDate ? isBefore(rideDate, new Date()) : false;
 
-  // Group passengers by user._id
   const groupedPassengers = thisDriver.passengers.reduce((acc, passenger) => {
     const key = passenger._id;
     if (!acc[key]) {
@@ -195,9 +194,7 @@ console.log("נוסע נוסף בהצלחה");
           <Box mt={2}>
             <Chip
               label={
-                // isJoined
-                //   ? `הצטרפת עם ${userPassengersCount} נוסעים`
-                //   : `${thisDriver.availableSeats} מקומות פנויים`
+          
                 `${thisDriver.availableSeats} מקומות פנויים`
               }
               color={

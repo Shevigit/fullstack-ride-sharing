@@ -97,25 +97,13 @@ console.log("joinedRides", joinedRides);
           <Divider sx={{ my: 1 }} />
           <Typography variant="body2">מקומות פנויים: {ride.availableSeats}</Typography>
           <Typography variant="body2" color="text.secondary">
-            {/* {typeof ride.driver === "object" && ride.driver?.name
-              ? `שם נהג: ${ride.driver.name}`
-              : "שם נהג לא ידוע"} */}
-              {/* {ride.driver?.userName ? `שם נהג: ${ride.driver.userName}` : "שם נהג לא ידוע"} */}
+            
 {typeof ride.driver === "object" && ride.driver?.userName
   ? `שם נהג: ${ride.driver.userName}`
   : "שם נהג לא ידוע"}
 
           </Typography>
-          {/* {showActions && (
-            <Box mt={2} display="flex" gap={1}>
-              <Button size="small" variant="outlined" color="primary" onClick={() => handleEdit(ride._id!)}>
-                ערוך
-              </Button>
-              <Button size="small" variant="outlined" color="error" onClick={() => handleDelete(ride)}>
-                מחק
-              </Button>
-            </Box>
-          )} */}
+   
         </CardContent>
       </Card>
     </Grid>
@@ -140,18 +128,7 @@ console.log("joinedRides", joinedRides);
         </Grid>
       </Box>
 
-      {/* <Box mt={5}>
-        <Typography variant="h5">🚗 נסיעות שהצטרפתי אליהן</Typography>
-        <Grid container spacing={2} mt={1}>
-          {joinedRides?.length ? (
-            joinedRides.map((ride) => renderRideCard(ride))
-          ) : (
-            <Typography variant="body1" sx={{ ml: 2 }}>
-              לא הצטרפת לנסיעות.
-            </Typography>
-          )}
-        </Grid>
-      </Box> */}
+   
     </Box>
   );
 };

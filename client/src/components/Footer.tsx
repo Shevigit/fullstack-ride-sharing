@@ -4,7 +4,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { useSelector } from "react-redux";
-import { RootState } from "../stores/Store"; // נתיב נכון למאגר ה-Redux שלך
+import { RootState } from "../stores/Store";
 
 import {
   footerBox,
@@ -17,7 +17,6 @@ import {
 } from "../CSS/FooterStyles";
 
 export default function Footer() {
-  // בודקים ב-Redux האם יש משתמש מחובר
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
   const isLoggedIn = Boolean(currentUser);
 
@@ -31,9 +30,13 @@ export default function Footer() {
             <Box sx={linkList}>
               <Link href="/" color="inherit" underline="hover">דף הבית</Link>
               <Link href="/About" color="inherit" underline="hover">אודות</Link>
-              <Link href="/SearchDrive" color="inherit" underline="hover">חיפוש נסיעה</Link>
-              {!isLoggedIn && (
-                <Link href="/loginIn" color="inherit" underline="hover">הרשמה</Link>
+              {isLoggedIn && (
+                <Link href="/SearchDrive" color="inherit" underline="hover">חיפוש נסיעה</Link>
+              )}
+              {!isLoggedIn && (<>
+                <Link href="/loginForm" color="inherit" underline="hover">הרשמה</Link>
+                <Link href="/loginIn" color="inherit" underline="hover">התחברות</Link>
+              </>
               )}
             </Box>
           </Grid>
@@ -66,7 +69,7 @@ export default function Footer() {
         <Divider sx={dividerStyle} />
 
         <Typography sx={copyrightText}>
-          כל הזכויות שמורות. © RideShare 2024
+          כל הזכויות שמורות. © RideShare 2025
         </Typography>
       </Container>
     </Box>

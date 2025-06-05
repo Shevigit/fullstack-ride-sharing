@@ -25,9 +25,12 @@ import { useRegisterMutation } from '../stores/Slices/UserApiSlice';
 import { login } from '../stores/Slices/authSlice';
 import { styles } from '../CSS/loginForm';
 
+
+
+
 const LoginForm = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [Register] = useRegisterMutation();
   const [apiError, setApiError] = useState<string | null>(null);
 
@@ -54,7 +57,6 @@ const LoginForm = () => {
 
   const hasCarValue = watch('hasCar');
 
-  // שינוי ניהול hasCar ו-driveringLicense בלי useEffect
   const onHasCarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     setValue('hasCar', checked);
@@ -63,15 +65,19 @@ const LoginForm = () => {
     }
   };
 
+
   const onSubmit = async (data: User) => {
     try {
       const result = await Register(data).unwrap();
-      dispatch(login(result.user)); // שמירת המשתמש ב-Redux + localStorage
+      dispatch(login(result.user)); 
       navigate('/');
     } catch (error) {
       setApiError('אירעה שגיאה. נסה שוב.');
     }
   };
+ localStorage.setItem('currentUser', JSON.stringify(result.user));
+
+
 
   return (
     <Box dir="rtl" sx={styles.rootBox}>

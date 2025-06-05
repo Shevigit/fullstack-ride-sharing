@@ -1,19 +1,5 @@
 import { User } from "../../components/interfaces/Interface";
 import apiSlice from "../Slices/ApiSlice";
-interface SuggestionSchema {
-    driver: UserSchema;
-    address: string;
-    source: string;
-    destination: string;
-    date: Date;
-    time:  string;
-    availableSeats:  number;
-    genderPreference: string;
-    passengers: UserSchema
-    status: string;
-  
-}
-
 interface UserSchema {
     userName: string;
     phone: string;
@@ -24,6 +10,21 @@ interface UserSchema {
     gender: string;
 
 }
+
+interface SuggestionSchema {
+    driver: UserSchema;
+    address: string;
+    source: string;
+    destination: string;
+    date: Date;
+    time:  string;
+    availableSeats:  number;
+    genderPreference: string;
+passengers: UserSchema[];/////????
+    status: string;
+  
+}
+
 interface LoginCredentials {
     email: string;
     password: string;
