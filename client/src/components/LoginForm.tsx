@@ -22,8 +22,14 @@ import FormSchema from '../schemas/FormSchema';
 import { User } from './interfaces/Interface';
 import { useRegisterMutation } from '../stores/Slices/UserApiSlice';
 import { styles } from '../CSS/loginForm';
+import { useDispatch } from 'react-redux';
+import { loginRegister } from '../stores/Slices/authSlice'; // חשוב
+
+
+
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [Register] = useRegisterMutation();
   const [apiError, setApiError] = useState<string | null>(null);
@@ -57,15 +63,33 @@ const LoginForm = () => {
     }
   }, [hasCarValue]);
 
+  // const onSubmit = async (data: User) => {
+  //   try {
+  //     const result = await Register(data).unwrap();
+  //     localStorage.setItem('currentUser', JSON.stringify(result.user));
+  //     navigate('/');
+  //   } catch (error) {
+  //     setApiError('אירעה שגיאה. נסה שוב.');
+  //   }
+  // };
+
   const onSubmit = async (data: User) => {
-    try {
-      const result = await Register(data).unwrap();
-      localStorage.setItem('currentUser', JSON.stringify(result.user));
-      navigate('/');
-    } catch (error) {
-      setApiError('אירעה שגיאה. נסה שוב.');
-    }
-  };
+  try {
+    const result = await Register(data).unwrap();
+
+    // שמור בלוקאל
+    localStorage.setItem('currentUser', JSON.stringify(result.user));
+
+    // עדכן את Redux!
+    dispatch(loginRegister(result.user));
+
+    // נווט
+    navigate('/');
+  } catch (error) {
+    setApiError('אירעה שגיאה. נסה שוב.');
+  }
+};
+
 
   return (
     <Box dir="rtl" sx={styles.rootBox}>
