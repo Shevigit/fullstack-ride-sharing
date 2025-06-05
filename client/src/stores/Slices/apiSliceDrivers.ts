@@ -26,7 +26,7 @@ const apiSliceDriver = createApi({
   tagTypes: ["Driver", "City"],
   endpoints: (builder) => ({
     getCities: builder.query<City[], void>({
-      query: () => "/api/cities",
+      query: () => "/api/geoRoutes",
       providesTags: ["City"],
     }),
   }),

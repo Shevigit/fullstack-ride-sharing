@@ -6,7 +6,7 @@ export const streetApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7002" }), // תיקון קטן גם בבסיס
   endpoints: (builder) => ({
     getStreets: builder.query<string[], { city: string }>({
-      query: ({ city }) => `/api/streets?city=${encodeURIComponent(city)}`,
+      query: ({ city }) => `geoRoutes?city=${encodeURIComponent(city)}`,
     }),
   }),
 });

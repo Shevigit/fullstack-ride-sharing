@@ -57,8 +57,17 @@ createSuggestion: builder.mutation<Driver, CreateSuggestionPayload>({
   invalidatesTags: ["Driver"],
 }),
 
-        
+getDriverSuggestions: builder.query<Driver[], string>({
+  query: (driverId) => `/drivers/driver/${driverId}`,
+  providesTags: ["Driver"],
+}),
+getPassengerSuggestions: builder.query<Driver[], string>({
+  query: (userId) => `/drivers/passenger/${userId}`,
+  providesTags: ["Driver"],
+}),
+
     }),
+    
 });
 
 export const {
@@ -68,5 +77,8 @@ export const {
     useUpdatedriverMutation,
     useDeletedriverMutation,
     useJoinSuggestionMutation,
+    useCreateSuggestionMutation,
+    useGetDriverSuggestionsQuery,
+    useGetPassengerSuggestionsQuery
 } = apiDriverSlice;
 export default apiDriverSlice
