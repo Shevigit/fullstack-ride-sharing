@@ -71,16 +71,17 @@ const HomePageNav = () => {
         })}>
           חיפוש נסיעה
         </NavLink>
+    
 
-        <NavLink to="/About" style={({ isActive }) => ({
-          ...NavbarLink,
-          color: isActive ? '#004ba0' : '#333',
-          fontWeight: isActive ? '700' : '400',
-        })}>
-          אודות
-        </NavLink>
+      <NavLink to="/About" style={({ isActive }) => ({
+        ...NavbarLink,
+        color: isActive ? '#004ba0' : '#333',
+        fontWeight: isActive ? '700' : '400',
+      })}>
+        אודות
+      </NavLink>
 
-        <NavLink to="/" style={({ isActive }) => ({
+      <NavLink to="/" style={({ isActive }) => ({
           ...NavbarLink,
           color: isActive ? '#004ba0' : '#333',
           fontWeight: isActive ? '700' : '400',

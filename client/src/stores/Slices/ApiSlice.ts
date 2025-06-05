@@ -18,15 +18,9 @@ const apiSlice = createApi({
       return headers;
     },
   }),
-// <<<<<<< HEAD
   tagTypes: ["User", "Post", "Drives", "LoginCredentials", "City", "Comment", "Driver"],
   endpoints: () => ({}),
-// =======
 
-//   tagTypes: ["User", "Post", "Drives", "LoginCredentials","City"],
-
-// endpoints:()=>({}),
-// >>>>>>> e44f49ec6d504252c9039b7aefe26acb7f3af694
 });
 
 export default apiSlice;

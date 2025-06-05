@@ -19,32 +19,7 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET,)
     res.json({user:userInfo, accessToken: accessToken })
 };
-// const register = async (req, res) => {
-//     const { userName, phone, email, password, hasCar, gender } = req.body
-//     if (!userName || !phone || !email || !password || !gender )
-//         return res.status(400).json({ message: "All fields are required!" })
-//     const duplicate = await User.findOne({ email: email }).lean()
-//     if (duplicate)
-//         return res.status(409).json({ message: "duplicate email" })
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const userObject = { userName, phone, email, password: hashedPassword, hasCar, gender, driveringLicense }
-//     const user = await User.create(userObject)
-//     if (!user)
-//         return res.status(400).json({ message: "invalid user received" })
-//    const userInfo = { 
-//   _id: user._id,
-//   userName: user.userName,
-//   email: user.email,
-//   phone: user.phone,
-//   password: user.password,
-//   hasCar: user.hasCar,
-//   gender: user.gender,
-//   driveringLicense: user.driveringLicense
-// }
 
-//     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET)
-//     return res.status(201).json({ accessToken: accessToken, user: userInfo })
-// };
 const register = async (req, res) => {
   const { userName, phone, email, password, hasCar, gender, driveringLicense } = req.body;
 

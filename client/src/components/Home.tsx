@@ -92,7 +92,7 @@ const Home = () => {
 <div style={mediumFont}>שיתוף ותקשורת עם נוסעים ונהגים בזמן אמת</div>
 <div style={mediumFont}>קבלת עדכונים והודעות ישירות מהאפליקציה</div>
 <div style={bigFont}>והכל בקליק אחד</div>
-
+{currentUser && (
                         <div style={containerOfBtnsInHomePage}>
                             <Link to="/Update">
                                 <Button sx={btnStyle} style={margin}>עדכן נסיעה</Button>
@@ -103,7 +103,7 @@ const Home = () => {
                             <Link to="/SearchDrive">
                                 <Button sx={btnStyle} style={margin}>חפש נסיעה</Button>
                             </Link>
-                        </div>
+                        </div>)}
                         {/* )} */}
                     </div>
                 </div>

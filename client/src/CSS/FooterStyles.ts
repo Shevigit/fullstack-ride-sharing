@@ -6,6 +6,7 @@ export const footerBox: SxProps<Theme> = {
   pt: 6,
   pb: 3,
   direction: "rtl",
+  width:"100vw",
 };
 
 export const sectionTitle: SxProps<Theme> = {

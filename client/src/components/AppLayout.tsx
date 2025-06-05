@@ -1,5 +1,4 @@
 
-// import { Outlet } from 'react-router';
 import UserLayout from './UserLayOut';
 import Footer from './Footer';
 
@@ -9,7 +8,6 @@ const AppLayout = () => {
       <UserLayout />
 
       <div style={{ flex: 1 }}>
-        {/* <Outlet /> */}
       </div>
 
       <Footer />
