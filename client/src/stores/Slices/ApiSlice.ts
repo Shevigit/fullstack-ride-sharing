@@ -19,7 +19,7 @@ const ApiSlice = createApi({
 
   tagTypes: ["User", "Post", "Drives", "LoginCredentials","City"],
 
-endpoints:()=>({})
+endpoints:()=>({}),
 });
 
 
