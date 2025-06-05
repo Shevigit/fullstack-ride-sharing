@@ -1,4 +1,4 @@
-//import { City } from "./ApiSlice"; // אם ההגדרה שם
+import  City  from "./ApiSlice"; // אם ההגדרה שם
 import ApiSlice from "./ApiSlice";
 
 export interface City {
@@ -9,7 +9,7 @@ export interface City {
 const citiesApi = ApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCities: builder.query<City[], void>({
-      query: () => "/geoRoutes/cities",
+      query: () => "/api/geoRoutes/cities",
       providesTags: ["City"],
       keepUnusedDataFor: 60 * 60,
     }),

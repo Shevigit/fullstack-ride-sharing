@@ -1,8 +1,7 @@
 
 
 
-
-// import { useEffect, useState } from 'react';
+// import { useState } from 'react';
 // import {
 //   Button,
 //   FormControlLabel,
@@ -16,21 +15,27 @@
 // } from '@mui/material';
 // import { useForm, Controller } from 'react-hook-form';
 // import { zodResolver } from '@hookform/resolvers/zod';
-// import { Driver, Driver_FieldsFillByUser, status, type, User } from './interfaces/Interface';
+// import { useSelector } from 'react-redux';
+// import { RootState } from '../stores/Store'; 
+// import {
+//   Driver_FieldsFillByUser,
+//   type,
+//   CreateSuggestionPayload
+// } from './interfaces/Interface';
 // import SuggestionSchema from '../schemas/SuggestionSchema';
-// import { useAdddriverMutation } from '../stores/Slices/endPointsDriver';
+// import { useCreateSuggestionMutation } from '../stores/Slices/endPointsDriver';
 // import { useNavigate } from 'react-router';
-// import { useGetCitiesQuery } from '../stores/Slices/apiSliceDrivers';
+// import { useGetCitiesQuery } from '../stores/Slices/citiesApi';
 // import { useLazyGetStreetsQuery } from '../stores/Slices/streetSlice';
 
 // const SuggestionDrive = () => {
-//   const [currentUser, setCurrentUser] = useState<User>();
-//   const [type_, setType_] = useState<type>();
+//   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
+//   const [type_, setType_] = useState<type>(type.זכר);
 //   const [selectedCity, setSelectedCity] = useState<string | null>(null);
 //   const [streetInput, setStreetInput] = useState('');
 //   const [streetOptions, setStreetOptions] = useState<string[]>([]);
 
-//   const [addDriver] = useAdddriverMutation();
+//   const [createSuggestion, { isLoading }] = useCreateSuggestionMutation();
 //   const { data: cities = [] } = useGetCitiesQuery();
 //   const [getStreets, { isFetching: loadingStreets }] = useLazyGetStreetsQuery();
 //   const navigate = useNavigate();
@@ -45,45 +50,45 @@
 //     resolver: zodResolver(SuggestionSchema) as any,
 //   });
 
-//   useEffect(() => {
-//     const current_User = JSON.parse(localStorage.getItem("currentUser")!) as User;
-//     setCurrentUser(current_User);
-//   }, []);
-
-//   // טעינת רחובות לפי עיר בלבד
-//   useEffect(() => {
-//     if (selectedCity) {
-//       getStreets({ city: selectedCity }).then((res) => {
-//         if (res?.data) {
-//           const unique = [...new Set(res.data)];
-//           setStreetOptions(unique);
-//         }
-//       });
-//     }
-//   }, [selectedCity]);
-
 //   const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 //     setType_(event.target.value as unknown as type);
 //   };
 
 //   const onSubmit = async (data: Driver_FieldsFillByUser) => {
-//     const newDriver: Driver_FieldsFillByUser = {
+//     if (!currentUser?.id) return;
+
+//     const [hours, minutes] = data.time.split(':').map(Number);
+//     const fullDate = new Date(data.date);
+//     fullDate.setHours(hours);
+//     fullDate.setMinutes(minutes);
+
+//     const newSuggestion: CreateSuggestionPayload & { genderPreference: type } = {
 //       ...data,
-//       date: new Date(data.date),
+//       date: fullDate,
+//       driver: currentUser.id,
+//       genderPreference: type_
 //     };
 
-//     const driver: Driver = {
-//       ...newDriver,
-//       driver: currentUser!._id!,
-//       genderPreference: type_ ?? type.זכר,
-//       passengers: [],
-//       status: status.פעיל,
-//       createdAt: new Date(),
-//     };
+//     try {
+//       await createSuggestion(newSuggestion).unwrap();
+//       console.log("נסיעה נוצרה בהצלחה", newSuggestion);
+//       navigate('/');
+//     } catch (err) {
+//       console.error("שגיאה ביצירת נסיעה:", err);
+//     }
+//   };
 
-//     await addDriver(driver);
-//     console.log(driver);
-//     navigate('/');
+//   const handleCityChange = async (_: any, value: string | null) => {
+//     setSelectedCity(value);
+//     setStreetInput('');
+//     setStreetOptions([]);
+//     if (value) {
+//       const res = await getStreets({ city: value });
+//       if ('data' in res && res.data) {
+//         const unique = [...new Set(res.data)];
+//         setStreetOptions(unique);
+//       }
+//     }
 //   };
 
 //   const cityNames = cities.map(city => city.name);
@@ -103,11 +108,9 @@
 //             render={({ field }) => (
 //               <Autocomplete
 //                 options={cityNames}
-//                 onChange={(_, value) => {
+//                 onChange={(e, value) => {
 //                   field.onChange(value);
-//                   setSelectedCity(value);
-//                   setStreetInput('');
-//                   setStreetOptions([]);
+//                   handleCityChange(e, value);
 //                 }}
 //                 renderInput={(params) => (
 //                   <TextField
@@ -193,6 +196,7 @@
 //           {/* שעה */}
 //           <TextField
 //             label="שעת יציאה"
+//             type="time"
 //             {...register('time')}
 //             error={!!errors.time}
 //             helperText={errors.time?.message}
@@ -211,9 +215,10 @@
 //           <RadioGroup value={type_} onChange={handleGenderChange} row>
 //             <FormControlLabel value="זכר" control={<Radio color="success" />} label="זכר" />
 //             <FormControlLabel value="נקבה" control={<Radio color="success" />} label="נקבה" />
+//             <FormControlLabel value="מעדיף לא לומר" control={<Radio color="success" />} label="מעדיף לא לומר" />
 //           </RadioGroup>
 
-//           <Button  type="submit" variant="contained" style={{ backgroundColor: "rgba(81, 165, 12, 0.86)" }}>
+//           <Button type="submit" variant="contained" style={{ backgroundColor: "rgba(81, 165, 12, 0.86)" }} disabled={isLoading}>
 //             שלח
 //           </Button>
 //         </Stack>
@@ -223,8 +228,7 @@
 // };
 
 // export default SuggestionDrive;
-
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Button,
   FormControlLabel,
@@ -234,19 +238,27 @@ import {
   TextField,
   Autocomplete,
   CircularProgress,
-  Typography
+  Typography,
+  Paper,
+  Box,
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Driver_FieldsFillByUser, type, User, CreateSuggestionPayload } from './interfaces/Interface';
+import { useSelector } from 'react-redux';
+import { RootState } from '../stores/Store';
+import {
+  Driver_FieldsFillByUser,
+  type,
+  CreateSuggestionPayload,
+} from './interfaces/Interface';
 import SuggestionSchema from '../schemas/SuggestionSchema';
 import { useCreateSuggestionMutation } from '../stores/Slices/endPointsDriver';
 import { useNavigate } from 'react-router';
-import { useGetCitiesQuery } from '../stores/Slices/apiSliceDrivers';
+import { useGetCitiesQuery } from '../stores/Slices/citiesApi';
 import { useLazyGetStreetsQuery } from '../stores/Slices/streetSlice';
 
 const SuggestionDrive = () => {
-  const [currentUser, setCurrentUser] = useState<User>();
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser);
   const [type_, setType_] = useState<type>(type.זכר);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [streetInput, setStreetInput] = useState('');
@@ -267,58 +279,72 @@ const SuggestionDrive = () => {
     resolver: zodResolver(SuggestionSchema) as any,
   });
 
-  useEffect(() => {
-    const current_User = JSON.parse(localStorage.getItem("currentUser")!) as User;
-    setCurrentUser(current_User);
-  }, []);
-
-  useEffect(() => {
-    if (selectedCity) {
-      getStreets({ city: selectedCity }).then((res) => {
-        if (res?.data) {
-          const unique = [...new Set(res.data)];
-          setStreetOptions(unique);
-        }
-      });
-    }
-  }, [selectedCity]);
-
   const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setType_(event.target.value as unknown as type);
   };
 
-const onSubmit = async (data: Driver_FieldsFillByUser) => {
-  if (!currentUser?._id) return;
+  const onSubmit = async (data: Driver_FieldsFillByUser) => {
+    if (!currentUser?.id) return;
 
-  const [hours, minutes] = data.time.split(':').map(Number);
-  const fullDate = new Date(data.date);
-  fullDate.setHours(hours);
-  fullDate.setMinutes(minutes);
+    const [hours, minutes] = data.time.split(':').map(Number);
+    const fullDate = new Date(data.date);
+    fullDate.setHours(hours);
+    fullDate.setMinutes(minutes);
 
-  const newSuggestion: CreateSuggestionPayload & { genderPreference: type } = {
-    ...data,
-    date: fullDate,
-    driver: currentUser._id,
-    genderPreference: type_
+    const newSuggestion: CreateSuggestionPayload & { genderPreference: type } = {
+      ...data,
+      date: fullDate,
+      driver: currentUser.id,
+      genderPreference: type_,
+    };
+
+    try {
+      await createSuggestion(newSuggestion).unwrap();
+      navigate('/');
+    } catch (err) {
+      console.error('שגיאה ביצירת נסיעה:', err);
+    }
   };
 
-  try {
-    await createSuggestion(newSuggestion).unwrap();
-    console.log("נסיעה נוצרה בהצלחה", newSuggestion);
-    navigate('/');
-  } catch (err) {
-    console.error("שגיאה ביצירת נסיעה:", err);
-  }
-};
+  const handleCityChange = async (_: any, value: string | null) => {
+    setSelectedCity(value);
+    setStreetInput('');
+    setStreetOptions([]);
+    if (value) {
+      const res = await getStreets({ city: value });
+      if ('data' in res && res.data) {
+        const unique = [...new Set(res.data)];
+        setStreetOptions(unique);
+      }
+    }
+  };
 
-
-  const cityNames = cities.map(city => city.name);
+  const cityNames = cities.map((city) => city.name);
 
   return (
-    <div style={{ marginTop: "20vh", marginLeft: "15vw" }}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2} sx={{ maxWidth: 500, padding: 2 }}>
-          <Typography variant="h5" textAlign="center">
+    <Box
+      sx={{
+        mt: '15vh',
+        mx: 'auto',
+        maxWidth: 600,
+        p: 4,
+        bgcolor: 'background.paper',
+        boxShadow: 3,
+        borderRadius: 3,
+        direction: 'rtl',
+      }}
+      component={Paper}
+      elevation={6}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Stack spacing={3}>
+          <Typography
+            variant="h4"
+            textAlign="center"
+            color="success.main"
+            fontWeight="bold"
+            mb={1}
+          >
             טופס הצעת נסיעה
           </Typography>
 
@@ -329,11 +355,9 @@ const onSubmit = async (data: Driver_FieldsFillByUser) => {
             render={({ field }) => (
               <Autocomplete
                 options={cityNames}
-                onChange={(_, value) => {
+                onChange={(e, value) => {
                   field.onChange(value);
-                  setSelectedCity(value);
-                  setStreetInput('');
-                  setStreetOptions([]);
+                  handleCityChange(e, value);
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -341,9 +365,12 @@ const onSubmit = async (data: Driver_FieldsFillByUser) => {
                     label="עיר מקור"
                     error={!!errors.source}
                     helperText={errors.source?.message}
+                    variant="outlined"
+                    fullWidth
                   />
                 )}
                 noOptionsText="לא נמצאה עיר מתאימה"
+                autoHighlight
               />
             )}
           />
@@ -354,7 +381,7 @@ const onSubmit = async (data: Driver_FieldsFillByUser) => {
             control={control}
             render={({ field }) => (
               <Autocomplete
-                options={streetOptions.filter(street =>
+                options={streetOptions.filter((street) =>
                   street.toLowerCase().includes(streetInput.toLowerCase())
                 )}
                 inputValue={streetInput}
@@ -370,11 +397,14 @@ const onSubmit = async (data: Driver_FieldsFillByUser) => {
                     color="success"
                     error={!!errors.address}
                     helperText={errors.address?.message}
+                    fullWidth
                     InputProps={{
                       ...params.InputProps,
                       endAdornment: (
                         <>
-                          {loadingStreets && <CircularProgress color="inherit" size={20} />}
+                          {loadingStreets && (
+                            <CircularProgress color="inherit" size={20} />
+                          )}
                           {params.InputProps.endAdornment}
                         </>
                       ),
@@ -399,9 +429,12 @@ const onSubmit = async (data: Driver_FieldsFillByUser) => {
                     label="עיר יעד"
                     error={!!errors.destination}
                     helperText={errors.destination?.message}
+                    variant="outlined"
+                    fullWidth
                   />
                 )}
                 noOptionsText="לא נמצאה עיר מתאימה"
+                autoHighlight
               />
             )}
           />
@@ -414,16 +447,18 @@ const onSubmit = async (data: Driver_FieldsFillByUser) => {
             InputLabelProps={{ shrink: true }}
             error={!!errors.date}
             helperText={errors.date?.message}
+            fullWidth
           />
 
           {/* שעה */}
-     <TextField
-  label="שעת יציאה"
-  type="time"
-  {...register('time')}
-  error={!!errors.time}
-  helperText={errors.time?.message}
-/>
+          <TextField
+            label="שעת יציאה"
+            type="time"
+            {...register('time')}
+            error={!!errors.time}
+            helperText={errors.time?.message}
+            fullWidth
+          />
 
           {/* מקומות פנויים */}
           <TextField
@@ -432,21 +467,52 @@ const onSubmit = async (data: Driver_FieldsFillByUser) => {
             {...register('availableSeats')}
             error={!!errors.availableSeats}
             helperText={errors.availableSeats?.message}
+            fullWidth
+            inputProps={{ min: 1 }}
           />
 
           {/* העדפת מגדר */}
           <RadioGroup value={type_} onChange={handleGenderChange} row>
-            <FormControlLabel value="זכר" control={<Radio color="success" />} label="זכר" />
-            <FormControlLabel value="נקבה" control={<Radio color="success" />} label="נקבה" />
-            <FormControlLabel value="מעדיף לא לומר" control={<Radio color="success" />} label="מעדיף לא לומר" />
+            <FormControlLabel
+              value="זכר"
+              control={<Radio color="success" />}
+              label="זכר"
+            />
+            <FormControlLabel
+              value="נקבה"
+              control={<Radio color="success" />}
+              label="נקבה"
+            />
+            <FormControlLabel
+              value="מעדיף לא לומר"
+              control={<Radio color="success" />}
+              label="מעדיף לא לומר"
+            />
           </RadioGroup>
 
-          <Button type="submit" variant="contained" style={{ backgroundColor: "rgba(81, 165, 12, 0.86)" }} disabled={isLoading}>
+          {/* כפתור שליחה */}
+          <Button
+            type="submit"
+            variant="contained"
+            color="success"
+            disabled={isLoading}
+            sx={{
+              py: 1.5,
+              fontWeight: 'bold',
+              fontSize: '1.1rem',
+              borderRadius: 2,
+              boxShadow: '0 4px 12px rgba(81, 165, 12, 0.7)',
+              ':hover': {
+                backgroundColor: 'success.dark',
+                boxShadow: '0 6px 16px rgba(81, 165, 12, 0.9)',
+              },
+            }}
+          >
             שלח
           </Button>
         </Stack>
       </form>
-    </div>
+    </Box>
   );
 };
 

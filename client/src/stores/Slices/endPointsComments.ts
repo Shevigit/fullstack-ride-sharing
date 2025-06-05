@@ -1,5 +1,5 @@
 import { Comment } from "../../components/interfaces/Interface";
-import ApiSliceCommets from "./ApiSliceComments";
+import ApiSliceCommets from "./ApiSlice";
 const apiCommentSlice = ApiSliceCommets.injectEndpoints({
     endpoints: (builder) => ({
         getAllcomments: builder.query<Comment[], void>({

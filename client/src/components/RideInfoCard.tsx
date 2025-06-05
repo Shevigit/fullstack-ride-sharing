@@ -81,25 +81,11 @@ try {
 const handleJoinConfirm = async () => {
   if (!thisDriver?._id || !currentUser?._id) return;
 
-  // const updatedPassengers = [...thisDriver.passengers.filter(p => p?._id !== currentUser._id)];
-
-  // const newPassengers = Array(selectedPassengersCount).fill(currentUser);
-
-  // const updatedDriver: Driver = {
-  //   ...thisDriver,
-  //   availableSeats:
-  //     thisDriver.availableSeats + userPassengersCount - selectedPassengersCount,
-  //   passengers: [...updatedPassengers, ...newPassengers],
-  //   _id: thisDriver._id,
-  // };
 
   try {
 console.log("מנסה להוסיף נוסע", thisDriver._id, currentUser._id,selectedPassengersCount);
 
-// await addPassengerToSuggestion({
-//   suggestionId: thisDriver._id,
-//   passengerId: currentUser._id,
-// });
+
 if(thisDriver._id!= currentUser._id){
 const result = await joinSuggestio({
   suggestionId: thisDriver._id,
