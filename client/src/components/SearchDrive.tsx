@@ -92,7 +92,17 @@ const SearchDrive = () => {
   }
 
   // אם לא חיפשנו עדיין, מציגים את כל הנהגים
-  const driversToShow = searchAttempted ? filteredDrivers : allDrivers;
+  // const driversToShow = searchAttempted ? filteredDrivers : allDrivers;
+const today = new Date();
+today.setHours(0, 0, 0, 0); // אפס את השעות להשוואת תאריך בלבד
+
+const filteredActiveFutureDrivers = (searchAttempted ? filteredDrivers : allDrivers).filter((driver) => {
+  const isStatusActive = driver.status === "פעיל"; // אם זה מחרוזת
+  const isFutureDate = driver.date && new Date(driver.date).setHours(0, 0, 0, 0) >= today.getTime();
+  return isStatusActive && isFutureDate;
+});
+
+const driversToShow = filteredActiveFutureDrivers;
 
   return (
     <Box
@@ -178,14 +188,13 @@ const SearchDrive = () => {
               fullWidth
               error={!!errors.time}
               helperText={errors.time?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <AccessTimeIcon />
-                  </InputAdornment>
-                ),
-              }}
-              inputProps={{ step: 300 }}
+              // InputProps={{
+              //   endAdornment: (
+              //     <InputAdornment position="end">
+              //       <AccessTimeIcon />
+              //     </InputAdornment>
+              //   ),
+              // }}
             />
           </Grid>
 
@@ -246,7 +255,7 @@ const SearchDrive = () => {
                       </Typography>
                       {/* ///////////////////////////////////////////// */}
                        <Typography variant="body2" color="text.secondary">
-                        {driver.driver? `שם נהג: ${driver.driver}`  : "שם נהג לא נמצא"}
+                        {driver.driver.userName? `שם נהג: ${driver.driver.userName}`  : "שם נהג לא נמצא"}
                       </Typography>
                     </Box>
                     <Stack alignItems="flex-end" spacing={1}>

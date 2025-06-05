@@ -2,10 +2,12 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Suggestion = require('../models/DriverSuggestion');
+const mongoose = require('mongoose');
 
 const addDriverSuggestion = async (req, res) => {
     try {
-        if (!req.body.driver) {
+        if (!req.user.id
+) {
             console.log("0");
             
             return res.status(401).json({ message: 'Missing user ID from token' });
@@ -28,7 +30,7 @@ const addDriverSuggestion = async (req, res) => {
             return res.status(400).json({ message: 'Missing required fields' });
         }
         const newSuggestion = await Suggestion.create({
-            driver: req.body.driver, // מזהה הנהג מגיע מה־JWT
+            driver: req.user.id,
             address,
             source,
             destination,
@@ -78,9 +80,13 @@ const filterDriverSuggestions = async (req, res) => {
 
         if (source) filter.source = source;
         if (destination) filter.destination = destination;
-        if (date) filter.date = new Date(date); // ודא שהתאריך בפורמט תקין
+
+        if (date && !isNaN(Date.parse(date))) {
+            filter.date = new Date(date);
+        }
+
         if (time) filter.time = time;
-        if (status) filter.status = status; // למשל: active, canceled, completed
+        if (status) filter.status = status;
 
         const suggestions = await Suggestion.find(filter).sort({ createdAt: -1 });
 
@@ -90,6 +96,7 @@ const filterDriverSuggestions = async (req, res) => {
         res.status(500).json({ message: 'Failed to filter driver suggestions' });
     }
 };
+
 const deleteDriverSuggestion = async (req, res) => {
     try {
         const { id } = req.params;
@@ -102,6 +109,9 @@ const deleteDriverSuggestion = async (req, res) => {
         if (suggestion.driver.toString() !== req.user.id) {
             return res.status(403).json({ message: "Forbidden – Not your suggestion" });
         }
+if (!req.user || suggestion.driver.toString() !== req.user.id) {
+    return res.status(403).json({ message: "Forbidden – Not your suggestion" });
+}
 
         await suggestion.deleteOne();
         res.json({ message: "Suggestion deleted successfully" });
@@ -133,7 +143,7 @@ if(!updateDriver){
     }
 };
 
-const joinSuggestion=async(req, res)=> {
+const joinSuggestion = async (req, res) => {
 
   const suggestionId = req.params.suggestionId;
   const { userId, countSeat } = req.body;
@@ -143,7 +153,8 @@ const joinSuggestion=async(req, res)=> {
   }
 
   try {
-    const suggestion = await Suggestion.findById(suggestionId);
+    const suggestion = await Suggestion.findById(suggestionId).populate("driver");
+
     if (!suggestion) {
       return res.status(404).json({ message: 'הצעת נסיעה לא נמצאה' });
     }
@@ -153,21 +164,12 @@ const joinSuggestion=async(req, res)=> {
       return res.status(400).json({ message: 'הנהג לא יכול להצטרף כנסע לנסיעה שלו' });
     }
 
-// <<<<<<< HEAD
-//     const existingPassengerIndex = suggestion.passengers.findIndex(
-//       (p) => p.user.toString() === userId
-//     );
 
-//     if (countSeat === 0) {
-//       // אם countSeat = 0, יש להסיר את המשתמש אם הוא נמצא במערך
-//       if (existingPassengerIndex !== -1) {
-//         suggestion.passengers.splice(existingPassengerIndex, 1);
-// =======
-    // ודא שפורמט passengers הוא מערך של אובייקטים
     let passengers = Array.isArray(suggestion.passengers) ? suggestion.passengers : [];
 
-    // חפש את הנוסע אם קיים
-    const existingPassengerIndex = passengers.findIndex(p => p.user?.toString?.() === userId);
+    const existingPassengerIndex = passengers.findIndex(
+      (p) => p.user?.toString() === userId
+    );
 
     // === הסרה ===
     if (countSeat === 0) {
@@ -177,34 +179,21 @@ const joinSuggestion=async(req, res)=> {
         suggestion.availableSeats += freedSeats;
         suggestion.passengers = passengers;
         await suggestion.save();
+
+        // עדכון משתמש - הסרה ממערך passengerSuggestions
+        await User.findByIdAndUpdate(userId, {
+          $pull: { passengerSuggestions: suggestion._id }
+        });
+
         return res.json({ message: 'המשתמש הוסר מהרשימת הנוסעים', suggestion });
       } else {
         return res.status(400).json({ message: 'המשתמש לא נמצא ברשימת הנוסעים להסרה' });
       }
     }
+if (suggestion.availableSeats <= 0 && existingPassengerIndex === -1) {
+  return res.status(400).json({ message: 'הנסיעה מלאה' });
+}
 
-// <<<<<<< HEAD
-//     // countSeat > 0 - ממשיכים להוסיף/לעדכן
-
-//     // מחשבים מושבים פנויים (כולל סידור של מושבים קיימים)
-//     const seatsTaken = suggestion.passengers.reduce((sum, p) => sum + p.countSeat, 0);
-//     const seatsLeft = suggestion.availableSeats - seatsTaken + (existingPassengerIndex !== -1 ? suggestion.passengers[existingPassengerIndex].countSeat : 0);
-
-//     if (countSeat > seatsLeft) {
-//       return res.status(400).json({ message: `אין מספיק מקומות פנויים, נותרו ${seatsLeft}` });
-//     }
-
-//     if (existingPassengerIndex !== -1) {
-//       // מעדכנים את כמות המושבים של הנוסע הקיים
-//       suggestion.passengers[existingPassengerIndex].countSeat = countSeat;
-//     } else {
-//       suggestion.passengers.push({ user: userId, countSeat });
-//     }
-
-//     await suggestion.save();
-
-//     res.json({ message: 'נוסע נוסף/עודכן בהצלחה', suggestion });
-// =======
     // === עדכון או הוספה ===
     if (existingPassengerIndex !== -1) {
       const currentCount = passengers[existingPassengerIndex].countSeat || 1;
@@ -223,6 +212,11 @@ const joinSuggestion=async(req, res)=> {
 
       passengers.push({ user: userId, countSeat });
       suggestion.availableSeats -= countSeat;
+
+      // עדכון משתמש - הוספה למערך passengerSuggestions
+      await User.findByIdAndUpdate(userId, {
+        $addToSet: { passengerSuggestions: suggestion._id } // מונע כפילויות
+      });
     }
 
     suggestion.passengers = passengers;
@@ -234,7 +228,9 @@ const joinSuggestion=async(req, res)=> {
     console.error(error);
     res.status(500).json({ message: 'שגיאה בשרת' });
   }
-}
+};
+
+
 
 
 const getFoundById = async (req, res) => {
@@ -285,4 +281,174 @@ const getSuggestionById = async (req, res) => {
 };
 
 
-module.exports = {joinSuggestion, getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById }
+// const createSuggestion = async (req, res) => {
+//   try {
+//     const newSuggestion = new Suggestion(req.body);
+//     const savedSuggestion = await newSuggestion.save();
+
+//     // עדכון המשתמש שהוא נהג
+//     await User.findByIdAndUpdate(savedSuggestion.driver, {
+//       $push: { driverSuggestions: savedSuggestion._id },
+//     });
+
+//     res.status(201).json(savedSuggestion);
+//   } catch (error) {
+//     console.error('שגיאה ביצירת נסיעה:', error);
+//     res.status(500).json({ message: 'שגיאה ביצירת נסיעה' });
+//   }
+// };
+
+
+
+// const createSuggestion = async (req, res) => {
+//   try {
+//     const newSuggestion = new Suggestion(req.body);
+//     const savedSuggestion = await newSuggestion.save();
+
+//     // כאן נוסיף את ההדפסה
+//     console.log('driver id:', savedSuggestion.driver); // צריך להיות ObjectId תקני
+
+//     // עדכון המשתמש שהוא נהג
+//     const updateResult = await User.findByIdAndUpdate(
+//       savedSuggestion.driver,
+//       { $push: { driverSuggestions: savedSuggestion._id } },
+//       { new: true }
+//     );
+
+//     console.log('עדכון משתמש:', updateResult); // נוכל לבדוק אם העדכון הצליח
+
+//     res.status(201).json(savedSuggestion);
+//   } catch (error) {
+//     console.error('שגיאה ביצירת נסיעה:', error);
+//     res.status(500).json({ message: 'שגיאה ביצירת נסיעה' });
+//   }
+// };
+
+const createSuggestion = async (req, res) => {
+  try {
+    const newSuggestion = new Suggestion(req.body);
+    const savedSuggestion = await newSuggestion.save();
+
+    // הדפסת מזהה הנהג
+    console.log('driver id:', savedSuggestion.driver); // ObjectId תקני
+
+    // עדכון המשתמש - הוספת מזהה הנסיעה לשדה driverSuggestions
+    await User.findByIdAndUpdate(
+      savedSuggestion.driver,
+      { $push: { driverSuggestions: savedSuggestion._id } },
+        { new: true }
+
+    );
+console.log('driver:', savedSuggestion.driver); // ודא שזה תקף
+
+    // שליפת המשתמש כולל הנסיעות כדי לבדוק שהכל תקין
+    const user = await User.findById(savedSuggestion.driver).populate('driverSuggestions');
+    console.log('נסיעות של המשתמש:', user.driverSuggestions);
+
+    res.status(201).json(savedSuggestion);
+  } catch (error) {
+    console.error('שגיאה ביצירת נסיעה:', error);
+    res.status(500).json({ message: 'שגיאה ביצירת נסיעה' });
+  }
+};
+// const getDriverSuggestions = async (req, res) => {
+//   try {
+//     const { driverId } = req.params;
+
+//     const suggestions = await Suggestion.find({ driver: driverId })
+//       .populate('driver')
+//       .populate('passengers')
+//       .sort({ createdAt: -1 });
+
+//     res.json(suggestions);
+//   } catch (error) {
+//     console.error('Failed to get driver suggestions:', error);
+//     res.status(500).json({ message: 'Failed to get driver suggestions' });
+//   }
+// };
+
+// const getPassengerSuggestions = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+
+//     const suggestions = await Suggestion.find({ passengers: userId })
+//       .populate('driver')
+//       .populate('passengers')
+//       .sort({ createdAt: -1 });
+
+//     res.json(suggestions);
+//   } catch (error) {
+//     console.error('Failed to get passenger suggestions:', error);
+//     res.status(500).json({ message: 'Failed to get passenger suggestions' });
+//   }
+// };
+// const getDriverSuggestions = async (req, res) => {
+//   try {
+//     const { driverId } = req.params;
+//     const objectDriverId = mongoose.Types.ObjectId(driverId);
+
+//     const suggestions = await Suggestion.find({ driver: objectDriverId })
+//       .populate('driver')
+//       .populate('passengers')
+//       .sort({ createdAt: -1 });
+
+//     res.json(suggestions);
+//   } catch (error) {
+//     console.error('Failed to get driver suggestions:', error);
+//     res.status(500).json({ message: 'Failed to get driver suggestions' });
+//   }
+// };
+
+// const getPassengerSuggestions = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const objectUserId = mongoose.Types.ObjectId(userId);
+
+//     const suggestions = await Suggestion.find({ passengers: objectUserId })
+//       .populate('driver')
+//       .populate('passengers')
+//       .sort({ createdAt: -1 });
+
+//     res.json(suggestions);
+//   } catch (error) {
+//     console.error('Failed to get passenger suggestions:', error);
+//     res.status(500).json({ message: 'Failed to get passenger suggestions' });
+//   }
+// };
+
+const getDriverSuggestions = async (req, res) => {
+  try {
+    const { driverId } = req.params;
+    const driverObjectId = new mongoose.Types.ObjectId(driverId);
+
+    const suggestions = await Suggestion.find({ driver: driverObjectId })
+      .populate('driver')
+      .populate('passengers')
+      .sort({ createdAt: -1 });
+
+    res.json(suggestions);
+  } catch (error) {
+    console.error('Failed to get driver suggestions:', error);
+    res.status(500).json({ message: 'Failed to get driver suggestions' });
+  }
+};
+
+const getPassengerSuggestions = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    const suggestions = await Suggestion.find({ passengers: userObjectId })
+      .populate('driver')
+      .populate('passengers')
+      .sort({ createdAt: -1 });
+
+    res.json(suggestions);
+  } catch (error) {
+    console.error('Failed to get passenger suggestions:', error);
+    res.status(500).json({ message: 'Failed to get passenger suggestions' });
+  }
+};
+
+module.exports = {getPassengerSuggestions,getDriverSuggestions,joinSuggestion, getSuggestionById, getAllDriverSuggestions, addDriverSuggestion, getActiveDriverSuggestions, filterDriverSuggestions, deleteDriverSuggestion, updateDriverSuggestion, getFoundById,createSuggestion }
+
