@@ -9,7 +9,7 @@ export interface City {
 const citiesApi = ApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCities: builder.query<City[], void>({
-      query: () => "geoRoutes/cities",
+      query: () => "/geoRoutes/cities",
       providesTags: ["City"],
       keepUnusedDataFor: 60 * 60,
     }),

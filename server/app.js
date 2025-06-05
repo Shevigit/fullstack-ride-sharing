@@ -30,7 +30,7 @@ app.use(express.json());
 app.use('/api', authRoutes); // משתמש ב-authRoutes שיובא למעלה
 app.use('/drivers',driverRouter);
 app.use('/comments',commentsRouter)
-app.use("geoRoutes", geoRoutes);
+app.use("/api/geoRoutes", geoRoutes);
 
 
 // app.get("/api/cities", async (req, res) => {

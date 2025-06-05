@@ -25,3 +25,4 @@ export const { addUser } = LoginSlice.actions;
 export const selectUser = (state: { login: loginUser }):User => {state.login.user};
 
 export default LoginSlice.reducer;
+

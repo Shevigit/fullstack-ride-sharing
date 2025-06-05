@@ -258,7 +258,7 @@ console.log("joinedRides", joinedRides);
   : "שם נהג לא ידוע"}
 
           </Typography>
-          {showActions && (
+          {/* {showActions && (
             <Box mt={2} display="flex" gap={1}>
               <Button size="small" variant="outlined" color="primary" onClick={() => handleEdit(ride._id!)}>
                 ערוך
@@ -267,7 +267,7 @@ console.log("joinedRides", joinedRides);
                 מחק
               </Button>
             </Box>
-          )}
+          )} */}
         </CardContent>
       </Card>
     </Grid>
@@ -292,7 +292,7 @@ console.log("joinedRides", joinedRides);
         </Grid>
       </Box>
 
-      <Box mt={5}>
+      {/* <Box mt={5}>
         <Typography variant="h5">🚗 נסיעות שהצטרפתי אליהן</Typography>
         <Grid container spacing={2} mt={1}>
           {joinedRides?.length ? (
@@ -303,7 +303,7 @@ console.log("joinedRides", joinedRides);
             </Typography>
           )}
         </Grid>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
