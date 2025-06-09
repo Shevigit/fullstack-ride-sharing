@@ -1,11 +1,15 @@
-// Slices/authSlice.ts
+
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface User {
-  id: string;
-  name: string;
+export interface User {
+  id?: string | number;
+  name?: string;
   email: string;
-  // הוסף שדות נוספים במידת הצורך
+  password: string;
+  phone?: string;
+  gender?: string;
+  hasCar?: boolean;
+  driveringLicense?: string;
 }
 
 interface AuthState {
@@ -13,7 +17,9 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  currentUser: JSON.parse(localStorage.getItem("currentUser") || "null"),
+  currentUser: localStorage.getItem("currentUser")
+    ? JSON.parse(localStorage.getItem("currentUser") as string)
+    : null,
 };
 
 const authSlice = createSlice({

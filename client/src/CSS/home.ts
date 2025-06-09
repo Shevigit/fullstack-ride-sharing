@@ -18,13 +18,12 @@ export const containerLinks: CSSProperties = {
     width: '50vw',
     height: '36vh',
     backgroundColor: "white",
-    // marginTop: "14.8vh",
     position: 'absolute',
     bottom: '10vh',
     left: '5vw',
-    padding: '1rem', // אופציונלי, לריווח פנימי
-    borderRadius: '12Px',      // פינות מעוגלות
-    boxShadow: '0 6px 12px rgba(0, 0, 0, 0.2)', // צל עדין
+    padding: '1rem', 
+    borderRadius: '12Px',     
+    boxShadow: '0 6px 12px rgba(0, 0, 0, 0.2)', 
     overflow: 'hidden',
     textAlign: "right",
     fontFamily: "Calibri "
@@ -183,13 +182,13 @@ export const modalContentStyle: React.CSSProperties = {
 export const commentsContainer: CSSProperties = {
     width: "100vw",
     margin: "0 auto",
-    padding: "20px",
+    // padding: "20px",
     border: "1px solid #ccc",
     borderRadius: "12px",
     textAlign: "center",
     boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
     backgroundColor: "#fdfdfd",
-    height: "35vh", // חשוב: וודא שיש מספיק גובה כדי להכיל טקסט רב שורות.
+    height: "35vh", 
     fontSize: "large",
     color: "black",
     display: "flex",

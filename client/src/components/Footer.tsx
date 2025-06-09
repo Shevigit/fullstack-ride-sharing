@@ -4,7 +4,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { useSelector } from "react-redux";
-import { RootState } from "../stores/Store"; // נתיב נכון למאגר ה-Redux שלך
+import { RootState } from "../stores/Store";
 
 import {
   footerBox,
@@ -17,7 +17,6 @@ import {
 } from "../CSS/FooterStyles";
 
 export default function Footer() {
-  // בודקים ב-Redux האם יש משתמש מחובר
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
   const isLoggedIn = Boolean(currentUser);
 
@@ -33,11 +32,11 @@ export default function Footer() {
               <Link href="/About" color="inherit" underline="hover">אודות</Link>
               {isLoggedIn && (
                 <Link href="/SearchDrive" color="inherit" underline="hover">חיפוש נסיעה</Link>
-                )}
+              )}
               {!isLoggedIn && (<>
                 <Link href="/loginForm" color="inherit" underline="hover">הרשמה</Link>
                 <Link href="/loginIn" color="inherit" underline="hover">התחברות</Link>
-                </>
+              </>
               )}
             </Box>
           </Grid>

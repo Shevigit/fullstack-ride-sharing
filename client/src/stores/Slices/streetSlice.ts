@@ -1,14 +1,13 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+import apiSlice from "./ApiSlice";
 
-export const streetApi = createApi({
-  reducerPath: "streetApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7002" }), // תיקון קטן גם בבסיס
+const streetApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getStreets: builder.query<string[], { city: string }>({
-      query: ({ city }) => `geoRoutes?city=${encodeURIComponent(city)}`,
+      query: ({ city }) => `/api/geoRoutes/streets?city=${encodeURIComponent(city)}`,
     }),
   }),
 });
 
 export const { useLazyGetStreetsQuery } = streetApi;
+export default streetApi;

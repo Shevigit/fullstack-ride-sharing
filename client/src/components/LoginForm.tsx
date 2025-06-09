@@ -16,13 +16,15 @@ import { AccountCircle, Email, Lock, Phone, Badge } from '@mui/icons-material';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import FormSchema from '../schemas/FormSchema';
 import { User } from './interfaces/Interface';
 import { useRegisterMutation } from '../stores/Slices/UserApiSlice';
+import { login } from '../stores/Slices/authSlice';
 import { styles } from '../CSS/loginForm';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { loginRegister } from '../stores/Slices/authSlice'; // חשוב
 
 
@@ -31,6 +33,7 @@ import { loginRegister } from '../stores/Slices/authSlice'; // חשוב
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // const dispatch = useDispatch();
   const [Register] = useRegisterMutation();
   const [apiError, setApiError] = useState<string | null>(null);
 
@@ -57,11 +60,14 @@ const LoginForm = () => {
 
   const hasCarValue = watch('hasCar');
 
-  useEffect(() => {
-    if (!hasCarValue) {
+  // שינוי ניהול hasCar ו-driveringLicense בלי useEffect
+  const onHasCarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = event.target.checked;
+    setValue('hasCar', checked);
+    if (!checked) {
       setValue('driveringLicense', '');
     }
-  }, [hasCarValue]);
+  };
 
   // const onSubmit = async (data: User) => {
   //   try {
@@ -74,6 +80,16 @@ const LoginForm = () => {
   // };
 
   const onSubmit = async (data: User) => {
+// <<<<<<< HEAD
+//     try {
+//       const result = await Register(data).unwrap();
+//       dispatch(login(result.user)); // שמירת המשתמש ב-Redux + localStorage
+//       navigate('/');
+//     } catch (error) {
+//       setApiError('אירעה שגיאה. נסה שוב.');
+//     }
+//   };
+// =======
   try {
     const result = await Register(data).unwrap();
 
@@ -90,6 +106,7 @@ const LoginForm = () => {
   }
 };
 
+// >>>>>>> e44f49ec6d504252c9039b7aefe26acb7f3af694
 
   return (
     <Box dir="rtl" sx={styles.rootBox}>
@@ -165,35 +182,35 @@ const LoginForm = () => {
               }}
             />
 
-        
-<FormControlLabel
-  control={
-    <Checkbox
-      color="secondary"
-      {...register('hasCar')}
-      checked={hasCarValue}
-    />
-  }
-  label="יש לי רכב"
-/>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="secondary"
+                  checked={hasCarValue}
+                  onChange={onHasCarChange}
+                />
+              }
+              label="יש לי רכב"
+            />
 
-{hasCarValue && (
-  <TextField
-    label="מספר רישיון נהיגה"
-    fullWidth
-    variant="outlined"
-    {...register('driveringLicense')}
-    error={!!errors.driveringLicense}
-    helperText={errors.driveringLicense?.message}
-    InputProps={{
-      startAdornment: (
-        <InputAdornment position="start">
-          <Badge color="primary" />
-        </InputAdornment>
-      ),
-    }}
-  />
-)}
+            {hasCarValue && (
+              <TextField
+                label="מספר רישיון נהיגה"
+                fullWidth
+                variant="outlined"
+                {...register('driveringLicense')}
+                error={!!errors.driveringLicense}
+                helperText={errors.driveringLicense?.message}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Badge color="primary" />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+
             <Typography variant="subtitle1" fontWeight="medium">
               מין:
             </Typography>

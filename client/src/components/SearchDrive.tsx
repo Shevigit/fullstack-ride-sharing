@@ -91,35 +91,40 @@ const SearchDrive = () => {
     return <Alert severity="error">שגיאה בטעינת מידע.</Alert>;
   }
 
-  // אם לא חיפשנו עדיין, מציגים את כל הנהגים
-  // const driversToShow = searchAttempted ? filteredDrivers : allDrivers;
-const today = new Date();
-today.setHours(0, 0, 0, 0); // אפס את השעות להשוואת תאריך בלבד
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-const filteredActiveFutureDrivers = (searchAttempted ? filteredDrivers : allDrivers).filter((driver) => {
-  const isStatusActive = driver.status === "פעיל"; // אם זה מחרוזת
-  const isFutureDate = driver.date && new Date(driver.date).setHours(0, 0, 0, 0) >= today.getTime();
-  return isStatusActive && isFutureDate;
-});
+  const filteredActiveFutureDrivers = (searchAttempted ? filteredDrivers : allDrivers).filter((driver) => {
+    const isStatusActive = driver.status === "פעיל";
+    const isFutureDate = driver.date && new Date(driver.date).setHours(0, 0, 0, 0) >= today.getTime();
+    return isStatusActive && isFutureDate;
+  });
 
-const driversToShow = filteredActiveFutureDrivers;
+  const driversToShow = filteredActiveFutureDrivers;
 
   return (
     <Box
       sx={{
-        p: 3,
-        mx: "10vw",
-        mt: "17vh",
-        backgroundColor: "#f5f5f5",
-        borderRadius: 3,
-        boxShadow: 2,
+        p: 4,
+        mx: { xs: 2, sm: "8vw", md: "12vw" },
+        mt: "15vh",
+        backgroundColor: "#ffffff",
+        borderRadius: 4,
+        boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+        direction: "rtl",
       }}
     >
+      <Typography variant="h4" fontWeight="bold" mb={3} align="center" color="primary">
+        חיפוש נסיעות
+      </Typography>
+
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
+          
           {[{ name: "source", label: "עיר מוצא" }, { name: "destination", label: "עיר יעד" }].map(({ name, label }) => (
             <Grid item xs={12} md={6} key={name}>
               <Controller
+              
                 name={name as "source" | "destination"}
                 control={control}
                 render={({ field: { onChange, value, ...rest } }) => (
@@ -128,7 +133,6 @@ const driversToShow = filteredActiveFutureDrivers;
                     options={cities}
                     getOptionLabel={(option) => option.name}
                     isOptionEqualToValue={(option, val) => val !== null && option.id === val.id}
-                    sx={{ width: "100%" }}
                     value={value}
                     onChange={(_, newValue) => onChange(newValue)}
                     renderInput={(params) => (
@@ -140,6 +144,8 @@ const driversToShow = filteredActiveFutureDrivers;
                         helperText={errors[name as keyof typeof errors]?.message}
                       />
                     )}
+                    disablePortal
+                    autoHighlight
                   />
                 )}
               />
@@ -154,7 +160,7 @@ const driversToShow = filteredActiveFutureDrivers;
                 render={({ field: { onChange, value, ...rest } }) => (
                   <DatePicker
                     {...rest}
-                    label="תאריך"
+                    label="תאריך הנסיעה"
                     value={value}
                     onChange={onChange}
                     disablePast
@@ -168,7 +174,7 @@ const driversToShow = filteredActiveFutureDrivers;
                           ...params.InputProps,
                           endAdornment: (
                             <InputAdornment position="end">
-                              <CalendarIcon />
+                              <CalendarIcon color="primary" />
                             </InputAdornment>
                           ),
                         }}
@@ -181,20 +187,23 @@ const driversToShow = filteredActiveFutureDrivers;
           </Grid>
 
           <Grid item xs={12} md={6}>
+            
             <TextField
-              label="שעה"
+              sx={{ width: { xs: "45%", md: "200%" }, height: 52, }}
+
+              label="שעת יציאה"
               type="time"
               {...register("time")}
               fullWidth
               error={!!errors.time}
               helperText={errors.time?.message}
-              // InputProps={{
-              //   endAdornment: (
-              //     <InputAdornment position="end">
-              //       <AccessTimeIcon />
-              //     </InputAdornment>
-              //   ),
-              // }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <AccessTimeIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }}
             />
           </Grid>
 
@@ -204,15 +213,15 @@ const driversToShow = filteredActiveFutureDrivers;
               variant="contained"
               color="primary"
               startIcon={<SearchIcon />}
-              sx={{ width: "10vw", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
+              sx={{ width: { xs: "45%", md: "200%" }, height: 52, fontSize: "1.1rem", borderRadius: 2 }}
               disabled={!watch("source") || !watch("destination") || !watch("date") || !watch("time")}
             >
               חפש נסיעות
             </Button>
             <Button
-              variant="contained"
+              variant="outlined"
               color="primary"
-              sx={{ width: "10vw", height: 50, fontSize: "1.1rem", borderRadius: 2 }}
+              sx={{ width: { xs: "45%", md: "200%" }, height: 52, fontSize: "1.1rem", borderRadius: 2 }}
               onClick={handleReset}
             >
               אפס סינון
@@ -221,9 +230,9 @@ const driversToShow = filteredActiveFutureDrivers;
         </Grid>
       </form>
 
-      <Box mt={4} sx={{ mx: "7vw" }}>
+      <Box mt={5} mx={{ xs: 1, sm: 6 }}>
         {driversToShow.length === 0 ? (
-          <Typography align="center" sx={{ color: "black" }}>
+          <Typography align="center" color="text.secondary" variant="h6" sx={{ mt: 4 }}>
             {searchAttempted ? "לא נמצאו נהגים התואמים לסינון." : "אין נהגים זמינים כרגע."}
           </Typography>
         ) : (
@@ -235,44 +244,51 @@ const driversToShow = filteredActiveFutureDrivers;
             return (
               <Card
                 key={driver._id}
-                sx={{ mb: 2, p: 2, borderRadius: 3, backgroundColor: "#f9f9ff" }}
+                sx={{
+                  mb: 2,
+                  p: 2,
+                  borderRadius: 3,
+                  backgroundColor: "#f0f4ff",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                }}
                 dir="rtl"
+                elevation={3}
               >
                 <CardContent>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
                     <Box>
-                      <Typography variant="h6" color="primary">
+                      <Typography variant="h6" color="primary" fontWeight={600}>
                         {driver.source} → {driver.destination}
                       </Typography>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <AccessTimeIcon fontSize="small" />
-                        <Typography variant="body2">
+                      <Stack direction="row" spacing={1} alignItems="center" mt={0.5} mb={1}>
+                        <CalendarIcon color="action" fontSize="small" />
+                        <Typography variant="body2" color="text.secondary">
                           {formattedDate} בשעה {driver.time}
                         </Typography>
                       </Stack>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color={driver.availableSeats > 0 ? "success.main" : "error.main"}>
                         {driver.availableSeats > 0 ? `${driver.availableSeats} מקומות פנויים` : "אין מקומות פנויים"}
                       </Typography>
-                      {/* ///////////////////////////////////////////// */}
-                       <Typography variant="body2" color="text.secondary">
-                        {driver.driver.userName? `שם נהג: ${driver.driver.userName}`  : "שם נהג לא נמצא"}
+                      <Typography variant="body2" color="text.secondary" mt={0.5}>
+                        {driver.driver.userName ? `שם נהג: ${driver.driver.userName}` : "שם נהג לא נמצא"}
                       </Typography>
                     </Box>
+
                     <Stack alignItems="flex-end" spacing={1}>
                       <Chip
                         label={isPast ? "הושלם" : driver.status ? "פעיל" : "לא פעיל"}
                         color={driver.status ? "success" : "default"}
                         size="small"
+                        sx={{ fontWeight: "bold" }}
                       />
                       <Button
                         component={Link}
                         to={`/SearchDrive/${driver._id}`}
                         variant="outlined"
                         size="small"
-                        // disabled={driver.availableSeats === 0}
+                        sx={{ fontWeight: "medium" }}
                       >
                         פרטים נוספים
-                        {/* {driver.availableSeats === 0 ? "אין מקומות פנויים" : "פרטים נוספים"} */}
                       </Button>
                     </Stack>
                   </Stack>

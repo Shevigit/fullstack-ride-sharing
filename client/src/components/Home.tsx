@@ -85,13 +85,14 @@ const Home = () => {
 
                 <div style={picture}>
                     <div style={containerLinks}>
-                        <div style={bigFont}>מהיום קל יותר ...... (צריך ניסוח)</div>
-                        <div style={mediumFont}>מלל כלשהוא...</div>
-                        <div style={mediumFont}>מלל כלשהוא...</div>
-                        <div style={mediumFont}>מלל כלשהוא...</div>
-                        <div style={mediumFont}>מלל כלשהוא...</div>
-                        <div style={bigFont}>והכל בקליק אחד</div>
-                        {isLoggedIn && (
+{/* <<<<<<< HEAD */}
+                       <div style={bigFont}>מהיום זה קל יותר מתמיד</div>
+<div style={mediumFont}>תכנון הנסיעות שלך בלחיצות פשוטות</div>
+<div style={mediumFont}>התאמה מושלמת לדרישות וללו"ז שלך</div>
+<div style={mediumFont}>שיתוף ותקשורת עם נוסעים ונהגים בזמן אמת</div>
+<div style={mediumFont}>קבלת עדכונים והודעות ישירות מהאפליקציה</div>
+<div style={bigFont}>והכל בקליק אחד</div>
+{currentUser && (
                         <div style={containerOfBtnsInHomePage}>
                             <Link to="/Update">
                                 <Button sx={btnStyle} style={margin}>עדכן נסיעה</Button>
@@ -103,6 +104,7 @@ const Home = () => {
                                 <Button sx={btnStyle} style={margin}>חפש נסיעה</Button>
                             </Link>
                         </div>)}
+                        {/* )} */}
                     </div>
                 </div>
 
@@ -135,9 +137,7 @@ const Home = () => {
                         </div>
                     )}
                 </section>
-                {/* <section style={{background: "rgb(76, 0, 168)", width:"100vw", height: "30vh"}}>
-                       
-                </section> */}
+           
             </div>
         </>
     );
