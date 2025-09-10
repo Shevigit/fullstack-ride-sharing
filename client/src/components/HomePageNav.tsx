@@ -1,5 +1,4 @@
 
-
 import { useNavigate, NavLink } from 'react-router';
 import { navStyle } from '../CSS/nav';
 import { NavbarLink } from '../CSS/homePageNav';
@@ -18,80 +17,60 @@ const HomePageNav = () => {
     navigate('/');
   };
 
+  // פונקציה קטנה ל־NavLink עם style דינמי
+  const renderLink = (to: string, label: string) => (
+    <NavLink
+      to={to}
+      style={({ isActive }) => ({
+        ...NavbarLink,
+        color: isActive ? '#004ba0' : '#333',
+        fontWeight: isActive ? '700' : '400',
+      })}
+    >
+      {label}
+    </NavLink>
+  );
+
   return (
-    <nav style={{ 
-      ...navStyle, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'space-between', 
-      padding: '0 16px',
-      direction: 'rtl',
-      backgroundColor: '#fff',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-      height: 60,
-    }}>
+    <nav
+      style={{
+        ...navStyle,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 16px',
+        direction: 'rtl',
+        backgroundColor: '#fff',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+        height: 60,
+      }}
+    >
       {/* לוגו/כותרת */}
-      <NavLink 
-        to="/" 
-        style={{ 
-          textDecoration: 'none', 
-          fontWeight: '700', 
-          fontSize: 24, 
-          color: '#1976d2' 
-        }}
-        activeStyle={{ color: '#004ba0' }}
+      <NavLink
+        to="/"
+        style={({ isActive }) => ({
+          textDecoration: 'none',
+          fontWeight: '700',
+          fontSize: 24,
+          color: isActive ? '#004ba0' : '#1976d2',
+        })}
       >
         RideShare
       </NavLink>
 
       {/* קישורים מרכזיים */}
       <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-        <NavLink to="/Update" style={({ isActive }) => ({
-          ...NavbarLink,
-          color: isActive ? '#004ba0' : '#333',
-          fontWeight: isActive ? '700' : '400',
-        })}>
-          פרופיל משתמש
-        </NavLink>
+        {renderLink('/Update', 'פרופיל משתמש')}
 
-        {user?.hasCar && (
-          <NavLink to="/Offer" style={({ isActive }) => ({
-            ...NavbarLink,
-            color: isActive ? '#004ba0' : '#333',
-            fontWeight: isActive ? '700' : '400',
-          })}>
-            הוספת נסיעה
-          </NavLink>
-        )}
+        {user?.hasCar && renderLink('/Offer', 'הוספת נסיעה')}
 
-        <NavLink to="/SearchDrive" style={({ isActive }) => ({
-          ...NavbarLink,
-          color: isActive ? '#004ba0' : '#333',
-          fontWeight: isActive ? '700' : '400',
-        })}>
-          חיפוש נסיעה
-        </NavLink>
-    
-
-      <NavLink to="/About" style={({ isActive }) => ({
-        ...NavbarLink,
-        color: isActive ? '#004ba0' : '#333',
-        fontWeight: isActive ? '700' : '400',
-      })}>
-        אודות
-      </NavLink>
-
-      <NavLink to="/" style={({ isActive }) => ({
-          ...NavbarLink,
-          color: isActive ? '#004ba0' : '#333',
-          fontWeight: isActive ? '700' : '400',
-        })}>
-          עמוד הבית
-        </NavLink>
+        {renderLink('/SearchDrive', 'חיפוש נסיעה')}
+        {renderLink('/About', 'אודות')}
+        {renderLink('/', 'עמוד הבית')}
       </div>
 
       {/* כפתור יציאה */}
-      <Button 
+      <Button
         variant="outlined"
         color="primary"
         onClick={handleLogout}
