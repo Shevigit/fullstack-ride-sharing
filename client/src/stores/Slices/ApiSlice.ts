@@ -12,6 +12,7 @@ const apiSlice = createApi({
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = cookies.get("token");
+        console.log("Token from cookies:", token); 
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
