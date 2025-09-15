@@ -53,8 +53,8 @@ const LoginIn = () => {
       setCookie('token', result.accessToken, { path: '/', maxAge: 3600 * 24 * 7 });
 
       // שמירת המשתמש ב-localStorage
-      // localStorage.setItem("currentUser", JSON.stringify(result.user));
- document.cookie = `token=${result.accessToken}; Path=/; Secure=${process.env.NODE_ENV === 'production'}; HttpOnly; SameSite=Strict; Max-Age=${7*24*60*60}`; // ✅ שונה לאבטחה
+      localStorage.setItem("currentUser", JSON.stringify(result.user));
+
       // עדכון ה-Redux state
       dispatch(login(result.user));
 
