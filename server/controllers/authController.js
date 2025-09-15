@@ -16,7 +16,14 @@ const login = async (req, res) => {
         hasCar: foundUser.hasCar, driveringLicense: foundUser.driveringLicense, gender: foundUser.gender,
         driverSuggestions: foundUser.driverSuggestions, passengerSuggestions: foundUser.passengerSuggestions, createdAt: foundUser.createdAt
     }
-    const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET,)
+    const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30d' });
+    res.cookie('accessToken', accessToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'Strict',
+  maxAge: 7 * 24 * 60 * 60 * 1000
+});
+
     res.json({user:userInfo, accessToken: accessToken })
 };
 
@@ -59,7 +66,14 @@ const register = async (req, res) => {
     driveringLicense: user.driveringLicense
   };
 
-  const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
+const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30d' });
+
+res.cookie('accessToken', accessToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'Strict',
+  maxAge: 7 * 24 * 60 * 60 * 1000
+});
   return res.status(201).json({ accessToken, user: userInfo });
 };
 
