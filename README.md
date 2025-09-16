@@ -60,7 +60,7 @@ cd server
 node app.js
 
 
-Server will run by default on: http://localhost:5000
+Server will run by default on: http://localhost:7002
 
 Start the client
 
@@ -107,3 +107,4 @@ External APIs: Open Data API (data.gov.il)
 👩‍💻 Author
 
 Developed as part of a full-stack web development project, 2025.
+
