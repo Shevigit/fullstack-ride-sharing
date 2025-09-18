@@ -1,11 +1,11 @@
-# 🚐 Shuttle Mediation Website (Client-Server Project)
+#  Shuttle Mediation Website (Client-Server Project)
 
 A full-stack web application for coordinating and managing rides (shuttle mediation).  
 The project is built with **React + TypeScript** on the client side and **Node.js + Express** on the server side, with data stored in **MongoDB**.
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 client-server/
 │
@@ -16,7 +16,7 @@ client-server/
 
 ---
 
-## 🚀 Features
+##  Features
 - **Frontend (React + TypeScript)**  
   - State management using **Redux Toolkit**  
   - Styled with **MUI** (Material UI)  
@@ -37,7 +37,7 @@ client-server/
 
 ---
 
-## ⚙️ Installation
+## ⚙ Installation
 
 1. Clone the repository:
    ```bash
@@ -52,7 +52,7 @@ npm install
 cd ../client
 npm install
 
-▶️ Running the Project
+▶ Running the Project
 
 Start the server
 
@@ -107,4 +107,5 @@ External APIs: Open Data API (data.gov.il)
 👩‍💻 Author
 
 Developed as part of a full-stack web development project, 2025.
+
 
