@@ -50,7 +50,7 @@ const LoginIn = () => {
       const result = await Login(data).unwrap();
 
       // שמירת הטוקן בקוקיז
-      setCookie('token', result.accessToken, { path: '/', maxAge: 3600 * 24 * 7 });
+      setCookie('token', result.accessToken, { path: '/', maxAge: 3600 * 24 * 7, sameSite: 'lax' });
 
       // שמירת המשתמש ב-localStorage
       localStorage.setItem("currentUser", JSON.stringify(result.user));
